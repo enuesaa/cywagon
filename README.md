@@ -1,9 +1,10 @@
 # cywagon
 
 ## Planning features
-- nginx と CloudFront のいいとこ取り的なやつ作りたい
+- ウェブサーバを作りたい
+- nginx と CloudFront のいいとこ取り的なイメージ
 - CloudFront Functions のようにコードでレスポンスを変えられる感じにしたい
-  - lua か js か ruby かな？
+  - lua かな？
 
 ## Stacks
 - Go
