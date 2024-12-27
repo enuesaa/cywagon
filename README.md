@@ -1,12 +1,34 @@
 # cywagon
 
-## Planning features
-- ウェブサーバを作りたい
-- nginx と CloudFront のいいとこ取り的なイメージ
-- CloudFront Functions のようにコードでレスポンスを変えられる感じにしたい
-  - lua かな？
+## Planning
+### Commands
+```console
+$ cywagon create
+failed to create project due to admin server does not started.
+please run `cywagon up`
 
-## Stacks
+$ cywagon up
+
+$ cywagon create <project-name> --hostname <hostname>
+
+$ cywagon ls --filter <project-name>:<prefix>
+<project-name>:<version-name> published
+<project-name>:<version-name>
+
+$ cywagon push <project-name>:<version-name> --from-dir .
+<project-name>:<version-name>
+
+$ cywagon publish <project-name>:<version-name>
+
+$ cywagon down
+```
+
+### features
+- ウェブサーバ
+- CloudFront Functions のようにリクエスト/レスポンスを整形できる
+  - lua で記述
+
+### Stacks
 - Go
 - EC2 でのホストを検討
 - systemd とかでよしなにできたらいいなあ
