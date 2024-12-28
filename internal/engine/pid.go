@@ -8,7 +8,6 @@ import (
 	"strconv"
 )
 
-
 func PidFile() (string, error) {
 	homedir, err := os.UserHomeDir()
 	if err != nil {

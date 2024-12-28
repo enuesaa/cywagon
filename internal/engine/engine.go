@@ -36,5 +36,8 @@ func handleConnection(conn net.Conn) {
 	if err != nil {
 		log.Panicf("Error: %s", err.Error())
 	}
+	if err := Log(string(bytes)); err != nil {
+		fmt.Printf("Error: %s", err.Error())
+	}
 	fmt.Printf("Received: %s", bytes)
 }
