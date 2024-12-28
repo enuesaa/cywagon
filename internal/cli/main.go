@@ -11,6 +11,7 @@ func Run() int {
 	subcommands.Register(&upCmd{}, "")
 	subcommands.Register(&helloCmd{}, "")
 	subcommands.Register(&engineStartCmd{}, "")
+	subcommands.Register(&downCmd{}, "")
   
 	flag.Parse()
 
