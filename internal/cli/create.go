@@ -12,23 +12,23 @@ import (
 type helloCmd struct {}
 
 func (c *helloCmd) Name() string {
-	return "hello"
+	return "create"
 }
 
 func (c *helloCmd) Synopsis() string {
-	return "hello"
+	return "create"
 }
 
 func (c *helloCmd) Usage() string {
-	return `hello:
-	Print hello.
+	return `create:
+	Create.
   `
 }
 
 func (c *helloCmd) SetFlags(f *flag.FlagSet) {}
 
 func (c *helloCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if err := engine.Hello(); err != nil {
+	if err := engine.SendCreate(); err != nil {
 		log.Fatalf("Error: %s\n", err.Error())
 	}
 	return subcommands.ExitSuccess

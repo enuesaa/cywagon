@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -36,8 +37,11 @@ func handleConnection(conn net.Conn) {
 	if err != nil {
 		log.Panicf("Error: %s", err.Error())
 	}
-	if err := Log(string(bytes)); err != nil {
-		fmt.Printf("Error: %s", err.Error())
+	var message CreateMessage
+	if err := json.Unmarshal(bytes, &message); err != nil {
+		Log("failed to parse")
+		return
 	}
-	fmt.Printf("Received: %s", bytes)
+
+	Log(fmt.Sprintf("message: %s", message.Name))
 }

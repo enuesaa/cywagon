@@ -12,3 +12,14 @@ func Socket() (string, error) {
 	}
 	return filepath.Join(homedir, "tmp/cywagon.sock"), nil
 }
+
+func DeleteSockFile() error {
+	path, err := Socket()
+	if err != nil {
+		return err
+	}
+	if err := os.Remove(path); err != nil {
+		return err
+	}
+	return nil
+}
