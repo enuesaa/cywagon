@@ -1,0 +1,11 @@
+---
+- ansible.builtin.apt:
+    name: logrotate
+    state: present
+
+- ansible.builtin.copy:
+    src: files/syslog
+    dest: /etc/logrotate.d/syslog
+    owner: root
+    group: root
+    mode: '0644'

@@ -2,6 +2,9 @@
   become: true
 
   tasks:
+    - community.general.timezone:
+        name: Asia/Tokyo
+
     - ansible.builtin.apt:
         update_cache: true
 
@@ -55,6 +58,6 @@
     #     cmd: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
     #     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
 
-    - ansible.builtin.shell:
-        cmd: source ~/.bashrc
-        executable: /bin/bash
+    # - ansible.builtin.shell:
+    #     cmd: source ~/.bashrc
+    #     executable: /bin/bash
