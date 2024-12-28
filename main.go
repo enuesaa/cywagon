@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"time"
 
@@ -9,6 +10,10 @@ import (
 )
 
 func main() {
+	if err := execCmd(); err != nil {
+		log.Panicf("Error: %s", err.Error())
+	}
+
 	luaScript := `
 		if string.find(event.path, "7") then
 			print("bbb")
