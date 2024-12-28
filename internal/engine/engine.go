@@ -1,11 +1,12 @@
 package engine
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net"
+
+	"github.com/enuesaa/cywagon/internal/msg"
 )
 
 func RunEngine() error {
@@ -37,11 +38,7 @@ func handleConnection(conn net.Conn) {
 	if err != nil {
 		log.Panicf("Error: %s", err.Error())
 	}
-	var message CreateMessage
-	if err := json.Unmarshal(bytes, &message); err != nil {
-		Log("failed to parse")
-		return
+	if err := msg.Receive(bytes); err != nil {
+		log.Panicf("Error: %s", err.Error())
 	}
-
-	Log(fmt.Sprintf("message: %s", message.Name))
 }
