@@ -1,24 +1,18 @@
-package main
+package internal
 
 import (
 	"fmt"
 	"io"
 	"log"
 	"net"
-	"os"
-	"path/filepath"
 )
 
-func main() {
-	homedir, err := os.UserHomeDir()
+func RunEngine() error {
+	socket, err := Socket()
 	if err != nil {
-		log.Panicf("Error: %s", err.Error())
+		return err
 	}
-
-	socketPath := filepath.Join(homedir, "tmp/cywagon.sock")
-	fmt.Printf("%s\n", socketPath)
-
-	listener, err := net.Listen("unix", socketPath)
+	listener, err := net.Listen("unix", socket)
 	if err != nil {
 		log.Panicf("Error: %s", err.Error())
 	}

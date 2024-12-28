@@ -3,41 +3,30 @@ package main
 import (
 	"fmt"
 	"log"
-	"math/rand"
-	"time"
+	"os"
 
-	"github.com/yuin/gopher-lua"
+	"github.com/enuesaa/cywagon/internal"
 )
 
 func main() {
-	if err := execCmd(); err != nil {
-		log.Panicf("Error: %s", err.Error())
+	if len(os.Args) == 1 {
+		log.Fatalf("Error: missing required arg\n")
 	}
+	cmd := os.Args[1]
 
-	luaScript := `
-		if string.find(event.path, "7") then
-			print("bbb")
-		end
-		event.path = event.path .. "aaa"
-	`
-	L := lua.NewState()
-	defer L.Close()
-
-	start := time.Now()
-
-	for range 10000 {
-		event := L.NewTable()
-		L.SetField(event, "path", lua.LString(fmt.Sprintf("example%d/", rand.Intn(1000))))
-		L.SetGlobal("event", event)
-		if err := L.DoString(luaScript); err != nil {
-			panic(err)
+	switch cmd {
+	case "engine-start":
+		if err := internal.RunEngine(); err != nil {
+			log.Fatalf("Error: %s\n", err.Error())
 		}
-		updatedObj := L.GetGlobal("event").(*lua.LTable)
-		path := L.GetField(updatedObj, "path").(lua.LString)
-		fmt.Printf("path: %s\n", path)
+	case "up":
+		if err := internal.Up(); err != nil {
+			log.Fatalf("Error: %s\n", err.Error())
+		}
+	case "hello":
+		if err := internal.Hello(); err != nil {
+			log.Fatalf("Error: %s\n", err.Error())
+		}
 	}
-
-	elapsed := time.Since(start)
-	fmt.Printf("time: %v\n", elapsed)
+	fmt.Println(os.Args)
 }
-

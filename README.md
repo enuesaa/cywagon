@@ -33,3 +33,4 @@ $ cywagon down
 - AWS EC2 + Route53
 - systemd とかでよしなにできたらいいなあ
 - DNS サーバのセルフホストもできるけど、時間かかるので、Route 53 前提
+- docker みたいに engine と cli の構成
