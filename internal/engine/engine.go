@@ -31,14 +31,17 @@ func RunEngine() error {
 	}
 }
 
-func handleConnection(conn net.Conn) {
+func handleConnection(conn net.Conn) error {
 	defer conn.Close()
 
 	bytes, err := io.ReadAll(conn)
 	if err != nil {
-		log.Panicf("Error: %s", err.Error())
+		return err
 	}
-	if err := msg.Receive(bytes); err != nil {
-		log.Panicf("Error: %s", err.Error())
+
+	receiver := msg.Receiver{}
+	if err := receiver.Receive(bytes); err != nil {
+		return err
 	}
+	return nil
 }

@@ -7,7 +7,9 @@ import (
 	"github.com/enuesaa/cywagon/internal/msg/schema"
 )
 
-func Receive(bytes []byte) error {
+type Receiver struct {}
+
+func (r *Receiver) Receive(bytes []byte) error {
 	var pre schema.Message[struct{}]
 	if err := json.Unmarshal(bytes, &pre); err != nil {
 		return err
