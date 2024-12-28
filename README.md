@@ -23,13 +23,13 @@ $ cywagon publish <project-name>:<version-name>
 $ cywagon down
 ```
 
-### features
+### Features
 - ウェブサーバ
 - CloudFront Functions のようにリクエスト/レスポンスを整形できる
   - lua で記述
 
 ### Stacks
 - Go
-- EC2 でのホストを検討
+- AWS EC2 + Route53
 - systemd とかでよしなにできたらいいなあ
-- たぶん cli と worker の最低2つは必要
+- DNS サーバのセルフホストもできるけど、時間かかるので、Route 53 前提
