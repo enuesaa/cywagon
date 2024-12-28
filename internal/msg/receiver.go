@@ -1,15 +1,17 @@
 package msg
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
 	"github.com/enuesaa/cywagon/internal/msg/schema"
+	"github.com/enuesaa/cywagon/internal/repository"
 )
 
 type Receiver struct {}
 
-func (r *Receiver) Receive(bytes []byte) error {
+func (r *Receiver) Receive(ctx context.Context, bytes []byte) error {
 	var pre schema.Message[struct{}]
 	if err := json.Unmarshal(bytes, &pre); err != nil {
 		return err
@@ -19,7 +21,9 @@ func (r *Receiver) Receive(bytes []byte) error {
 		if err := json.Unmarshal(bytes, &message); err != nil {
 			return err
 		}
-		Log(fmt.Sprintf("message: %s", message.Data.Name))
+		logrepo := repository.UseLog(ctx)
+		logrepo.Info("message: %s", message.Data.Name)
+
 		return nil
 	}
 

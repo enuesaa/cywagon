@@ -1,10 +1,10 @@
 package cli
 
 import (
-	"context"
 	"flag"
 	"os"
 
+	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/google/subcommands"
 )
 
@@ -16,7 +16,7 @@ func Run() {
   
 	flag.Parse()
 
-	ctx := context.Background()
+	ctx := repository.New()
 	status := subcommands.Execute(ctx)
 
 	os.Exit(int(status))

@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
@@ -9,7 +10,7 @@ import (
 	"github.com/enuesaa/cywagon/internal/msg"
 )
 
-func RunEngine() error {
+func RunEngine(ctx context.Context) error {
 	socket, err := Socket()
 	if err != nil {
 		return err
@@ -27,11 +28,11 @@ func RunEngine() error {
 			log.Panicf("Error: %s", err.Error())
 		}
 
-		go handleConnection(conn)
+		go handleConnection(ctx, conn)
 	}
 }
 
-func handleConnection(conn net.Conn) error {
+func handleConnection(ctx context.Context, conn net.Conn) error {
 	defer conn.Close()
 
 	bytes, err := io.ReadAll(conn)
@@ -40,7 +41,7 @@ func handleConnection(conn net.Conn) error {
 	}
 
 	receiver := msg.Receiver{}
-	if err := receiver.Receive(bytes); err != nil {
+	if err := receiver.Receive(ctx, bytes); err != nil {
 		return err
 	}
 	return nil
