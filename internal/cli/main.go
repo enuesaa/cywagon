@@ -3,13 +3,14 @@ package cli
 import (
 	"context"
 	"flag"
+	"os"
 
 	"github.com/google/subcommands"
 )
 
-func Run() int {
+func Run() {
 	subcommands.Register(&upCmd{}, "")
-	subcommands.Register(&helloCmd{}, "")
+	subcommands.Register(&createCmd{}, "")
 	subcommands.Register(&engineStartCmd{}, "")
 	subcommands.Register(&downCmd{}, "")
   
@@ -18,5 +19,5 @@ func Run() int {
 	ctx := context.Background()
 	status := subcommands.Execute(ctx)
 
-	return int(status)
+	os.Exit(int(status))
 }

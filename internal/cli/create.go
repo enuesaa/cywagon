@@ -3,33 +3,34 @@ package cli
 import (
 	"context"
 	"flag"
-	"log"
+	"fmt"
 
 	"github.com/enuesaa/cywagon/internal/engine"
 	"github.com/google/subcommands"
 )
 
-type helloCmd struct {}
+type createCmd struct {}
 
-func (c *helloCmd) Name() string {
+func (c *createCmd) Name() string {
 	return "create"
 }
 
-func (c *helloCmd) Synopsis() string {
+func (c *createCmd) Synopsis() string {
 	return "create"
 }
 
-func (c *helloCmd) Usage() string {
+func (c *createCmd) Usage() string {
 	return `create:
-	Create.
+	Create
   `
 }
 
-func (c *helloCmd) SetFlags(f *flag.FlagSet) {}
+func (c *createCmd) SetFlags(f *flag.FlagSet) {}
 
-func (c *helloCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *createCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if err := engine.SendCreate(); err != nil {
-		log.Fatalf("Error: %s\n", err.Error())
+		fmt.Printf("Error: %s\n", err.Error())
+		return subcommands.ExitFailure
 	}
 	return subcommands.ExitSuccess
 }
