@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/enuesaa/cywagon/internal/engine"
+	"github.com/enuesaa/cywagon/internal/engctl"
 	"github.com/google/subcommands"
 )
 
@@ -28,7 +28,7 @@ func (c *upCmd) Usage() string {
 func (c *upCmd) SetFlags(f *flag.FlagSet) {}
 
 func (c *upCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if err := engine.Up(); err != nil {
+	if err := engctl.Up(); err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
 		return subcommands.ExitFailure
 	}
