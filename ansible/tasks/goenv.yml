@@ -11,6 +11,7 @@
       export PATH="${GOENV_ROOT}/bin:${PATH}"
       eval "$(goenv init -)"
     state: present
+    marker: "# {mark} ANSIBLE GOENV BLOCK"
 
 - ansible.builtin.shell:
     cmd: source ~/.bashrc
