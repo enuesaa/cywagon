@@ -16,7 +16,7 @@ func Run() {
   
 	flag.Parse()
 
-	ctx := repository.New()
+	ctx := repository.NewContext()
 	status := subcommands.Execute(ctx)
 
 	os.Exit(int(status))

@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// To generate mock file, run following command:
+//   mockgen -source=log.go -destination=log_mock.go -package=repository
+
 type LogRepositoryInterface interface {
 	Info(format string, a ...any) error
 }

@@ -6,6 +6,9 @@ import (
 	"path/filepath"
 )
 
+// To generate mock file, run following command:
+//   mockgen -source=fs.go -destination=fs_mock.go -package=repository
+
 type FsRepositoryInterface interface {
 	IsExist(path string) bool
 	IsDir(path string) (bool, error)

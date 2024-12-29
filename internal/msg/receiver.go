@@ -12,7 +12,7 @@ import (
 type Receiver struct {}
 
 func (r *Receiver) Receive(ctx context.Context, bytes []byte) (string, error) {
-	logrepo := repository.UseLog(ctx)
+	repos := repository.Use(ctx)
 
 	var pre schema.Message[struct{}]
 	if err := json.Unmarshal(bytes, &pre); err != nil {
@@ -23,7 +23,7 @@ func (r *Receiver) Receive(ctx context.Context, bytes []byte) (string, error) {
 		if err := json.Unmarshal(bytes, &message); err != nil {
 			return "", err
 		}
-		logrepo.Info("message: %s", message.Data.Name)
+		repos.Log.Info("message: %s", message.Data.Name)
 
 		return "", nil
 	}

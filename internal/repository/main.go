@@ -2,19 +2,31 @@ package repository
 
 import "context"
 
-type logKey struct{}
+func NewRepos() Repos {
+	return Repos{
+		Fs: &FsRepository{},
+		Log: &LogRepository{},
+	}
+}
 
-func New() context.Context {
+type Repos struct {
+	Fs FsRepositoryInterface
+	Log LogRepositoryInterface
+}
+
+type reposKey struct{}
+
+func NewContext() context.Context {
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, logKey{}, LogRepository{})
+	ctx = context.WithValue(ctx, reposKey{}, NewRepos())
 
 	return ctx
 }
 
-func UseLog(ctx context.Context) LogRepository {
-	repo, ok := ctx.Value(logKey{}).(LogRepository)
-	if ok {
-		return LogRepository{}
+func Use(ctx context.Context) Repos {
+	repos, ok := ctx.Value(reposKey{}).(Repos)
+	if !ok {
+		return NewRepos()
 	}
-	return repo
+	return repos
 }
