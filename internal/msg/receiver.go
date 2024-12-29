@@ -11,21 +11,26 @@ import (
 
 type Receiver struct {}
 
-func (r *Receiver) Receive(ctx context.Context, bytes []byte) error {
+func (r *Receiver) Receive(ctx context.Context, bytes []byte) (string, error) {
+	logrepo := repository.UseLog(ctx)
+
 	var pre schema.Message[struct{}]
 	if err := json.Unmarshal(bytes, &pre); err != nil {
-		return err
+		return "", err
 	}
 	if pre.Operation == "create" {
 		var message schema.Message[schema.CreateData]
 		if err := json.Unmarshal(bytes, &message); err != nil {
-			return err
+			return "", err
 		}
-		logrepo := repository.UseLog(ctx)
 		logrepo.Info("message: %s", message.Data.Name)
 
-		return nil
+		return "", nil
 	}
 
-	return fmt.Errorf("not found such operation")
+	if pre.Operation == "down" {
+		return "down", nil
+	}
+
+	return "", fmt.Errorf("not found such operation")
 }

@@ -16,9 +16,5 @@ func Up() error {
 	}
 	fmt.Printf("pid: %d\n", cmd.Process.Pid)
 
-	if err := CreatePidFile(cmd.Process.Pid); err != nil {
-		return err
-	}
-
 	return nil
 }

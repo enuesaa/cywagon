@@ -6,11 +6,17 @@ import (
 	"io"
 	"log"
 	"net"
+	"os"
 
 	"github.com/enuesaa/cywagon/internal/msg"
 )
 
-func RunEngine(ctx context.Context) error {
+func Up(ctx context.Context) error {
+	pid := os.Getegid()
+	if err := CreatePidFile(pid); err != nil {
+		return err
+	}
+
 	socket, err := Socket()
 	if err != nil {
 		return err
@@ -41,8 +47,15 @@ func handleConnection(ctx context.Context, conn net.Conn) error {
 	}
 
 	receiver := msg.Receiver{}
-	if err := receiver.Receive(ctx, bytes); err != nil {
+	operation, err := receiver.Receive(ctx, bytes)
+	if err != nil {
 		return err
+	}
+	if operation == "down" {
+		if err := Down(); err != nil {
+			return err
+		}
+		os.Exit(0)
 	}
 	return nil
 }

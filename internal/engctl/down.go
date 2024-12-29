@@ -20,12 +20,5 @@ func Down() error {
 		return err
 	}
 	fmt.Println("send sigterm")
-
-	if err := DeletePidFile(); err != nil {
-		return err
-	}
-	if err := DeleteSockFile(); err != nil {
-		return err
-	}
 	return nil
 }

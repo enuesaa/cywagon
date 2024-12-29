@@ -28,7 +28,7 @@ func (c *engineStartCmd) Usage() string {
 func (c *engineStartCmd) SetFlags(f *flag.FlagSet) {}
 
 func (c *engineStartCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if err := eng.RunEngine(ctx); err != nil {
+	if err := eng.Up(ctx); err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
 		return subcommands.ExitFailure
 	}
