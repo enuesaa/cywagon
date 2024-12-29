@@ -7,7 +7,7 @@ import (
 )
 
 func Up() error {
-	cmd := exec.Command("cywagon", "engine-start")
+	cmd := exec.Command("cywagon", "up", "--foreground")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Setsid: true,
 	}

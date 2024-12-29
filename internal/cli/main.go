@@ -9,10 +9,9 @@ import (
 
 func Run(ctx context.Context) int {
 	// cli
-	subcommands.Register(&upCmd{}, "")
-	subcommands.Register(&createCmd{}, "")
-	subcommands.Register(&engineStartCmd{}, "")
-	subcommands.Register(&downCmd{}, "")
+	subcommands.Register(newUpCmd(), "")
+	subcommands.Register(newDownCmd(), "")
+	subcommands.Register(newCreateCmd(), "")
 
 	// parse
 	flag.Parse()

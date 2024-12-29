@@ -9,6 +9,10 @@ import (
 	"github.com/google/subcommands"
 )
 
+func newCreateCmd() *createCmd {
+	return &createCmd{}
+}
+
 type createCmd struct {}
 
 func (c *createCmd) Name() string {

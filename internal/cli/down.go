@@ -9,6 +9,10 @@ import (
 	"github.com/google/subcommands"
 )
 
+func newDownCmd() *downCmd {
+	return &downCmd{}
+}
+
 type downCmd struct {}
 
 func (c *downCmd) Name() string {
