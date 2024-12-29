@@ -1,23 +1,24 @@
 package cli
 
 import (
+	"context"
 	"flag"
-	"os"
 
-	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/google/subcommands"
 )
 
-func Run() {
+func Run(ctx context.Context) int {
+	// cli
 	subcommands.Register(&upCmd{}, "")
 	subcommands.Register(&createCmd{}, "")
 	subcommands.Register(&engineStartCmd{}, "")
 	subcommands.Register(&downCmd{}, "")
-  
+
+	// parse
 	flag.Parse()
 
-	ctx := repository.NewContext()
+	// execute
 	status := subcommands.Execute(ctx)
 
-	os.Exit(int(status))
+	return int(status)
 }

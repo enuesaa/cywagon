@@ -16,13 +16,11 @@ func (c *downCmd) Name() string {
 }
 
 func (c *downCmd) Synopsis() string {
-	return "down"
+	return "Down"
 }
 
 func (c *downCmd) Usage() string {
-	return `down:
-	Down engine.
-  `
+	return "cywagon down\n"
 }
 
 func (c *downCmd) SetFlags(f *flag.FlagSet) {}

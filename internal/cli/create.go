@@ -16,13 +16,11 @@ func (c *createCmd) Name() string {
 }
 
 func (c *createCmd) Synopsis() string {
-	return "create"
+	return "Create"
 }
 
 func (c *createCmd) Usage() string {
-	return `create:
-	Create
-  `
+	return "cywagon create\n"
 }
 
 func (c *createCmd) SetFlags(f *flag.FlagSet) {}

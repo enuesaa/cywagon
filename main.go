@@ -1,7 +1,15 @@
 package main
 
-import "github.com/enuesaa/cywagon/internal/cli"
+import (
+	"os"
+
+	"github.com/enuesaa/cywagon/internal/cli"
+	"github.com/enuesaa/cywagon/internal/repository"
+)
 
 func main() {
-	cli.Run()
+	ctx := repository.NewContext()
+
+	code := cli.Run(ctx)
+	os.Exit(code)
 }

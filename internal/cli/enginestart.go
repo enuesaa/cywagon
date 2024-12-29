@@ -20,9 +20,7 @@ func (c *engineStartCmd) Synopsis() string {
 }
 
 func (c *engineStartCmd) Usage() string {
-	return `engine-start:
-	Start engine.
-  `
+	return "cywagon engine-start\n"
 }
 
 func (c *engineStartCmd) SetFlags(f *flag.FlagSet) {}
