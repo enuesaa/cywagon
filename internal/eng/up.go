@@ -19,7 +19,7 @@ func Up(ctx context.Context) error {
 		return err
 	}
 
-	socket, err := Socket()
+	socket, err := repos.Ps.GetSockPath()
 	if err != nil {
 		return err
 	}

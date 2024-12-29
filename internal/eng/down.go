@@ -13,7 +13,7 @@ func Down(ctx context.Context) error {
 	if err := repos.Ps.DeletePidFile(); err != nil {
 		return err
 	}
-	if err := DeleteSockFile(); err != nil {
+	if err := repos.Ps.DeleteSockFile(); err != nil {
 		return err
 	}
 

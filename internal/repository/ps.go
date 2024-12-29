@@ -13,6 +13,8 @@ type PsRepositoryInterface interface {
 	CreatePidFile(pid int) error
 	DeletePidFile() error
 	ReadPidFile() (int, error)
+	GetSockPath() (string, error)
+	DeleteSockFile() error
 }
 
 type PsRepository struct {}
@@ -81,4 +83,25 @@ func (repo *PsRepository) ReadPidFile() (int, error) {
 		return -1, err
 	}
 	return pid, nil
+}
+
+func (repo *PsRepository) GetSockPath() (string, error) {
+	homedir, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	path := filepath.Join(homedir, "tmp/cywagon.sock")
+
+	return path, nil
+}
+
+func (repo *PsRepository) DeleteSockFile() error {
+	path, err := repo.GetSockPath()
+	if err != nil {
+		return err
+	}
+	if err := os.Remove(path); err != nil {
+		return err
+	}
+	return nil
 }

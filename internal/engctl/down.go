@@ -25,5 +25,6 @@ func Down(ctx context.Context) error {
 		return err
 	}
 	fmt.Println("send sigterm")
+
 	return nil
 }
