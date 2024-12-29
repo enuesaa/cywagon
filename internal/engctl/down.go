@@ -1,13 +1,18 @@
 package engctl
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"syscall"
+
+	"github.com/enuesaa/cywagon/internal/repository"
 )
 
-func Down() error {
-	pid, err := ReadPidFile()
+func Down(ctx context.Context) error {
+	repos := repository.Use(ctx)
+
+	pid, err := repos.Ps.ReadPidFile()
 	if err != nil {
 		return err
 	}

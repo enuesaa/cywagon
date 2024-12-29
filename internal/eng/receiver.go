@@ -1,4 +1,4 @@
-package msg
+package eng
 
 import (
 	"context"
@@ -9,28 +9,29 @@ import (
 	"github.com/enuesaa/cywagon/internal/repository"
 )
 
-type Receiver struct {}
-
-func (r *Receiver) Receive(ctx context.Context, bytes []byte) (string, error) {
+func Receive(ctx context.Context, bytes []byte) error {
 	repos := repository.Use(ctx)
 
 	var pre schema.Message[struct{}]
 	if err := json.Unmarshal(bytes, &pre); err != nil {
-		return "", err
+		return err
 	}
 	if pre.Operation == "create" {
 		var message schema.Message[schema.CreateData]
 		if err := json.Unmarshal(bytes, &message); err != nil {
-			return "", err
+			return err
 		}
 		repos.Log.Info("message: %s", message.Data.Name)
 
-		return "", nil
+		return nil
 	}
 
 	if pre.Operation == "down" {
-		return "down", nil
+		if err := Down(ctx); err != nil {
+			return err
+		}
+		return nil
 	}
 
-	return "", fmt.Errorf("not found such operation")
+	return fmt.Errorf("not found such operation")
 }

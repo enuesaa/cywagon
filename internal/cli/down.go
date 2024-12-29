@@ -29,11 +29,10 @@ func (c *downCmd) Usage() string {
 
 func (c *downCmd) SetFlags(f *flag.FlagSet) {}
 
-func (c *downCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if err := engctl.Down(); err != nil {
+func (c *downCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	if err := engctl.Down(ctx); err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
 		return subcommands.ExitFailure
 	}
-
 	return subcommands.ExitSuccess
 }

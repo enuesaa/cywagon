@@ -8,12 +8,14 @@ import (
 	"net"
 	"os"
 
-	"github.com/enuesaa/cywagon/internal/msg"
+	"github.com/enuesaa/cywagon/internal/repository"
 )
 
 func Up(ctx context.Context) error {
+	repos := repository.Use(ctx)
+
 	pid := os.Getegid()
-	if err := CreatePidFile(pid); err != nil {
+	if err := repos.Ps.CreatePidFile(pid); err != nil {
 		return err
 	}
 
@@ -46,16 +48,8 @@ func handleConnection(ctx context.Context, conn net.Conn) error {
 		return err
 	}
 
-	receiver := msg.Receiver{}
-	operation, err := receiver.Receive(ctx, bytes)
-	if err != nil {
+	if err := Receive(ctx, bytes); err != nil {
 		return err
-	}
-	if operation == "down" {
-		if err := Down(); err != nil {
-			return err
-		}
-		os.Exit(0)
 	}
 	return nil
 }
