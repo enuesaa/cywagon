@@ -2,19 +2,31 @@ package repository
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"time"
 )
 
-// To generate mock file, run following command:
-//   mockgen -source=log.go -destination=log_mock.go -package=repository
+func init() {
+	log.SetFlags(0)
+}
 
 type LogRepositoryInterface interface {
+	PrintErr(err error)
+	Print(format string, a ...any)
 	Info(format string, a ...any) error
 }
 
 type LogRepository struct {}
+
+func (repo *LogRepository) PrintErr(err error) {
+	log.Printf("Error: %s\n", err.Error())
+}
+
+func (repo *LogRepository) Print(format string, a ...any) {
+	log.Printf(format, a...)
+}
 
 func (repo *LogRepository) Info(format string, a ...any) error {
 	text := fmt.Sprintf(format, a...)

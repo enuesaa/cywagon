@@ -3,9 +3,9 @@ package cli
 import (
 	"context"
 	"flag"
-	"fmt"
 
 	"github.com/enuesaa/cywagon/internal/msg"
+	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/google/subcommands"
 )
 
@@ -30,9 +30,11 @@ func (c *createCmd) Usage() string {
 func (c *createCmd) SetFlags(f *flag.FlagSet) {}
 
 func (c *createCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	repos := repository.Use(ctx)
+
 	sender := msg.Sender{}
 	if err := sender.SendCreateMessage(ctx, "aaa"); err != nil {
-		fmt.Printf("Error: %s\n", err.Error())
+		repos.Log.PrintErr(err)
 		return subcommands.ExitFailure
 	}
 

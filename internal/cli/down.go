@@ -3,9 +3,9 @@ package cli
 import (
 	"context"
 	"flag"
-	"fmt"
 
 	"github.com/enuesaa/cywagon/internal/engctl"
+	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/google/subcommands"
 )
 
@@ -30,8 +30,10 @@ func (c *downCmd) Usage() string {
 func (c *downCmd) SetFlags(f *flag.FlagSet) {}
 
 func (c *downCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	repos := repository.Use(ctx)
+
 	if err := engctl.Down(ctx); err != nil {
-		fmt.Printf("Error: %s\n", err.Error())
+		repos.Log.PrintErr(err)
 		return subcommands.ExitFailure
 	}
 

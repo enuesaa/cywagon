@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"io"
+	"net"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -15,6 +16,7 @@ type PsRepositoryInterface interface {
 	ReadPidFile() (int, error)
 	GetSockPath() (string, error)
 	DeleteSockFile() error
+	SendThroughSocket(data []byte) error
 }
 
 type PsRepository struct {}
@@ -101,6 +103,24 @@ func (repo *PsRepository) DeleteSockFile() error {
 		return err
 	}
 	if err := os.Remove(path); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (repo *PsRepository) SendThroughSocket(data []byte) error {
+	sock, err := repo.GetSockPath()
+	if err != nil {
+		return err
+	}
+	conn, err := net.Dial("unix", sock)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	_, err = conn.Write(data)
+	if err != nil {
 		return err
 	}
 	return nil
