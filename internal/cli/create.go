@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 
-	"github.com/enuesaa/cywagon/internal/msg"
+	"github.com/enuesaa/cywagon/internal/engctl"
 	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/google/subcommands"
 )
@@ -32,11 +32,9 @@ func (c *createCmd) SetFlags(f *flag.FlagSet) {}
 func (c *createCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	repos := repository.Use(ctx)
 
-	sender := msg.Sender{}
-	if err := sender.SendCreateMessage(ctx, "aaa"); err != nil {
+	if err := engctl.SendCreateMessage(ctx); err != nil {
 		repos.Log.PrintErr(err)
 		return subcommands.ExitFailure
 	}
-
 	return subcommands.ExitSuccess
 }

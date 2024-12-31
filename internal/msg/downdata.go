@@ -1,3 +1,3 @@
-package schema
+package msg
 
 type DownData struct {}

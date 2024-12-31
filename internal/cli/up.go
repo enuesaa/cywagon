@@ -50,6 +50,5 @@ func (c *upCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) 
 			return subcommands.ExitFailure
 		}
 	}
-
 	return subcommands.ExitSuccess
 }

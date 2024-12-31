@@ -1,4 +1,4 @@
-package schema
+package msg
 
 type Message[T any] struct {
 	Operation string `json:"operation"`

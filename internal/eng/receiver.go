@@ -5,19 +5,19 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/enuesaa/cywagon/internal/msg/schema"
+	"github.com/enuesaa/cywagon/internal/msg"
 	"github.com/enuesaa/cywagon/internal/repository"
 )
 
 func Receive(ctx context.Context, bytes []byte) error {
 	repos := repository.Use(ctx)
 
-	var pre schema.Message[struct{}]
+	var pre msg.Message[struct{}]
 	if err := json.Unmarshal(bytes, &pre); err != nil {
 		return err
 	}
 	if pre.Operation == "create" {
-		var message schema.Message[schema.CreateData]
+		var message msg.Message[msg.CreateData]
 		if err := json.Unmarshal(bytes, &message); err != nil {
 			return err
 		}

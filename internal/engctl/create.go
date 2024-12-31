@@ -1,22 +1,20 @@
-package msg
+package engctl
 
 import (
 	"context"
 	"encoding/json"
 
-	"github.com/enuesaa/cywagon/internal/msg/schema"
+	"github.com/enuesaa/cywagon/internal/msg"
 	"github.com/enuesaa/cywagon/internal/repository"
 )
 
-type Sender struct {}
-
-func (s *Sender) SendCreateMessage(ctx context.Context, name string) error {
+func SendCreateMessage(ctx context.Context) error {
 	repos := repository.Use(ctx)
 
-	message := schema.Message[schema.CreateData]{
+	message := msg.Message[msg.CreateData]{
 		Operation: "create",
-		Data: schema.CreateData{
-			Name: name,
+		Data: msg.CreateData{
+			Name: "aaa",
 		},
 	}
 	bytes, err := json.Marshal(message)

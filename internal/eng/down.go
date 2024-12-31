@@ -17,6 +17,7 @@ func Down(ctx context.Context) error {
 		return err
 	}
 
+	// TODO: subcommands.ExitStatus を返せればベスト
 	os.Exit(0)
 
 	return nil
