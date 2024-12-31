@@ -34,5 +34,6 @@ func (c *downCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}
 		fmt.Printf("Error: %s\n", err.Error())
 		return subcommands.ExitFailure
 	}
+
 	return subcommands.ExitSuccess
 }

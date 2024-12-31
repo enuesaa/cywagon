@@ -42,12 +42,12 @@ func (c *upCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) 
 			fmt.Printf("Error: %s\n", err.Error())
 			return subcommands.ExitFailure
 		}
-		return subcommands.ExitSuccess
+	} else {
+		if err := engctl.Up(ctx); err != nil {
+			fmt.Printf("Error: %s\n", err.Error())
+			return subcommands.ExitFailure
+		}
 	}
 
-	if err := engctl.Up(); err != nil {
-		fmt.Printf("Error: %s\n", err.Error())
-		return subcommands.ExitFailure
-	}
 	return subcommands.ExitSuccess
 }

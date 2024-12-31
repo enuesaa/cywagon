@@ -1,12 +1,13 @@
 package engctl
 
 import (
+	"context"
 	"fmt"
 	"os/exec"
 	"syscall"
 )
 
-func Up() error {
+func Up(ctx context.Context) error {
 	cmd := exec.Command("cywagon", "up", "--foreground")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Setsid: true,

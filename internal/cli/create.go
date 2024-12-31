@@ -29,11 +29,12 @@ func (c *createCmd) Usage() string {
 
 func (c *createCmd) SetFlags(f *flag.FlagSet) {}
 
-func (c *createCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *createCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	sender := msg.Sender{}
-	if err := sender.SendCreateMessage("aaa"); err != nil {
+	if err := sender.SendCreateMessage(ctx, "aaa"); err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
 		return subcommands.ExitFailure
 	}
+
 	return subcommands.ExitSuccess
 }

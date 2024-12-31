@@ -1,16 +1,20 @@
 package msg
 
 import (
+	"context"
 	"encoding/json"
 	"net"
 
 	"github.com/enuesaa/cywagon/internal/msg/schema"
+	"github.com/enuesaa/cywagon/internal/repository"
 )
 
 type Sender struct {}
 
-func (s *Sender) send(bytes []byte) error {
-	socket, err := Socket()
+func (s *Sender) send(ctx context.Context, bytes []byte) error {
+	repos := repository.Use(ctx)
+
+	socket, err := repos.Ps.GetSockPath()
 	if err != nil {
 		return err
 	}
@@ -28,7 +32,7 @@ func (s *Sender) send(bytes []byte) error {
 	return nil
 }
 
-func (s *Sender) SendCreateMessage(name string) error {
+func (s *Sender) SendCreateMessage(ctx context.Context, name string) error {
 	message := schema.Message[schema.CreateData]{
 		Operation: "create",
 		Data: schema.CreateData{
@@ -39,5 +43,5 @@ func (s *Sender) SendCreateMessage(name string) error {
 	if err != nil {
 		return err
 	}
-	return s.send(bytes)
+	return s.send(ctx, bytes)
 }
