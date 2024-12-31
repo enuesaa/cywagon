@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"errors"
 	"flag"
 
 	"github.com/enuesaa/cywagon/internal/eng"
@@ -41,6 +42,9 @@ func (c *upCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) 
 
 	if c.foreground {
 		if err := eng.Up(ctx); err != nil {
+			if errors.Is(err, eng.ErrDownEngine) {
+				return subcommands.ExitSuccess
+			}
 			repos.Log.PrintErr(err)
 			return subcommands.ExitFailure
 		}

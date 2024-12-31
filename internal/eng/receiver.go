@@ -30,7 +30,7 @@ func Receive(ctx context.Context, bytes []byte) error {
 		if err := Down(ctx); err != nil {
 			return err
 		}
-		return nil
+		return ErrDownEngine
 	}
 
 	return fmt.Errorf("not found such operation")
