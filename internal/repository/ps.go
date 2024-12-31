@@ -11,7 +11,7 @@ import (
 
 type PsRepositoryInterface interface {
 	GetPidFilePath() (string, error)
-	CreatePidFile(pid int) error
+	CreatePidFile() error
 	DeletePidFile() error
 	ReadPidFile() (int, error)
 	GetSockPath() (string, error)
@@ -33,7 +33,7 @@ func (repo *PsRepository) GetPidFilePath() (string, error) {
 }
 
 
-func (repo *PsRepository) CreatePidFile(pid int) error {
+func (repo *PsRepository) CreatePidFile() error {
 	path, err := repo.GetPidFilePath()
 	if err != nil {
 		return err
@@ -45,6 +45,7 @@ func (repo *PsRepository) CreatePidFile(pid int) error {
 	}
 	defer f.Close()
 
+	pid := os.Getpid()
 	content := fmt.Sprintf("%d", pid)
 	if _, err := f.Write([]byte(content)); err != nil {
 		return err

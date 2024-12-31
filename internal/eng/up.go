@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 
 	"github.com/enuesaa/cywagon/internal/repository"
 )
@@ -14,13 +13,14 @@ var ErrDownEngine = fmt.Errorf("engine down")
 func Up(ctx context.Context) error {
 	repos := repository.Use(ctx)
 
-	pid := os.Getegid()
-	if err := repos.Ps.CreatePidFile(pid); err != nil {
+	if err := repos.Ps.CreatePidFile(); err != nil {
 		return err
 	}
 
+	receiver := Receiver{}
+
 	err := repos.Ps.ListenSocket(func(b []byte) error {
-		if err := Receive(ctx, b); err != nil {
+		if err := receiver.Receive(ctx, b); err != nil {
 			if errors.Is(err, ErrDownEngine) {
 				return err
 			}
@@ -29,8 +29,5 @@ func Up(ctx context.Context) error {
 		}
 		return nil
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
