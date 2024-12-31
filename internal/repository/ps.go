@@ -17,6 +17,7 @@ type PsRepositoryInterface interface {
 	GetSockPath() (string, error)
 	DeleteSockFile() error
 	SendThroughSocket(data []byte) error
+	ListenSocket(callback func(b []byte) error) error
 }
 
 type PsRepository struct {}
@@ -109,11 +110,11 @@ func (repo *PsRepository) DeleteSockFile() error {
 }
 
 func (repo *PsRepository) SendThroughSocket(data []byte) error {
-	sock, err := repo.GetSockPath()
+	socket, err := repo.GetSockPath()
 	if err != nil {
 		return err
 	}
-	conn, err := net.Dial("unix", sock)
+	conn, err := net.Dial("unix", socket)
 	if err != nil {
 		return err
 	}
@@ -124,4 +125,33 @@ func (repo *PsRepository) SendThroughSocket(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+// Listen and wait until err fallback
+func (repo *PsRepository) ListenSocket(callback func(b []byte) error) error {
+	socket, err := repo.GetSockPath()
+	if err != nil {
+		return err
+	}
+	listener, err := net.Listen("unix", socket)
+	if err != nil {
+		return err
+	}
+	defer listener.Close()
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			return err
+		}
+		defer conn.Close()
+
+		bytes, err := io.ReadAll(conn)
+		if err != nil {
+			return err
+		}
+		if err := callback(bytes); err != nil {
+			return err
+		}
+	}
 }
