@@ -17,7 +17,7 @@ type PsRepositoryInterface interface {
 	DeletePidFile() error
 	ReadPidFile() (int, error)
 	SendSigTerm(pid int) error
-	CatchSigTerm(callback func())
+	CatchSignalStop(callback func())
 	Exit(code int)
 	GetSockPath() (string, error)
 	DeleteSockFile() error
@@ -105,9 +105,9 @@ func (repo *PsRepository) SendSigTerm(pid int) error {
 	return nil
 }
 
-func (repo *PsRepository) CatchSigTerm(callback func()) {
+func (repo *PsRepository) CatchSignalStop(callback func()) {
 	sig := make(chan os.Signal, 1)
-	signal.Notify(sig, syscall.SIGTERM)
+	signal.Notify(sig, syscall.SIGTERM, syscall.SIGINT)
 	<-sig
 	callback()
 }

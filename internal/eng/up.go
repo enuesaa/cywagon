@@ -18,13 +18,7 @@ func Up(ctx context.Context) error {
 	}
 
 	go Serve(ctx)
-
-	go repos.Ps.CatchSigTerm(func() {
-		repos.Log.Info("sigterm")
-		if err := Down(ctx); err != nil {
-			repos.Log.Info("Error: %s", err.Error())
-		}
-	})
+	go Down(ctx)
 
 	receiver := Receiver{}
 
