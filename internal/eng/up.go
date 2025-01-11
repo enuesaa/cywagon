@@ -17,6 +17,8 @@ func Up(ctx context.Context) error {
 		return err
 	}
 
+	go Serve()
+
 	receiver := Receiver{}
 
 	err := repos.Ps.ListenSocket(func(b []byte) error {

@@ -8,6 +8,8 @@ require (
 	go.uber.org/mock v0.5.0
 )
 
+require golang.org/x/time v0.8.0 // indirect
+
 require (
 	github.com/google/subcommands v1.2.0
 	github.com/labstack/gommon v0.4.2 // indirect
