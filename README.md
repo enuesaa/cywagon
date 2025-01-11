@@ -25,12 +25,15 @@ $ cywagon down
 
 ### Features
 - ウェブサーバ
-- CloudFront Functions のようにリクエスト/レスポンスを整形できる
-  - lua で記述
+  - 静的コンテンツのウェブサーバ
+  - 将来的には PHP など動かしたいが実装や FastCGI への理解に時間がかかりそうなので、一旦は静的コンテンツのみ
+- 設定ファイルを lua で記述する
+- handler も lua で記述できる
+  - CloudFront Functions のようにリクエスト/レスポンスを整形できる
+  - CloudFront はリクエスト/レスポンスとトリガーが分かれているが、挙動が案外わかりづらいので、いわゆるミドルウェアみたいに next() を呼ぶ方式にする。
+- systemd で start できる
+  - なのでコマンドとしては --foreground と --config-check のみ
 
 ### Stacks
 - Go
-- AWS EC2 + Route53
-- systemd とかでよしなにできたらいいなあ
-- DNS サーバのセルフホストもできるけど、時間かかるので、Route 53 前提
-- docker みたいに engine と cli の構成
+- AWS EC2
