@@ -5,6 +5,7 @@ import (
 	"io"
 	"net"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strconv"
 	"syscall"
@@ -16,6 +17,8 @@ type PsRepositoryInterface interface {
 	DeletePidFile() error
 	ReadPidFile() (int, error)
 	SendSigTerm(pid int) error
+	CatchSigTerm(callback func())
+	Exit(code int)
 	GetSockPath() (string, error)
 	DeleteSockFile() error
 	SendThroughSocket(data []byte) error
@@ -100,6 +103,17 @@ func (repo *PsRepository) SendSigTerm(pid int) error {
 		return err
 	}
 	return nil
+}
+
+func (repo *PsRepository) CatchSigTerm(callback func()) {
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGTERM)
+	<-sig
+	callback()
+}
+
+func (repo *PsRepository) Exit(code int) {
+	os.Exit(code)
 }
 
 func (repo *PsRepository) GetSockPath() (string, error) {

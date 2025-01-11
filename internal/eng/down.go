@@ -2,7 +2,6 @@ package eng
 
 import (
 	"context"
-	"os"
 
 	"github.com/enuesaa/cywagon/internal/repository"
 )
@@ -16,6 +15,7 @@ func Down(ctx context.Context) error {
 	if err := repos.Ps.DeleteSockFile(); err != nil {
 		return err
 	}
-	os.Exit(0)
+	repos.Ps.Exit(0)
+
 	return nil
 }
