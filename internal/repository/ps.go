@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"syscall"
 )
 
 type PsRepositoryInterface interface {
@@ -14,6 +15,7 @@ type PsRepositoryInterface interface {
 	CreatePidFile() error
 	DeletePidFile() error
 	ReadPidFile() (int, error)
+	SendSigTerm(pid int) error
 	GetSockPath() (string, error)
 	DeleteSockFile() error
 	SendThroughSocket(data []byte) error
@@ -87,6 +89,17 @@ func (repo *PsRepository) ReadPidFile() (int, error) {
 		return -1, err
 	}
 	return pid, nil
+}
+
+func (repo *PsRepository) SendSigTerm(pid int) error {
+	process, err := os.FindProcess(pid)
+	if err != nil {
+		return err
+	}
+	if err := process.Signal(syscall.SIGTERM); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (repo *PsRepository) GetSockPath() (string, error) {

@@ -4,6 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/enuesaa/cywagon/internal/repository"
 )
@@ -18,6 +21,16 @@ func Up(ctx context.Context) error {
 	}
 
 	go Serve()
+
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGTERM)
+	go func() {
+		<-sig
+		repos.Log.Info("sigterm")
+		if err := Down(ctx); err != nil {
+			repos.Log.Info("Error: %s", err.Error())
+		}
+	}()
 
 	receiver := Receiver{}
 

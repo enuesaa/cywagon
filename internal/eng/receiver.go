@@ -19,8 +19,6 @@ func (r *Receiver) Receive(ctx context.Context, b []byte) error {
 	switch pre.Operation {
 	case "create":
 		return r.ReceiveCreate(ctx, b)
-	case "down":
-		return r.ReceiveDown(ctx, b)		
 	}
 	return fmt.Errorf("not found such operation")
 }
@@ -35,11 +33,4 @@ func (r *Receiver) ReceiveCreate(ctx context.Context, b []byte) error {
 	repos.Log.Info("message: %s", message.Data.Name)
 
 	return nil
-}
-
-func (r *Receiver) ReceiveDown(ctx context.Context, b []byte) error {
-	if err := Down(ctx); err != nil {
-		return err
-	}
-	return ErrDownEngine
 }
