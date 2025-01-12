@@ -2,7 +2,6 @@ package eng
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/enuesaa/cywagon/internal/repository"
@@ -20,16 +19,7 @@ func Up(ctx context.Context) error {
 	go Serve(ctx)
 	go Down(ctx)
 
-	receiver := Receiver{}
-
 	err := repos.Ps.ListenSocket(func(b []byte) error {
-		if err := receiver.Receive(ctx, b); err != nil {
-			if errors.Is(err, ErrDownEngine) {
-				return err
-			}
-			repos.Log.Info("Error: %s", err.Error())
-			return nil
-		}
 		return nil
 	})
 	return err

@@ -42,19 +42,18 @@ func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}
 	}
 
 	runner := liblua.NewRunner(string(scriptbytes))
-
-	if err := L.DoString(string(scriptbytes)); err != nil {
+	if err := runner.Run(); err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("port: %d\n", runner.GetInt("port"))
 	fmt.Printf("hostname: %s\n", runner.GetString("hostname"))
+	fmt.Printf("port: %d\n", runner.GetInt("port"))
 
 	res := runner.S().NewTable()
 	runner.S().SetField(res, "status", lua.LNumber(404))
 
 	nextfn := L.NewFunction(Next)
-	result, err := runner.RunFunction("handler", []lua.LValue{nextfn, nil, res})
+	result, err := runner.RunFunction("handle", []lua.LValue{nextfn, nil, res})
 	if err != nil {
 		panic(err)
 	}

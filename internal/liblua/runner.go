@@ -39,6 +39,7 @@ func (r *Runner) GetInt(name string) int {
 
 func (r *Runner) RunFunction(name string, args []lua.LValue) ([]lua.LValue, error) {
 	fn := r.state.GetGlobal(name).(*lua.LFunction)
+
 	_, err, values := r.state.Resume(lua.NewState(), fn, args...)
 	if err != nil {
 		return values, err
