@@ -30,10 +30,7 @@ func Parse(ctx context.Context) error {
 	response := Response{
 		Status: 404,
 	}
-	res := liblua.Parse(runner.S(), response)
-
-	nextfn := runner.S().NewFunction(Next)
-	result, err := runner.RunFunction("handle", []lua.LValue{nextfn, nil, res})
+	result, err := runner.RunFunction("handle", Next, nil, response)
 	if err != nil {
 		return err
 	}

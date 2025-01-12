@@ -1,6 +1,8 @@
 package liblua
 
 import (
+	"fmt"
+
 	lua "github.com/yuin/gopher-lua"
 )
 
@@ -37,10 +39,26 @@ func (r *Runner) GetInt(name string) int {
 	return int(value)
 }
 
-func (r *Runner) RunFunction(name string, args []lua.LValue) ([]lua.LValue, error) {
+func (r *Runner) RunFunction(name string, args... interface{}) ([]lua.LValue, error) {
 	fn := r.state.GetGlobal(name).(*lua.LFunction)
 
-	_, err, values := r.state.Resume(lua.NewState(), fn, args...)
+	luaArgs := []lua.LValue{}
+	for _, arg := range args {
+		switch argreal := arg.(type) {
+		case string:
+			luaArgs = append(luaArgs, lua.LString(argreal))
+		case int:
+			luaArgs = append(luaArgs, lua.LNumber(argreal))
+		case lua.LGFunction:
+			luaArgs = append(luaArgs, r.state.NewFunction(argreal))
+		case struct{}:
+			
+		default:
+			return []lua.LValue{}, fmt.Errorf("not implemented")
+		}
+	}
+
+	_, err, values := r.state.Resume(lua.NewState(), fn, luaArgs...)
 	if err != nil {
 		return values, err
 	}
