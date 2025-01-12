@@ -2,6 +2,7 @@ package liblua
 
 import (
 	"fmt"
+	"reflect"
 
 	lua "github.com/yuin/gopher-lua"
 )
@@ -17,10 +18,6 @@ type Runner struct {
 	code string
 	state *lua.LState
 
-}
-
-func (r *Runner) S() *lua.LState {
-	return r.state
 }
 
 func (r *Runner) Run() error {
@@ -39,28 +36,39 @@ func (r *Runner) GetInt(name string) int {
 	return int(value)
 }
 
-func (r *Runner) RunFunction(name string, args... interface{}) ([]lua.LValue, error) {
-	fn := r.state.GetGlobal(name).(*lua.LFunction)
-
+func (r *Runner) RunFunction(name string, args... interface{}) (FnResult, error) {
 	luaArgs := []lua.LValue{}
 	for _, arg := range args {
-		switch argreal := arg.(type) {
-		case string:
-			luaArgs = append(luaArgs, lua.LString(argreal))
-		case int:
-			luaArgs = append(luaArgs, lua.LNumber(argreal))
-		case lua.LGFunction:
-			luaArgs = append(luaArgs, r.state.NewFunction(argreal))
-		case struct{}:
-			
+		if arg == nil {
+			luaArgs = append(luaArgs, lua.LNil)
+			continue
+		}
+		switch reflect.TypeOf(arg).Kind() {
+		case reflect.Struct:
+			luaArgs = append(luaArgs, Parse(arg))
+		case reflect.String:
+			luaArgs = append(luaArgs, lua.LString(arg.(string)))
+		case reflect.Int:
+			luaArgs = append(luaArgs, lua.LNumber(arg.(int)))
+		case reflect.Func:
+			callback := arg.(func())
+			fn := func(*lua.LState) int {
+				callback()
+				return 0
+			}
+			luaArgs = append(luaArgs, r.state.NewFunction(fn))
 		default:
-			return []lua.LValue{}, fmt.Errorf("not implemented")
+			return FnResult{}, fmt.Errorf("not implemented")
 		}
 	}
 
-	_, err, values := r.state.Resume(lua.NewState(), fn, luaArgs...)
+	luaFn := r.state.GetGlobal(name).(*lua.LFunction)
+	_, err, values := r.state.Resume(lua.NewState(), luaFn, luaArgs...)
 	if err != nil {
-		return values, err
+		return FnResult{}, err
 	}
-	return values, nil
+	if len(values) == 0 {
+		return FnResult{value: lua.LNil}, nil
+	}
+	return FnResult{value: values[0]}, nil
 }

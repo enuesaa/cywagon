@@ -6,7 +6,6 @@ import (
 
 	"github.com/enuesaa/cywagon/internal/liblua"
 	"github.com/enuesaa/cywagon/internal/repository"
-	lua "github.com/yuin/gopher-lua"
 )
 
 func Parse(ctx context.Context) error {
@@ -34,15 +33,13 @@ func Parse(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	status := runner.S().GetField(result[0], "status")
-	fmt.Printf("res: %+v\n", status)
+	fmt.Printf("res: %d\n", result.GetInt("status"))
 
 	return nil
 }
 
 type Config struct {}
 
-func Next(L *lua.LState) int {
+func Next() {
 	fmt.Println("this is next function")
-	return 0
 }
