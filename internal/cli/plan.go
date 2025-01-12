@@ -10,27 +10,27 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-func newCheckCmd() *checkCmd {
-	return &checkCmd{}
+func newPlanCmd() *planCmd {
+	return &planCmd{}
 }
 
-type checkCmd struct {}
+type planCmd struct {}
 
-func (c *checkCmd) Name() string {
-	return "check"
+func (c *planCmd) Name() string {
+	return "plan"
 }
 
-func (c *checkCmd) Synopsis() string {
-	return "check"
+func (c *planCmd) Synopsis() string {
+	return "plan"
 }
 
-func (c *checkCmd) Usage() string {
-	return "cywagon check\n"
+func (c *planCmd) Usage() string {
+	return "cywagon plan\n"
 }
 
-func (c *checkCmd) SetFlags(f *flag.FlagSet) {}
+func (c *planCmd) SetFlags(f *flag.FlagSet) {}
 
-func (c *checkCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	L := lua.NewState()
 	defer L.Close()
 
