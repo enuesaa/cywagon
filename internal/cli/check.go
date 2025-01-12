@@ -50,16 +50,24 @@ func (c *checkCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{
 	hostname := L.GetGlobal("hostname").(lua.LString)
 	fmt.Printf("hostname: %s\n", hostname)
 
-	co, cocancel := L.NewThread()
-	defer cocancel()
 	fn := L.GetGlobal("handle").(*lua.LFunction)
-	_, err, values := L.Resume(co, fn)
+
+	res := L.NewTable()
+	L.SetField(res, "status", lua.LNumber(404))
+
+	nextfn := L.NewFunction(Next)
+
+	_, err, values := L.Resume(lua.NewState(), fn, nextfn, nil, res)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("res: %v\n", values)
-	fmt.Printf("res\n")
+	status := L.GetField(values[0], "status")
+	fmt.Printf("res: %+v\n", status)
 
-	// return subcommands.ExitSuccess
+	return subcommands.ExitSuccess
+}
+
+func Next(L *lua.LState) int {
+	fmt.Println("this is next function")
 	return 0
 }
