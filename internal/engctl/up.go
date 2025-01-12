@@ -1,21 +1,36 @@
-package engctl
+package eng
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"os/exec"
-	"syscall"
+
+	"github.com/enuesaa/cywagon/internal/repository"
 )
 
+var ErrDownEngine = fmt.Errorf("engine down")
+
 func Up(ctx context.Context) error {
-	cmd := exec.Command("cywagon", "up", "--foreground")
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Setsid: true,
-	}
-	if err := cmd.Start(); err != nil {
+	repos := repository.Use(ctx)
+
+	if err := repos.Ps.CreatePidFile(); err != nil {
 		return err
 	}
-	fmt.Printf("pid: %d\n", cmd.Process.Pid)
 
-	return nil
+	go Serve(ctx)
+	go Down(ctx)
+
+	receiver := Receiver{}
+
+	err := repos.Ps.ListenSocket(func(b []byte) error {
+		if err := receiver.Receive(ctx, b); err != nil {
+			if errors.Is(err, ErrDownEngine) {
+				return err
+			}
+			repos.Log.Info("Error: %s", err.Error())
+			return nil
+		}
+		return nil
+	})
+	return err
 }

@@ -1,4 +1,4 @@
-package scriptrun
+package confctl
 
 import (
 	"github.com/yuin/gopher-lua"
