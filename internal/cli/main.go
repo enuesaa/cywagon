@@ -12,6 +12,7 @@ func Run(ctx context.Context) int {
 	subcommands.Register(newUpCmd(), "")
 	subcommands.Register(newDownCmd(), "")
 	subcommands.Register(newCreateCmd(), "")
+	subcommands.Register(newCheckCmd(), "")
 
 	// parse
 	flag.Parse()
