@@ -8,7 +8,10 @@ require (
 	go.uber.org/mock v0.5.0
 )
 
-require golang.org/x/time v0.8.0 // indirect
+require (
+	github.com/fatih/structtag v1.2.0 // indirect
+	golang.org/x/time v0.8.0 // indirect
+)
 
 require (
 	github.com/google/subcommands v1.2.0
