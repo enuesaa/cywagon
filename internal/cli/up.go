@@ -2,12 +2,8 @@ package cli
 
 import (
 	"context"
-	"errors"
 	"flag"
 
-	"github.com/enuesaa/cywagon/internal/eng"
-	"github.com/enuesaa/cywagon/internal/engctl"
-	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/google/subcommands"
 )
 
@@ -38,21 +34,21 @@ func (c *upCmd) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *upCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	repos := repository.Use(ctx)
+	// repos := repository.Use(ctx)
 
-	if c.foreground {
-		if err := eng.Up(ctx); err != nil {
-			if errors.Is(err, eng.ErrDownEngine) {
-				return subcommands.ExitSuccess
-			}
-			repos.Log.PrintErr(err)
-			return subcommands.ExitFailure
-		}
-	} else {
-		if err := engctl.Up(ctx); err != nil {
-			repos.Log.PrintErr(err)
-			return subcommands.ExitFailure
-		}
-	}
+	// if c.foreground {
+	// 	if err := eng.Up(ctx); err != nil {
+	// 		if errors.Is(err, eng.ErrDownEngine) {
+	// 			return subcommands.ExitSuccess
+	// 		}
+	// 		repos.Log.PrintErr(err)
+	// 		return subcommands.ExitFailure
+	// 	}
+	// } else {
+	// 	// if err := engctl.Up(ctx); err != nil {
+	// 	// 	repos.Log.PrintErr(err)
+	// 	// 	return subcommands.ExitFailure
+	// 	// }
+	// }
 	return subcommands.ExitSuccess
 }

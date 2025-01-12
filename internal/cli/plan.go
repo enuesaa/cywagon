@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/enuesaa/cywagon/internal/liblua"
 	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/google/subcommands"
 	lua "github.com/yuin/gopher-lua"
@@ -40,28 +41,24 @@ func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}
 		panic(err)
 	}
 
+	runner := liblua.NewRunner(string(scriptbytes))
+
 	if err := L.DoString(string(scriptbytes)); err != nil {
 		panic(err)
 	}
 
-	port := L.GetGlobal("port").(lua.LNumber)
-	fmt.Printf("port: %d\n", port)
+	fmt.Printf("port: %d\n", runner.GetInt("port"))
+	fmt.Printf("hostname: %s\n", runner.GetString("hostname"))
 
-	hostname := L.GetGlobal("hostname").(lua.LString)
-	fmt.Printf("hostname: %s\n", hostname)
-
-	fn := L.GetGlobal("handle").(*lua.LFunction)
-
-	res := L.NewTable()
-	L.SetField(res, "status", lua.LNumber(404))
+	res := runner.S().NewTable()
+	runner.S().SetField(res, "status", lua.LNumber(404))
 
 	nextfn := L.NewFunction(Next)
-
-	_, err, values := L.Resume(lua.NewState(), fn, nextfn, nil, res)
+	result, err := runner.RunFunction("handler", []lua.LValue{nextfn, nil, res})
 	if err != nil {
 		panic(err)
 	}
-	status := L.GetField(values[0], "status")
+	status := runner.S().GetField(result[0], "status")
 	fmt.Printf("res: %+v\n", status)
 
 	return subcommands.ExitSuccess
