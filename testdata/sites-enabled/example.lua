@@ -5,6 +5,7 @@ print('a')
 
 function handle(next, req, res)
     print('handle')
+    print(res.status)
     next()
 
     res.status = 200

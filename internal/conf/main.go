@@ -24,8 +24,13 @@ func Parse(ctx context.Context) error {
 	fmt.Printf("hostname: %s\n", runner.GetString("hostname"))
 	fmt.Printf("port: %d\n", runner.GetInt("port"))
 
-	res := runner.S().NewTable()
-	runner.S().SetField(res, "status", lua.LNumber(404))
+	type Response struct {
+		Status int `lua:"status"`
+	}
+	response := Response{
+		Status: 404,
+	}
+	res := liblua.Parse(runner.S(), response)
 
 	nextfn := runner.S().NewFunction(Next)
 	result, err := runner.RunFunction("handle", []lua.LValue{nextfn, nil, res})
