@@ -3,7 +3,7 @@ port = 3000
 
 print('a')
 
-function handle(next, req, res)
+function handler(next, req, res)
     print('handle')
     print(res.status)
     next()

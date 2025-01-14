@@ -1,11 +1,6 @@
 package liblua
 
-import (
-	"fmt"
-	"reflect"
-
-	lua "github.com/yuin/gopher-lua"
-)
+import lua "github.com/yuin/gopher-lua"
 
 func NewRunner(code string) Runner {
 	return Runner{
@@ -36,39 +31,8 @@ func (r *Runner) GetInt(name string) int {
 	return int(value)
 }
 
-func (r *Runner) RunFunction(name string, args... interface{}) (FnResult, error) {
-	luaArgs := []lua.LValue{}
-	for _, arg := range args {
-		if arg == nil {
-			luaArgs = append(luaArgs, lua.LNil)
-			continue
-		}
-		switch reflect.TypeOf(arg).Kind() {
-		case reflect.Struct:
-			luaArgs = append(luaArgs, Parse(arg))
-		case reflect.String:
-			luaArgs = append(luaArgs, lua.LString(arg.(string)))
-		case reflect.Int:
-			luaArgs = append(luaArgs, lua.LNumber(arg.(int)))
-		case reflect.Func:
-			callback := arg.(func())
-			fn := func(*lua.LState) int {
-				callback()
-				return 0
-			}
-			luaArgs = append(luaArgs, r.state.NewFunction(fn))
-		default:
-			return FnResult{}, fmt.Errorf("not implemented")
-		}
-	}
+func (r *Runner) GetFunction(name string) Fn {
+	luafn := r.state.GetGlobal(name).(*lua.LFunction)
 
-	luaFn := r.state.GetGlobal(name).(*lua.LFunction)
-	_, err, values := r.state.Resume(lua.NewState(), luaFn, luaArgs...)
-	if err != nil {
-		return FnResult{}, err
-	}
-	if len(values) == 0 {
-		return FnResult{value: lua.LNil}, nil
-	}
-	return FnResult{value: values[0]}, nil
+	return Fn{luafn}
 }
