@@ -13,7 +13,7 @@ func newPlanCmd() *planCmd {
 	return &planCmd{}
 }
 
-type planCmd struct {}
+type planCmd struct{}
 
 func (c *planCmd) Name() string {
 	return "plan"

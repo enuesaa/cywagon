@@ -3,15 +3,13 @@ module github.com/enuesaa/cywagon
 go 1.23.0
 
 require (
+	github.com/fatih/structtag v1.2.0
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/yuin/gopher-lua v1.1.1
 	go.uber.org/mock v0.5.0
 )
 
-require (
-	github.com/fatih/structtag v1.2.0 // indirect
-	golang.org/x/time v0.8.0 // indirect
-)
+require golang.org/x/time v0.8.0 // indirect
 
 require (
 	github.com/google/subcommands v1.2.0

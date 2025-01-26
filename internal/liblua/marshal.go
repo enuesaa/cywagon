@@ -26,7 +26,7 @@ func Parse(from interface{}) *lua.LTable {
 			log.Printf("Error: %s\n", err.Error())
 			continue
 		}
-	
+
 		luaTag, err := tags.Get("lua")
 		if err != nil {
 			log.Printf("Error: %s\n", err.Error())

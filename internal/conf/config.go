@@ -8,8 +8,8 @@ import (
 
 type Config struct {
 	Hostname string
-	Port int
-	handler liblua.Fn
+	Port     int
+	handler  liblua.Fn
 }
 
 func (c *Config) RunHandler() error {

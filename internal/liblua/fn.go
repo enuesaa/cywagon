@@ -11,7 +11,7 @@ type Fn struct {
 	luafn *lua.LFunction
 }
 
-func (f *Fn) Run(args... interface{}) (FnResult, error) {
+func (f *Fn) Run(args ...interface{}) (FnResult, error) {
 	state := lua.NewState()
 
 	luaArgs := []lua.LValue{}

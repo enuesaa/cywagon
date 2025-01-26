@@ -4,15 +4,14 @@ import lua "github.com/yuin/gopher-lua"
 
 func NewRunner(code string) Runner {
 	return Runner{
-		code: code,
+		code:  code,
 		state: lua.NewState(),
 	}
 }
 
 type Runner struct {
-	code string
+	code  string
 	state *lua.LState
-
 }
 
 func (r *Runner) Run() error {

@@ -25,7 +25,7 @@ type PsRepositoryInterface interface {
 	ListenSocket(callback func(b []byte) error) error
 }
 
-type PsRepository struct {}
+type PsRepository struct{}
 
 func (repo *PsRepository) GetPidFilePath() (string, error) {
 	homedir, err := os.UserHomeDir()
@@ -36,7 +36,6 @@ func (repo *PsRepository) GetPidFilePath() (string, error) {
 
 	return path, nil
 }
-
 
 func (repo *PsRepository) CreatePidFile() error {
 	path, err := repo.GetPidFilePath()

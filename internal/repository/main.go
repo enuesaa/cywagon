@@ -4,15 +4,15 @@ import "context"
 
 func NewRepos() Repos {
 	return Repos{
-		Fs: &FsRepository{},
-		Ps: &PsRepository{},
+		Fs:  &FsRepository{},
+		Ps:  &PsRepository{},
 		Log: &LogRepository{},
 	}
 }
 
 type Repos struct {
-	Fs FsRepositoryInterface
-	Ps PsRepositoryInterface
+	Fs  FsRepositoryInterface
+	Ps  PsRepositoryInterface
 	Log LogRepositoryInterface
 }
 

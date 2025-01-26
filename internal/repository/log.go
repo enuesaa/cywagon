@@ -18,7 +18,7 @@ type LogRepositoryInterface interface {
 	Info(format string, a ...any) error
 }
 
-type LogRepository struct {}
+type LogRepository struct{}
 
 func (repo *LogRepository) PrintErr(err error) {
 	log.Printf("Error: %s\n", err.Error())

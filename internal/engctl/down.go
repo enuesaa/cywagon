@@ -27,4 +27,4 @@ func RemoveFiles(ctx context.Context) error {
 		return err
 	}
 	return nil
-} 
+}
