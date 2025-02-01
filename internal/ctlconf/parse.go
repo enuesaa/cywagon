@@ -11,8 +11,8 @@ func parse(ctx context.Context, code string) (Conf, error) {
 	runner := liblua.NewRunner(code)
 
 	entry := ConfEntry{
-		Workdir: ".",
-		Cmd: "",
+		Workdir:        ".",
+		Cmd:            "",
 		WaitForHealthy: 60,
 	}
 	if err := runner.SetGlobal("entry", entry); err != nil {
@@ -20,8 +20,8 @@ func parse(ctx context.Context, code string) (Conf, error) {
 	}
 	healthCheck := ConfHealthCheck{
 		Protocol: "HTTP",
-		Method: "GET",
-		Path: "/",
+		Method:   "GET",
+		Path:     "/",
 	}
 	if err := runner.SetGlobal("healthCheck", healthCheck); err != nil {
 		return config, err

@@ -2,14 +2,14 @@ package libserve
 
 import (
 	"fmt"
-	"net/http"
-	"net/url"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
 )
 
-type CustomTransport struct {}
+// see https://engineering.mercari.com/blog/entry/2018-12-05-105737/
+type CustomTransport struct{}
 
 func (t *CustomTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	req.Host = "example.com"
@@ -19,27 +19,18 @@ func (t *CustomTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 func Serve() error {
-	e := echo.New()
-
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "method=${method}, uri=${uri}, status=${status}\n",
-	}))
-
-	exampleComUrl, err := url.Parse("https://example.com")
+	host, err := url.Parse("https://example.com")
 	if err != nil {
 		return err
 	}
-	e.Use(middleware.ProxyWithConfig(middleware.ProxyConfig{
-		Skipper: func(e echo.Context) bool {
-			return false
-		},
-		Balancer: middleware.NewRoundRobinBalancer([]*middleware.ProxyTarget{
-			{
-				URL: exampleComUrl,
-			},
-		}),
-		Transport: &CustomTransport{},
-	}))
 
-	return e.Start(":3000")
+	proxy := httputil.NewSingleHostReverseProxy(host)
+
+	proxy.Transport = &CustomTransport{}
+	proxy.ModifyResponse = func(resp *http.Response) error {
+		return nil
+	}
+	proxy.ErrorHandler = func(w http.ResponseWriter, req *http.Request, err error) {}
+
+	return http.ListenAndServe(":3000", proxy)
 }
