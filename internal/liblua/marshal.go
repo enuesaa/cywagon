@@ -30,11 +30,13 @@ func Marshal(from interface{}) (*lua.LTable, error) {
 			return nil, err
 		}
 
-		if field.Type.Name() == "int" {
+		fieldType := field.Type.Name()
+		switch fieldType {
+		case "int":
 			state.SetField(ret, luaTag.Name, lua.LNumber(value.(int)))
-		} else if field.Type.Name() == "string" {
+		case "string":
 			state.SetField(ret, luaTag.Name, lua.LString(value.(string)))
-		} else {
+		default:
 			return nil, fmt.Errorf("unknown")
 		}
 	}

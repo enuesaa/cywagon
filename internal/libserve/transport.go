@@ -4,7 +4,7 @@ import "net/http"
 
 // see https://engineering.mercari.com/blog/entry/2018-12-05-105737/
 
-type Transport struct{
+type Transport struct {
 	Host string
 }
 
