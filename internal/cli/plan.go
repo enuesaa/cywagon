@@ -32,7 +32,7 @@ func (c *planCmd) SetFlags(f *flag.FlagSet) {}
 func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	repos := repository.Use(ctx)
 
-	config, err := conf.Parse(ctx, "testdata/sites-enabled/example.lua")
+	config, err := libconf.Parse(ctx, "testdata/sites-enabled/example.lua")
 	if err != nil {
 		repos.Log.PrintErr(err)
 		return subcommands.ExitFailure
