@@ -30,16 +30,15 @@ func (c *Config) RunHandler() error {
 	response := Response{
 		Status: 404,
 	}
+	next := func() {
+		fmt.Println("this is next function")
+	}
 
-	result, err := c.handler.Run(Next, nil, response)
+	result, err := c.handler.Run(next, nil, response)
 	if err != nil {
 		return err
 	}
 	fmt.Printf("res: %d\n", result.GetInt("status"))
 
 	return nil
-}
-
-func Next() {
-	fmt.Println("this is next function")
 }

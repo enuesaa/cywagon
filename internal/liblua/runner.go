@@ -15,6 +15,18 @@ type Runner struct {
 }
 
 func (r *Runner) Run() error {
+	entry := lua.LTable{}
+	r.state.SetField(&entry, "cmd", lua.LString("a"))
+	r.state.SetField(&entry, "workdir", lua.LString("a"))
+	r.state.SetField(&entry, "waitForHealthy", lua.LNumber(60))
+	r.state.SetGlobal("entry", &entry)
+
+	healthCheck := lua.LTable{}
+	r.state.SetField(&healthCheck, "protocol", lua.LString("a"))
+	r.state.SetField(&healthCheck, "method", lua.LString("a"))
+	r.state.SetField(&healthCheck, "path", lua.LNumber(60))
+	r.state.SetGlobal("healthCheck", &healthCheck)
+
 	return r.state.DoString(r.code)
 }
 
