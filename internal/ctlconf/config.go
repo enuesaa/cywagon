@@ -7,9 +7,20 @@ import (
 )
 
 type Config struct {
-	Hostname string
-	Port     int
-	handler  liblua.Fn
+	Hostname    string
+	Entry       ConfigEntry
+	HealthCheck ConfigHealthCheck
+	handler     liblua.Fn
+}
+type ConfigEntry struct {
+	Workdir        string
+	Cmd            string
+	WaitForHealthy int
+}
+type ConfigHealthCheck struct {
+	Protocol string
+	Method   string
+	Path     string
 }
 
 func (c *Config) RunHandler() error {

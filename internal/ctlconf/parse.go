@@ -22,7 +22,6 @@ func Parse(ctx context.Context, path string) (Config, error) {
 		return config, err
 	}
 	config.Hostname = runner.GetString("hostname")
-	config.Port = runner.GetInt("port")
 	config.handler = runner.GetFunction("handler")
 
 	return config, nil

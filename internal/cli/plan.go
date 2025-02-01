@@ -15,7 +15,7 @@ func newPlanCmd() *planCmd {
 	}
 }
 
-type planCmd struct{
+type planCmd struct {
 	conf string
 }
 
@@ -36,7 +36,7 @@ func (c *planCmd) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if err := usecase.Start(ctx, c.conf); err != nil {
+	if err := usecase.Plan(ctx, c.conf); err != nil {
 		log.Printf("Error: %s", err.Error())
 		return subcommands.ExitFailure
 	}
