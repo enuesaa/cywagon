@@ -40,6 +40,13 @@ func (r *Runner) GetInt(name string) int {
 	return int(value)
 }
 
+// func (r *Runner) GetTable(name string) {
+// 	value := r.state.GetGlobal(name).(*lua.LTable)
+// 	value.RawGet()
+
+// 	return int(value)
+// }
+
 func (r *Runner) GetFunction(name string) Fn {
 	luafn := r.state.GetGlobal(name).(*lua.LFunction)
 

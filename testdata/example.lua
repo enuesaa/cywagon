@@ -1,8 +1,9 @@
-hostname = "example.com"
+host = "example.com"
 
-entry.workdir = "/tmp"
-entry.cmd = "go run ."
+entry.workdir = "../kakkofn"
+entry.cmd = "pnpm vite preview"
 entry.waitForHealthy = 60
+entry.host = "http://localhost:4173"
 
 healthCheck.protocol = "HTTP"
 healthCheck.method = "GET"

@@ -7,7 +7,7 @@ import (
 )
 
 type Conf struct {
-	Hostname    string
+	Host        string
 	Entry       ConfEntry
 	HealthCheck ConfHealthCheck
 	handler     liblua.Fn
@@ -16,6 +16,7 @@ type ConfEntry struct {
 	Workdir        string `lua:"workdir"`
 	Cmd            string `lua:"cmd"`
 	WaitForHealthy int    `lua:"waitForHealthy"`
+	Host           string `lua:"host"`
 }
 type ConfHealthCheck struct {
 	Protocol string `lua:"protocol"`

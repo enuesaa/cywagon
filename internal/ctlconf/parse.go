@@ -30,7 +30,7 @@ func parse(ctx context.Context, code string) (Conf, error) {
 	if err := runner.Run(); err != nil {
 		return config, err
 	}
-	config.Hostname = runner.GetString("hostname")
+	config.Host = runner.GetString("host")
 	config.handler = runner.GetFunction("handler")
 
 	return config, nil
