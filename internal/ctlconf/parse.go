@@ -33,5 +33,10 @@ func parse(ctx context.Context, code string) (Conf, error) {
 	config.Host = runner.GetString("host")
 	config.handler = runner.GetFunction("handler")
 
+	if err := runner.GetTable("entry", &entry); err != nil {
+		return config, err
+	}
+	config.Entry = entry
+
 	return config, nil
 }

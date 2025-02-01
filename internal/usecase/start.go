@@ -23,10 +23,8 @@ func Start(ctx context.Context, confDir string) error {
 	fmt.Printf("%+v\n", config)
 
 	go func() {
-		// cmd := exec.Command("bash", "-c", config.Entry.Cmd)
-		// cmd.Dir = config.Entry.Workdir
-		cmd := exec.Command("bash", "-c", "pnpm vite preview")
-		cmd.Dir = "../kakkofn"
+		cmd := exec.Command("bash", "-c", config.Entry.Cmd)
+		cmd.Dir = config.Entry.Workdir
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Start(); err != nil {
@@ -35,10 +33,8 @@ func Start(ctx context.Context, confDir string) error {
 		cmd.Start()
 	}()
 
-	// time.Sleep(time.Duration(config.Entry.WaitForHealthy) * time.Second)
-	time.Sleep(time.Duration(10) * time.Second)
+	time.Sleep(time.Duration(config.Entry.WaitForHealthy) * time.Second)
 	fmt.Println("start serve")
 
-	// return libserve.Serve(config.Entry.Host)
-	return libserve.Serve("http://localhost:4173")
+	return libserve.Serve(config.Entry.Host)
 }
