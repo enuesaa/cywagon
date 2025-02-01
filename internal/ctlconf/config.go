@@ -1,4 +1,4 @@
-package libconf
+package ctlconf
 
 import (
 	"fmt"
