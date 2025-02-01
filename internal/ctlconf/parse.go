@@ -18,6 +18,20 @@ func Parse(ctx context.Context, path string) (Config, error) {
 	}
 
 	runner := liblua.NewRunner(string(scriptbytes))
+
+	entry := ConfigEntry{
+		Workdir: ".",
+		Cmd: "",
+		WaitForHealthy: 60,
+	}
+	healthCheck := ConfigHealthCheck{
+		Protocol: "HTTP",
+		Method: "GET",
+		Path: "/",
+	}
+	runner.SetGlobal("entry", entry)
+	runner.SetGlobal("healthCheck", healthCheck)
+
 	if err := runner.Run(); err != nil {
 		return config, err
 	}

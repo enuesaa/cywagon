@@ -13,14 +13,14 @@ type Config struct {
 	handler     liblua.Fn
 }
 type ConfigEntry struct {
-	Workdir        string
-	Cmd            string
-	WaitForHealthy int
+	Workdir        string `lua:"workdir"`
+	Cmd            string `lua:"cmd"`
+	WaitForHealthy int    `lua:"waitForHealthy"`
 }
 type ConfigHealthCheck struct {
-	Protocol string
-	Method   string
-	Path     string
+	Protocol string `lua:"protocol"`
+	Method   string `lua:"method"`
+	Path     string `lua:"path"`
 }
 
 func (c *Config) RunHandler() error {

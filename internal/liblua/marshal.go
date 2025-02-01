@@ -10,7 +10,7 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-func Parse(from interface{}) *lua.LTable {
+func Marshal(from interface{}) *lua.LTable {
 	state := lua.NewState()
 	ret := state.NewTable()
 
@@ -32,7 +32,7 @@ func Parse(from interface{}) *lua.LTable {
 			log.Printf("Error: %s\n", err.Error())
 			continue
 		}
-		fmt.Printf("FOUND: %s ===>>> %+v\n", luaTag.Name, target.Field(i))
+		fmt.Printf("MARSHAL: %s ===>>> %+v\n", luaTag.Name, target.Field(i))
 
 		if field.Type.Name() == "int" {
 			state.SetField(ret, luaTag.Name, lua.LNumber(value.(int)))
