@@ -1,8 +1,11 @@
 package usecase
 
-import "context"
+import (
+	"context"
+
+	"github.com/enuesaa/cywagon/internal/libserve"
+)
 
 func Start(ctx context.Context, confDir string) error {
-
-	return nil
+	return libserve.Serve()
 }
