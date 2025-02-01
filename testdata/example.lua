@@ -1,7 +1,12 @@
 hostname = "example.com"
-port = 3000
 
-print('a')
+entry.workdir = "/tmp"
+entry.cmd = "go run ."
+entry.waitForHealthy = 60
+
+healthCheck.protocol = "HTTP"
+healthCheck.method = "GET"
+healthCheck.path = "/"
 
 function handler(next, req, res)
     print('handle')
