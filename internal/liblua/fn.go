@@ -22,7 +22,11 @@ func (f *Fn) Run(args ...interface{}) (FnResult, error) {
 		}
 		switch reflect.TypeOf(arg).Kind() {
 		case reflect.Struct:
-			luaArgs = append(luaArgs, Marshal(arg))
+			val, err := Marshal(arg)
+			if err != nil {
+				return FnResult{}, err
+			}
+			luaArgs = append(luaArgs, val)
 		case reflect.String:
 			luaArgs = append(luaArgs, lua.LString(arg.(string)))
 		case reflect.Int:

@@ -10,7 +10,7 @@ import (
 func Plan(ctx context.Context, confDir string) error {
 	repos := repository.Use(ctx)
 
-	config, err := ctlconf.Parse(ctx, "testdata/example.lua")
+	config, err := ctlconf.Read(ctx, "testdata/example.lua")
 	if err != nil {
 		return err
 	}

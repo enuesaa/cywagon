@@ -20,15 +20,15 @@ type startCmd struct {
 }
 
 func (c *startCmd) Name() string {
-	return "up"
+	return "start"
 }
 
 func (c *startCmd) Synopsis() string {
-	return "Up"
+	return "Start"
 }
 
 func (c *startCmd) Usage() string {
-	return "cywagon up\n"
+	return "cywagon start\n"
 }
 
 func (c *startCmd) SetFlags(f *flag.FlagSet) {

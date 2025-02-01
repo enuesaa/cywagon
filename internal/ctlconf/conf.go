@@ -6,24 +6,24 @@ import (
 	"github.com/enuesaa/cywagon/internal/liblua"
 )
 
-type Config struct {
+type Conf struct {
 	Hostname    string
-	Entry       ConfigEntry
-	HealthCheck ConfigHealthCheck
+	Entry       ConfEntry
+	HealthCheck ConfHealthCheck
 	handler     liblua.Fn
 }
-type ConfigEntry struct {
+type ConfEntry struct {
 	Workdir        string `lua:"workdir"`
 	Cmd            string `lua:"cmd"`
 	WaitForHealthy int    `lua:"waitForHealthy"`
 }
-type ConfigHealthCheck struct {
+type ConfHealthCheck struct {
 	Protocol string `lua:"protocol"`
 	Method   string `lua:"method"`
 	Path     string `lua:"path"`
 }
 
-func (c *Config) RunHandler() error {
+func (c *Conf) RunHandler() error {
 	type Response struct {
 		Status int `lua:"status"`
 	}

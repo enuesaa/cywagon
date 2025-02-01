@@ -14,8 +14,14 @@ type Runner struct {
 	state *lua.LState
 }
 
-func (r *Runner) SetGlobal(name string, value interface{}) {
-	r.state.SetGlobal(name, Marshal(value))
+func (r *Runner) SetGlobal(name string, value interface{}) error {
+	val, err := Marshal(value)
+	if err != nil {
+		return err
+	}
+	r.state.SetGlobal(name, val)
+
+	return nil
 }
 
 func (r *Runner) Run() error {

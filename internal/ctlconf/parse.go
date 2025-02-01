@@ -4,33 +4,28 @@ import (
 	"context"
 
 	"github.com/enuesaa/cywagon/internal/liblua"
-	"github.com/enuesaa/cywagon/internal/repository"
 )
 
-func Parse(ctx context.Context, path string) (Config, error) {
-	repos := repository.Use(ctx)
+func parse(ctx context.Context, code string) (Conf, error) {
+	var config Conf
+	runner := liblua.NewRunner(code)
 
-	var config Config
-
-	scriptbytes, err := repos.Fs.Read(path)
-	if err != nil {
-		return config, err
-	}
-
-	runner := liblua.NewRunner(string(scriptbytes))
-
-	entry := ConfigEntry{
+	entry := ConfEntry{
 		Workdir: ".",
 		Cmd: "",
 		WaitForHealthy: 60,
 	}
-	healthCheck := ConfigHealthCheck{
+	if err := runner.SetGlobal("entry", entry); err != nil {
+		return config, err
+	}
+	healthCheck := ConfHealthCheck{
 		Protocol: "HTTP",
 		Method: "GET",
 		Path: "/",
 	}
-	runner.SetGlobal("entry", entry)
-	runner.SetGlobal("healthCheck", healthCheck)
+	if err := runner.SetGlobal("healthCheck", healthCheck); err != nil {
+		return config, err
+	}
 
 	if err := runner.Run(); err != nil {
 		return config, err
