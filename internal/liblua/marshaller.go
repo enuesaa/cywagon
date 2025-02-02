@@ -9,72 +9,73 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
+func extarctLuaTagValue(m reflect.StructTag) (string, error) {
+	tags, err := structtag.Parse(string(m))
+	if err != nil {
+		return "", fmt.Errorf("lua tag not found: %s", err.Error())
+	}
+	value, err := tags.Get("lua")
+	if err != nil {
+		return "", fmt.Errorf("lua tag not found: %s", err.Error())
+	}
+	return value.Name, nil
+}
+
 func Marshal(from interface{}) (*lua.LTable, error) {
 	state := lua.NewState()
-	ret := state.NewTable()
+	table := state.NewTable()
 
-	target := reflect.TypeOf(from)
-	targetValue := reflect.ValueOf(from)
+	fromType := reflect.TypeOf(from)
+	fromReal := reflect.ValueOf(from)
+	if fromType.Kind() != reflect.Struct {
+		return nil, fmt.Errorf("unsupported value supplied")
+	}
 
-	for i := range target.NumField() {
-		field := target.Field(i)
-		value := targetValue.Field(i).Interface()
+	for i := range fromType.NumField() {
+		field := fromType.Field(i)
+		value := fromReal.Field(i).Interface()
 
-		tags, err := structtag.Parse(string(field.Tag))
+		name, err := extarctLuaTagValue(field.Tag)
 		if err != nil {
 			return nil, err
 		}
 
-		luaTag, err := tags.Get("lua")
-		if err != nil {
-			return nil, err
-		}
-
-		fieldType := field.Type.Name()
-		switch fieldType {
-		case "int":
-			state.SetField(ret, luaTag.Name, lua.LNumber(value.(int)))
-		case "string":
-			state.SetField(ret, luaTag.Name, lua.LString(value.(string)))
+		switch field.Type.Kind() {
+		case reflect.Int:
+			state.SetField(table, name, lua.LNumber(value.(int)))
+		case reflect.String:
+			state.SetField(table, name, lua.LString(value.(string)))
 		default:
-			return nil, fmt.Errorf("unknown")
+			return nil, fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}
 	}
-	return ret, nil
+	return table, nil
 }
 
 func Unmarshal(table *lua.LTable, dest interface{}) error {
 	state := lua.NewState()
 
-	target := reflect.TypeOf(dest).Elem()
-	targetValue := reflect.ValueOf(dest).Elem()
+	destType := reflect.TypeOf(dest).Elem()
+	destReal := reflect.ValueOf(dest).Elem()
 
-	for i := range target.NumField() {
-		field := target.Field(i)
+	for i := range destType.NumField() {
+		field := destType.Field(i)
+		value := destReal.Field(i)
 
-		tags, err := structtag.Parse(string(field.Tag))
+		name, err := extarctLuaTagValue(field.Tag)
 		if err != nil {
 			return err
 		}
-		luaTag, err := tags.Get("lua")
-		if err != nil {
-			return err
-		}
+		luaValue := state.GetField(table, name)
 
-		fieldType := field.Type.Name()
-		refValue := targetValue.FieldByName(field.Name)
-
-		switch fieldType {
-		case "int":
-			val := state.GetField(table, luaTag.Name).(lua.LNumber)
-			refValue.SetInt(int64(val))
-		case "string":
-			val := state.GetField(table, luaTag.Name).(lua.LString)
-			refValue.SetString(string(val))
+		switch field.Type.Kind() {
+		case reflect.Int:
+			value.SetInt(int64(luaValue.(lua.LNumber)))
+		case reflect.String:
+			value.SetString(string(luaValue.(lua.LString)))
 		default:
-			return fmt.Errorf("unknown")
+			return fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}
 	}
 	return nil
 }
-
