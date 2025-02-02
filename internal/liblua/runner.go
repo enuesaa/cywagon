@@ -14,6 +14,10 @@ type Runner struct {
 	state *lua.LState
 }
 
+func (r *Runner) Blend(value interface{}) error {
+	return Inject(r.state, value)
+}
+
 func (r *Runner) SetGlobal(name string, value interface{}) error {
 	val, err := Marshal(value)
 	if err != nil {

@@ -16,10 +16,6 @@ func Start(ctx context.Context, confDir string) error {
 	if err != nil {
 		return err
 	}
-	if err := config.RunHandler(); err != nil {
-		return err
-	}
-
 	fmt.Printf("%+v\n", config)
 
 	go func() {

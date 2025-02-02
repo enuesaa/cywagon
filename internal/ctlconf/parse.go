@@ -1,14 +1,21 @@
 package ctlconf
 
-import (
-	"context"
+import "github.com/enuesaa/cywagon/internal/liblua"
 
-	"github.com/enuesaa/cywagon/internal/liblua"
-)
-
-func parse(ctx context.Context, code string) (Conf, error) {
-	var config Conf
+func parse(code string) (Conf, error) {
+	config := Conf{
+		Host: "aa",
+		Entry: ConfEntry{
+			Workdir:        ".",
+			Cmd:            "",
+			WaitForHealthy: 60,
+		},
+	}
 	runner := liblua.NewRunner(code)
+
+	if err := runner.Blend(config); err != nil {
+		return config, err
+	}
 
 	entry := ConfEntry{
 		Workdir:        ".",
@@ -31,7 +38,7 @@ func parse(ctx context.Context, code string) (Conf, error) {
 		return config, err
 	}
 	config.Host = runner.GetString("host")
-	config.handler = runner.GetFunction("handler")
+	config.Handler = runner.GetFunction("handler")
 
 	if err := runner.GetTable("entry", &entry); err != nil {
 		return config, err
