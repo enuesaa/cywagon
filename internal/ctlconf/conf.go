@@ -1,10 +1,12 @@
 package ctlconf
 
+import "github.com/enuesaa/cywagon/internal/liblua"
+
 type Conf struct {
 	Host        string          `lua:"host"`
 	Entry       ConfEntry       `lua:"entry"`
 	HealthCheck ConfHealthCheck `lua:"healthCheck"`
-	Handler     func()          `lua:"handler"`
+	Handler     liblua.Fn       `lua:"handler"`
 }
 
 type ConfEntry struct {

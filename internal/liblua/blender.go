@@ -7,6 +7,8 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
+var typeFn = reflect.TypeOf(Fn{})
+
 func Inject(state *lua.LState, from interface{}) error {
 	fromType := reflect.TypeOf(from)
 	fromReal := reflect.ValueOf(from)
@@ -22,6 +24,9 @@ func Inject(state *lua.LState, from interface{}) error {
 		if err != nil {
 			continue
 		}
+		if field.Type == typeFn {
+			continue		
+		}
 
 		switch field.Type.Kind() {
 		case reflect.Int:
@@ -34,8 +39,6 @@ func Inject(state *lua.LState, from interface{}) error {
 				return err
 			}
 			state.SetGlobal(name, table)
-		case reflect.Func:
-			// pass
 		default:
 			return fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}
@@ -60,6 +63,12 @@ func Eject(state *lua.LState, dest interface{}) error {
 		}
 		luaValue := state.GetGlobal(name)
 
+		if field.Type == typeFn {
+			luafn := luaValue.(*lua.LFunction)
+			value.Set(reflect.ValueOf(Fn{luafn}))
+			continue		
+		}
+
 		switch field.Type.Kind() {
 		case reflect.Int:
 			value.SetInt(int64(luaValue.(lua.LNumber)))
@@ -69,8 +78,6 @@ func Eject(state *lua.LState, dest interface{}) error {
 			if err := Unmarshal(luaValue.(*lua.LTable), value.Addr().Interface()); err != nil {
 				return err	
 			}
-		case reflect.Func:
-			// pass
 		default:
 			return fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}

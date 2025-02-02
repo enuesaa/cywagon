@@ -25,9 +25,3 @@ func (r *Runner) Run() error {
 func (r *Runner) Eject(value interface{}) error {
 	return Eject(r.state, value)
 }
-
-func (r *Runner) GetFunction(name string) Fn {
-	luafn := r.state.GetGlobal(name).(*lua.LFunction)
-
-	return Fn{luafn}
-}

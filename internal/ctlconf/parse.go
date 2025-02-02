@@ -15,6 +15,7 @@ func parse(code string) (Conf, error) {
 			Method:   "GET",
 			Path:     "/",
 		},
+		Handler: liblua.Fn{},
 	}
 	runner := liblua.NewRunner(code)
 
