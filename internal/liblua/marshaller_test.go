@@ -8,6 +8,23 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
+func TestMarshal(t *testing.T) {
+	type Entry struct {
+		A string `lua:"a"`
+		B int `lua:"b"`
+	}
+	entry := Entry{
+		A: "aaa",
+		B: 1,
+	}
+	table, err := Marshal(entry)
+	require.Nil(t, err)
+
+	state := lua.NewState()
+	assert.Equal(t, "aaa", string(state.GetField(table, "a").(lua.LString)))
+	assert.Equal(t, 1, int(state.GetField(table, "b").(lua.LNumber)))
+}
+
 func TestUnmarshal(t *testing.T) {
 	code := `
 	entry = {}
