@@ -14,18 +14,16 @@ type Runner struct {
 	state *lua.LState
 }
 
-func (r *Runner) Blend(value interface{}) error {
-	if err := Inject(r.state, value); err != nil {
-		return err
-	}
-	if err := r.state.DoString(r.code); err != nil {
-		return err
-	}
-	return Eject(r.state, value)
+func (r *Runner) Inject(value interface{}) error {
+	return Inject(r.state, value)
 }
 
 func (r *Runner) Run() error {
 	return r.state.DoString(r.code)
+}
+
+func (r *Runner) Eject(value interface{}) error {
+	return Eject(r.state, value)
 }
 
 func (r *Runner) GetFunction(name string) Fn {

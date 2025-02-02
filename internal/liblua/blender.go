@@ -8,8 +8,8 @@ import (
 )
 
 func Inject(state *lua.LState, from interface{}) error {
-	fromType := reflect.TypeOf(from).Elem()
-	fromReal := reflect.ValueOf(from).Elem()
+	fromType := reflect.TypeOf(from)
+	fromReal := reflect.ValueOf(from)
 	if fromType.Kind() != reflect.Struct {
 		return fmt.Errorf("unsupported value supplied")
 	}
@@ -34,6 +34,8 @@ func Inject(state *lua.LState, from interface{}) error {
 				return err
 			}
 			state.SetGlobal(name, table)
+		case reflect.Func:
+			// pass
 		default:
 			return fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}
@@ -67,6 +69,8 @@ func Eject(state *lua.LState, dest interface{}) error {
 			if err := Unmarshal(luaValue.(*lua.LTable), value.Addr().Interface()); err != nil {
 				return err	
 			}
+		case reflect.Func:
+			// pass
 		default:
 			return fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}
