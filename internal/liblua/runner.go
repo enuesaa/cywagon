@@ -15,39 +15,17 @@ type Runner struct {
 }
 
 func (r *Runner) Blend(value interface{}) error {
-	return Inject(r.state, value)
-}
-
-func (r *Runner) SetGlobal(name string, value interface{}) error {
-	val, err := Marshal(value)
-	if err != nil {
+	if err := Inject(r.state, value); err != nil {
 		return err
 	}
-	r.state.SetGlobal(name, val)
-
-	return nil
+	if err := r.state.DoString(r.code); err != nil {
+		return err
+	}
+	return Eject(r.state, value)
 }
 
 func (r *Runner) Run() error {
 	return r.state.DoString(r.code)
-}
-
-func (r *Runner) GetString(name string) string {
-	value := r.state.GetGlobal(name).(lua.LString)
-
-	return value.String()
-}
-
-func (r *Runner) GetInt(name string) int {
-	value := r.state.GetGlobal(name).(lua.LNumber)
-
-	return int(value)
-}
-
-func (r *Runner) GetTable(name string, dest interface{}) error {
-	state := r.state.GetGlobal(name).(*lua.LTable)
-
-	return Unmarshal(state, dest)
 }
 
 func (r *Runner) GetFunction(name string) Fn {
