@@ -16,7 +16,7 @@ func Plan(ctx context.Context, confDir string) error {
 	}
 	repos.Log.Print("hostname: %s\n", config.Host)
 
-	if err := ctlconf.RunHandler(config); err != nil {
+	if err := config.RunHandler(); err != nil {
 		return err
 	}
 

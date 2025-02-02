@@ -2,7 +2,7 @@ package ctlconf
 
 import "fmt"
 
-func RunHandler(conf Conf) error {
+func (c *Conf) RunHandler() error {
 	type Response struct {
 		Status int `lua:"status"`
 	}
@@ -13,7 +13,7 @@ func RunHandler(conf Conf) error {
 		fmt.Println("this is next function")
 	}
 
-	result, err := conf.Handler.Run(next, nil, response)
+	result, err := c.Handler(next, nil, response)
 	if err != nil {
 		return err
 	}
