@@ -39,5 +39,5 @@ jobs:
       - uses: ./.github/actions/env
       - run: pip install ansible
   
-      - working-directory: ./ansible
+      - working-directory: ./examples/ansible
         run: ansible-playbook --check playbook.yml
