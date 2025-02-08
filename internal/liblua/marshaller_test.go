@@ -11,7 +11,7 @@ import (
 func TestMarshal(t *testing.T) {
 	type Entry struct {
 		A string `lua:"a"`
-		B int `lua:"b"`
+		B int    `lua:"b"`
 	}
 	entry := Entry{
 		A: "aaa",
@@ -33,7 +33,7 @@ func TestUnmarshal(t *testing.T) {
 	`
 	type Entry struct {
 		A string `lua:"a"`
-		B int `lua:"b"`
+		B int    `lua:"b"`
 	}
 	var entry Entry
 

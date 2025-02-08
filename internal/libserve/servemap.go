@@ -8,7 +8,7 @@ import (
 
 type ServeConf struct {
 	entryUrl *url.URL
-	conf ctlconf.Conf
+	conf     ctlconf.Conf
 }
 type ServeMap map[string]ServeConf
 
@@ -34,7 +34,7 @@ func newServeMap(confs []ctlconf.Conf) ServeMap {
 		}
 		serveConf := ServeConf{
 			entryUrl: entryUrl,
-			conf: conf,
+			conf:     conf,
 		}
 		serveMap[conf.Host] = serveConf
 

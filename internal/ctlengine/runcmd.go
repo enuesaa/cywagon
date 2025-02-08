@@ -10,6 +10,7 @@ type RunCmdArg struct {
 	Workdir string
 	Command string
 }
+
 func RunCmd(ctx context.Context, arg RunCmdArg) {
 	go runCmd(ctx, arg)
 }

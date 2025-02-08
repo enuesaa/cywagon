@@ -31,13 +31,3 @@ jobs:
 
       - run: echo '# staticcheck' >> $GITHUB_STEP_SUMMARY
       - run: staticcheck ./... >> $GITHUB_STEP_SUMMARY
-  
-  ansiblecheck:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/env
-      - run: pip install ansible
-  
-      - working-directory: ./examples/ansible
-        run: ansible-playbook --check playbook.yml

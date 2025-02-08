@@ -7,7 +7,7 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-type Fn = func (args ...interface{}) (*lua.LTable, error)
+type Fn = func(args ...interface{}) (*lua.LTable, error)
 
 func NewFn(luafn *lua.LFunction) Fn {
 	return func(args ...interface{}) (*lua.LTable, error) {
