@@ -3,8 +3,8 @@ package cli
 import (
 	"context"
 	"flag"
-	"log"
 
+	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/enuesaa/cywagon/internal/usecase"
 	"github.com/google/subcommands"
 )
@@ -36,8 +36,10 @@ func (c *planCmd) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	repos := repository.Use(ctx)
+
 	if err := usecase.Plan(ctx, c.conf); err != nil {
-		log.Printf("Error: %s", err.Error())
+		repos.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 
