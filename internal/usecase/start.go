@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"time"
 
 	"github.com/enuesaa/cywagon/internal/ctlconf"
 	"github.com/enuesaa/cywagon/internal/libserve"
@@ -12,26 +11,27 @@ import (
 func Start(ctx context.Context, confDir string) error {
 	repos := repository.Use(ctx)
 
-	files := ctlconf.List(ctx, confDir)
+	var confs []ctlconf.Conf
 
+	files := ctlconf.List(ctx, confDir)
 	for _, file := range files {
-		config, err := ctlconf.Read(ctx, file)
+		conf, err := ctlconf.Read(ctx, file)
 		if err != nil {
 			return err
 		}
-		repos.Log.Info("%+v", config)
+		repos.Log.Info("%+v", conf)
 
 		go func() {
-			if err := repos.Cmd.Start(config.Entry.Workdir, config.Entry.Cmd); err != nil {
+			if err := repos.Cmd.Start(conf.Entry.Workdir, conf.Entry.Cmd); err != nil {
 				repos.Log.Error(err)
 			}
 		}()
-		time.Sleep(time.Duration(config.Entry.WaitForHealthy) * time.Second)
-		repos.Log.Info("start serving")
+		// do this in healthcheck
+		// time.Sleep(time.Duration(config.Entry.WaitForHealthy) * time.Second)
 
-		if err := libserve.Serve(config.Entry.Host); err != nil {
-			return err
-		}
+		confs = append(confs, conf)
 	}
-	return nil
+	repos.Log.Info("start serving")
+
+	return libserve.Serve(confs)
 }

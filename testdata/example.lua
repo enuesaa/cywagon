@@ -3,7 +3,7 @@ host = "example.com"
 entry.workdir = "../kakkofn"
 entry.cmd = "pnpm vite preview"
 entry.waitForHealthy = 5
-entry.host = "http://localhost:4173"
+entry.host = "https://example.com"
 
 healthCheck.protocol = "HTTP"
 healthCheck.method = "GET"
