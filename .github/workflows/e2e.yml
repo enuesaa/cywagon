@@ -15,4 +15,7 @@ jobs:
       - uses: ./.github/actions/env
       - run: go install
 
-      - run: cywagon --help
+      - run: cywagon -help
+
+      - run: nohup cywagon start -conf testdata/examplecom &
+      - run: curl http://localhost:3000
