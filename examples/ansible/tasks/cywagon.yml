@@ -7,12 +7,12 @@
     cmd: systemctl list-unit-files
     executable: /bin/bash
 
-- ansible.builtin.git:
-    repo: https://github.com/enuesaa/cywagon.git
-    version: main
-    dest: "{{ ansible_env.HOME }}"
+# - ansible.builtin.git:
+#     repo: https://github.com/enuesaa/cywagon.git
+#     version: main
+#     dest: "{{ ansible_env.HOME }}"
 
-- ansible.builtin.shell:
-    cmd: go install
-    chdir: "{{ ansible_env.HOME }}/cywagon"
-    executable: /bin/bash
+# - ansible.builtin.shell:
+#     cmd: go install
+#     chdir: "{{ ansible_env.HOME }}/cywagon"
+#     executable: /bin/bash
