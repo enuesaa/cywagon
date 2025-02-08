@@ -1,0 +1,9 @@
+# misc
+.DS_Store
+
+# editor
+.vscode
+
+# test
+cover.out
+cover.html
