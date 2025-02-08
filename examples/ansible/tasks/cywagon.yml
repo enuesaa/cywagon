@@ -1,0 +1,10 @@
+---
+- ansible.builtin.git:
+    repo: https://github.com/enuesaa/cywagon.git
+    version: main
+    dest: "{{ ansible_env.HOME }}/cywagon"
+
+- ansible.builtin.shell:
+    cmd: go install
+    chdir: "{{ ansible_env.HOME }}/cywagon"
+    executable: /bin/bash

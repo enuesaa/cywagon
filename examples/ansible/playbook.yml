@@ -15,10 +15,13 @@
         file: ./tasks/goenv.yml
 
     - ansible.builtin.import_tasks:
-        file: ./tasks/pyenv.yml
+        file: ./tasks/cywagon.yml
 
-    - ansible.builtin.import_tasks:
-        file: ./tasks/nvm.yml
+    # - ansible.builtin.import_tasks:
+    #     file: ./tasks/pyenv.yml
+
+    # - ansible.builtin.import_tasks:
+    #     file: ./tasks/nvm.yml
 
     # - ansible.builtin.import_tasks:
     #     file: ./tasks/tfenv.yml
