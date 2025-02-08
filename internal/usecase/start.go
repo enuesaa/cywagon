@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/enuesaa/cywagon/internal/ctlconf"
+	"github.com/enuesaa/cywagon/internal/ctlengine"
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/repository"
 )
@@ -19,14 +20,11 @@ func Start(ctx context.Context, confDir string) error {
 		if err != nil {
 			return err
 		}
-		repos.Log.Info("%+v", conf)
-
 		if conf.Entry.Cmd != "" {
-			go func() {
-				if err := repos.Cmd.Start(conf.Entry.Workdir, conf.Entry.Cmd); err != nil {
-					repos.Log.Error(err)
-				}
-			}()
+			ctlengine.RunCmd(ctx, ctlengine.RunCmdArg{
+				Workdir: conf.Entry.Workdir,
+				Command: conf.Entry.Cmd,
+			})
 		}
 		confs = append(confs, conf)
 	}
