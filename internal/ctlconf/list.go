@@ -11,8 +11,7 @@ func List(ctx context.Context, dir string) []string {
 
 	list, err := repos.Fs.ListFiles(dir)
 	if err != nil {
-		list = []string{}
+		return []string{}
 	}
-
 	return list
 }

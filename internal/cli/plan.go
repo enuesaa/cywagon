@@ -32,7 +32,7 @@ func (c *planCmd) Usage() string {
 }
 
 func (c *planCmd) SetFlags(f *flag.FlagSet) {
-	f.StringVar(&c.conf, ".", ".", "conf files dir")
+	f.StringVar(&c.conf, "conf", ".", "conf files dir")
 }
 
 func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
