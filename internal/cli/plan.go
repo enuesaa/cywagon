@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"flag"
+	"fmt"
 
 	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/enuesaa/cywagon/internal/usecase"
@@ -32,11 +33,17 @@ func (c *planCmd) Usage() string {
 }
 
 func (c *planCmd) SetFlags(f *flag.FlagSet) {
-	f.StringVar(&c.conf, "conf", ".", "conf files dir")
+	f.StringVar(&c.conf, "conf", "", "conf files dir. required")
 }
 
 func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	repos := repository.Use(ctx)
+
+	if c.conf == "" {
+		err := fmt.Errorf("missing required flag: -conf")
+		repos.Log.Error(err)
+		return subcommands.ExitFailure
+	}
 
 	if err := usecase.Plan(ctx, c.conf); err != nil {
 		repos.Log.Error(err)
