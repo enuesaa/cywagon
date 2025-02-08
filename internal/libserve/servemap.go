@@ -17,11 +17,11 @@ func (m *ServeMap) Get(host string) ServeConf {
 	if ok {
 		return serveConf
 	}
-
-	// TODO: fix
-	serveConf, _ = (*m)["default"]
-
-	return serveConf
+	serveConf, ok = (*m)["default"]
+	if ok {
+		return serveConf
+	}
+	return ServeConf{}
 }
 
 func newServeMap(confs []ctlconf.Conf) ServeMap {
