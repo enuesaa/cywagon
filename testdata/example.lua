@@ -2,7 +2,7 @@ host = "example.com"
 
 entry.workdir = "../kakkofn"
 entry.cmd = "pnpm vite preview"
-entry.waitForHealthy = 60
+entry.waitForHealthy = 5
 entry.host = "http://localhost:4173"
 
 healthCheck.protocol = "HTTP"

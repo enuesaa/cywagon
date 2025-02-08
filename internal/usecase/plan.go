@@ -23,6 +23,5 @@ func Plan(ctx context.Context, confDir string) error {
 			return err
 		}
 	}
-
 	return nil
 }

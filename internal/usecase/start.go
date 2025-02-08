@@ -12,18 +12,26 @@ import (
 func Start(ctx context.Context, confDir string) error {
 	repos := repository.Use(ctx)
 
-	config, err := ctlconf.Read(ctx, "testdata/example.lua")
-	if err != nil {
-		return err
-	}
-	repos.Log.Info("%+v", config)
+	files := ctlconf.List(ctx, confDir)
 
-	go func() {
-		if err := repos.Cmd.Start(config.Entry.Workdir, config.Entry.Cmd); err != nil {
-			repos.Log.Error(err)
+	for _, file := range files {
+		config, err := ctlconf.Read(ctx, file)
+		if err != nil {
+			return err
 		}
-	}()
-	time.Sleep(time.Duration(config.Entry.WaitForHealthy) * time.Second)
+		repos.Log.Info("%+v", config)
 
-	return libserve.Serve(config.Entry.Host)
+		go func() {
+			if err := repos.Cmd.Start(config.Entry.Workdir, config.Entry.Cmd); err != nil {
+				repos.Log.Error(err)
+			}
+		}()
+		time.Sleep(time.Duration(config.Entry.WaitForHealthy) * time.Second)
+		repos.Log.Info("start serving")
+
+		if err := libserve.Serve(config.Entry.Host); err != nil {
+			return err
+		}
+	}
+	return nil
 }
