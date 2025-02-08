@@ -31,10 +31,13 @@ func NewFn(luafn *lua.LFunction) Fn {
 			case reflect.Int:
 				luaArgs = append(luaArgs, lua.LNumber(arg.(int)))
 			case reflect.Func:
-				callback := arg.(func())
-				fn := func(*lua.LState) int {
-					callback()
-					return 0
+				callback := arg.(func(t *lua.LTable) *lua.LTable)
+				fn := func(s *lua.LState) int {
+					table := s.ToTable(1)
+					res := callback(table)
+					s.Push(res)
+
+					return 1
 				}
 				luaArgs = append(luaArgs, state.NewFunction(fn))
 			default:

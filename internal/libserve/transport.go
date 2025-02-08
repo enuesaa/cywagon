@@ -12,7 +12,6 @@ type Transport struct {
 }
 
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
-	// TODO: fix
 	var res *http.Response
 	var err error
 
@@ -24,12 +23,15 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 		}
 	}
 
-	next := func() {
+	next := func() *http.Response {
 		fmt.Printf("next func\n")
-		res, err = http.DefaultTransport.RoundTrip(req)
+		res, _ = http.DefaultTransport.RoundTrip(req)
+		return res
 	}
 	code, _ := serveConf.conf.RunHandler(next)
 	fmt.Printf("code: %d\n", code)
+
+	res.StatusCode = code
 
 	return res, err
 }
