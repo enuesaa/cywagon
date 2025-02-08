@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/enuesaa/cywagon/internal/liblua"
-	lua "github.com/yuin/gopher-lua"
 )
 
 type Conf struct {
@@ -33,20 +32,19 @@ func (c *Conf) RunHandler(realnext func() *http.Response) (int, error) {
 		Status int `lua:"status"`
 	}
 	var req Request
+	var res Response
 
-	next := func(luareq *lua.LTable) *lua.LTable {
+	next := func(req interface{}) interface{} {
 		httpres := realnext()
-		res := Response{
-			Status: httpres.StatusCode,
-		}
-		luares, _ := liblua.Marshal(res)
-		return luares
+		res.Status = httpres.StatusCode
+		return res
 	}
-	res, err := c.Handler(next, req)
+	luaval, err := c.Handler(next, req)
 	if err != nil {
 		return 0, err
 	}
-	status := res.GetInt("status")
-
-	return status, nil
+	if err := liblua.Unmarshal(luaval, &res); err != nil {
+		return 0, err
+	}
+	return res.Status, nil
 }
