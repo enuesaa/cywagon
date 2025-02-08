@@ -11,7 +11,6 @@ func Plan(ctx context.Context, confDir string) error {
 	repos := repository.Use(ctx)
 
 	files := ctlconf.List(ctx, confDir)
-	repos.Log.Info("hostname: %s", files)
 
 	for _, file := range files {
 		config, err := ctlconf.Read(ctx, file)

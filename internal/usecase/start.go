@@ -2,35 +2,28 @@ package usecase
 
 import (
 	"context"
-	"fmt"
-	"os"
-	"os/exec"
 	"time"
 
 	"github.com/enuesaa/cywagon/internal/ctlconf"
 	"github.com/enuesaa/cywagon/internal/libserve"
+	"github.com/enuesaa/cywagon/internal/repository"
 )
 
 func Start(ctx context.Context, confDir string) error {
+	repos := repository.Use(ctx)
+
 	config, err := ctlconf.Read(ctx, "testdata/example.lua")
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%+v\n", config)
+	repos.Log.Info("%+v", config)
 
 	go func() {
-		cmd := exec.Command("bash", "-c", config.Entry.Cmd)
-		cmd.Dir = config.Entry.Workdir
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		if err := cmd.Start(); err != nil {
-			fmt.Println("Error:", err)
+		if err := repos.Cmd.Start(config.Entry.Workdir, config.Entry.Cmd); err != nil {
+			repos.Log.Error(err)
 		}
-		cmd.Start()
 	}()
-
 	time.Sleep(time.Duration(config.Entry.WaitForHealthy) * time.Second)
-	fmt.Println("start serve")
 
 	return libserve.Serve(config.Entry.Host)
 }

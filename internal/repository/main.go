@@ -6,12 +6,14 @@ func NewRepos() Repos {
 	return Repos{
 		Fs:  &FsRepository{},
 		Log: &LogRepository{},
+		Cmd: &CmdRepository{},
 	}
 }
 
 type Repos struct {
 	Fs  FsRepositoryInterface
 	Log LogRepositoryInterface
+	Cmd CmdRepositoryInterface
 }
 
 type reposKey struct{}
