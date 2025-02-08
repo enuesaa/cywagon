@@ -10,14 +10,14 @@ import (
 func Plan(ctx context.Context, confDir string) error {
 	repos := repository.Use(ctx)
 
-	config, err := ctlconf.Read(ctx, "testdata/example.lua")
-	if err != nil {
-		return err
-	}
-	repos.Log.Info("hostname: %s\n", config.Host)
+	files := ctlconf.List(ctx, confDir)
 
-	if err := config.RunHandler(); err != nil {
-		return err
+	for _, file := range files {
+		config, err := ctlconf.Read(ctx, file)
+		if err != nil {
+			return err
+		}
+		repos.Log.Info("hostname: %s\n", config.Host)
 	}
 
 	return nil
