@@ -21,14 +21,13 @@ func Start(ctx context.Context, confDir string) error {
 		}
 		repos.Log.Info("%+v", conf)
 
-		go func() {
-			if err := repos.Cmd.Start(conf.Entry.Workdir, conf.Entry.Cmd); err != nil {
-				repos.Log.Error(err)
-			}
-		}()
-		// do this in healthcheck
-		// time.Sleep(time.Duration(config.Entry.WaitForHealthy) * time.Second)
-
+		if conf.Entry.Cmd != "" {
+			go func() {
+				if err := repos.Cmd.Start(conf.Entry.Workdir, conf.Entry.Cmd); err != nil {
+					repos.Log.Error(err)
+				}
+			}()
+		}
 		confs = append(confs, conf)
 	}
 	repos.Log.Info("start serving")
