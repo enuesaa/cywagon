@@ -1,11 +1,6 @@
 package ctlconf
 
-import (
-	"context"
-
-	"github.com/enuesaa/cywagon/internal/liblua"
-	"github.com/enuesaa/cywagon/internal/repository"
-)
+import "github.com/enuesaa/cywagon/internal/liblua"
 
 type Conf struct {
 	Host        string          `lua:"host"`
@@ -27,24 +22,18 @@ type ConfHealthCheck struct {
 	Path     string `lua:"path"`
 }
 
-func (c *Conf) RunHandler(ctx context.Context) error {
-	repos := repository.Use(ctx)
-
+func (c *Conf) RunHandler(next func()) (int, error) {
 	type Response struct {
 		Status int `lua:"status"`
 	}
 	response := Response{
 		Status: 404,
 	}
-	next := func() {
-		repos.Log.Info("this is next function")
-	}
-
 	result, err := c.Handler(next, nil, response)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	repos.Log.Info("res: %d", result.GetInt("status"))
+	status := result.GetInt("status")
 
-	return nil
+	return status, nil
 }

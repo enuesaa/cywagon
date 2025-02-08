@@ -8,30 +8,37 @@ import (
 	"github.com/enuesaa/cywagon/internal/ctlconf"
 )
 
+type ServeConf struct {
+	entryUrl *url.URL
+	conf ctlconf.Conf
+}
+type ServeMap map[string]ServeConf
+
 func Serve(confs []ctlconf.Conf) error {
-	servemap := map[string]*url.URL{}
+	servemap := make(ServeMap)
 
 	for i, conf := range confs {
-		entryUrl, err := url.Parse(confs[0].Entry.Host)
+		entryUrl, err := url.Parse(conf.Entry.Host)
 		if err != nil {
 			return err
 		}
-		servemap[conf.Host] = entryUrl
+		servemap[conf.Host] = ServeConf{entryUrl: entryUrl, conf: conf}
 		if i == 0 {
-			servemap["default"] = entryUrl
+			servemap["default"] = ServeConf{entryUrl: entryUrl, conf: conf}
 		}
 	}
 	proxy := httputil.ReverseProxy{}
 	proxy.Rewrite = func(req *httputil.ProxyRequest) {
-		entryUrl, ok := servemap[req.In.Host]
+		serveConf, ok := servemap[req.In.Host]
 		if !ok {
-			entryUrl, ok = servemap["default"]
+			serveConf, ok = servemap["default"]
 			if !ok {
 				return
 			}
 		}
-		req.SetURL(entryUrl)
+		req.SetURL(serveConf.entryUrl)
 	}
+	proxy.Transport = &Transport{ServeMap: servemap}
 	// proxy.ModifyResponse = func(resp *http.Response) error {
 	// 	return nil
 	// }
