@@ -5,7 +5,7 @@ entry.host = "https://example.com"
 function handler(req)
     print('handle')
 
-    res = req.invoke()
+    res = invoke(req)
     res.status = 201
 
     return res

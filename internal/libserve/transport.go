@@ -16,7 +16,6 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 		res, err = http.DefaultTransport.RoundTrip(req)
 		return res
 	}
-	// TODO
 	site.Handler(req, next)
 
 	return res, err

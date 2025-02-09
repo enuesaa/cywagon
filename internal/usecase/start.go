@@ -37,8 +37,7 @@ func Start(ctx context.Context, confDir string) error {
 			Host: conf.Host,
 			OriginUrl: conf.Entry.Host,
 			Handler: func(r *http.Request, fn libserve.FnNext) *http.Response {
-				
-				return nil
+				return fn(r)
 			},
 		})
 	}
