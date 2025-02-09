@@ -30,5 +30,18 @@ func Start(ctx context.Context, confDir string) error {
 	}
 	repos.Log.Info("start serving")
 
-	return libserve.Serve(confs)
+	sites := make([]libserve.ServeOptsSite, len(confs))
+	for _, conf := range confs {
+		sites = append(sites, libserve.ServeOptsSite{
+			Host: conf.Host,
+			OriginUrl: conf.Entry.Host,
+			Handler: func() {},
+		})
+	}
+	serveOpts := libserve.ServeOpts{
+		Port: 3000,
+		Sites: sites,
+	}
+
+	return libserve.Serve(serveOpts)
 }

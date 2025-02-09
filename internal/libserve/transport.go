@@ -4,21 +4,16 @@ import "net/http"
 
 // see https://engineering.mercari.com/blog/entry/2018-12-05-105737/
 type Transport struct {
-	ServeMap ServeMap
+	ServeOpts ServeOpts
 }
 
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
-	var res *http.Response
-	var err error
-
-	serveConf := t.ServeMap.Get(req.Host)
-
-	next := func() *http.Response {
-		res, _ = http.DefaultTransport.RoundTrip(req)
+	site := t.ServeOpts.getByHost(req.Host)
+	next := func(req *http.Request) *http.Response {
+		res, _ := http.DefaultTransport.RoundTrip(req)
 		return res
 	}
-	code, _ := serveConf.conf.RunHandler(next)
-	res.StatusCode = code
+	res := site.Handler(req, next)
 
-	return res, err
+	return res, nil
 }
