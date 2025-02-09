@@ -8,15 +8,11 @@ type Transport struct {
 }
 
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
-	var res *http.Response
-
 	site := t.ServeOpts.getByHost(req.Host)
-	next := func(_ *http.Request) *http.Response {
-		res, _ = http.DefaultTransport.RoundTrip(req)
+
+	next := func(r *http.Request) *http.Response {
+		res, _ := http.DefaultTransport.RoundTrip(r)
 		return res
 	}
-	if err := site.Handler(req, next, res); err != nil {
-		return res, err
-	}
-	return res, nil
+	return site.Handler(req, next)
 }

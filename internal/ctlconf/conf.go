@@ -28,29 +28,33 @@ type ConfHealthCheck struct {
 }
 
 // libserve に移したい
-type ConfHandlerRequest struct{}
+type ConfHandlerRequest struct{
+	Path string `lua:"path"`
+}
 type ConfHandlerResponse struct {
 	Status int `lua:"status"`
 }
 
-func (c *Conf) RunHandler(req *http.Request, next libserve.FnNext, res *http.Response) error {
-	handlerReq := ConfHandlerRequest{}
+func (c *Conf) RunHandler(req *http.Request, next libserve.FnNext) (*http.Response, error) {
+	var res *http.Response
+
+	handlerReq := ConfHandlerRequest{
+		Path: req.URL.Path,
+	}
 	handlerRes := ConfHandlerResponse{
 		Status: 0,
 	}
-
-	args := []interface{}{}
-	args = append(args, func(ConfHandlerRequest) ConfHandlerResponse {
+	handlerNext := func(r ConfHandlerRequest) ConfHandlerResponse {
+		req.URL.Path = r.Path
 		res = next(req)
 		handlerRes.Status = res.StatusCode
 		return handlerRes
-	})
-	args = append(args, handlerReq)
+	}
 
-	if err := c.Handler(args, &handlerRes); err != nil {
-		return err
+	if err := c.Handler(&handlerRes, handlerNext, handlerReq); err != nil {
+		return res, err
 	}
 	res.StatusCode = handlerRes.Status
 
-	return nil
+	return res, nil
 }

@@ -7,7 +7,7 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-type Fn func(args []interface{}, res interface{}) error
+type Fn func(res interface{}, args ...interface{}) error
 
 func Inject(state *lua.LState, from interface{}) error {
 	fromType := reflect.TypeOf(from)
@@ -74,7 +74,7 @@ func Eject(state *lua.LState, dest interface{}) error {
 		case reflect.Func:
 			luafn := luaValue.(*lua.LFunction)
 
-			fn := func(args []interface{}, res interface{}) error {
+			fn := func(res interface{}, args ...interface{}) error {
 				luaArgs := []lua.LValue{}
 				for _, arg := range args {
 					luaArg, err := Marshal(arg)
