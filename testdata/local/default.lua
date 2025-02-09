@@ -9,11 +9,11 @@ healthCheck.protocol = "HTTP"
 healthCheck.method = "GET"
 healthCheck.path = "/"
 
-function handler(req)
+function handler(next, req)
     print('handle')
 
-    res = req.invoke()
-    res.status = 200
+    res = next(req)
+    res.status = 201
 
     return res
 end

@@ -27,37 +27,35 @@ func Marshal(from interface{}) (lua.LValue, error) {
 
 	fromType := reflect.TypeOf(from)
 	fromReal := reflect.ValueOf(from)
+	kind := fromType.Kind()
 
-	if fromType.Kind() == reflect.Func {
+	if kind == reflect.Func {
+		arg := fromType.In(0)
+		argReal := reflect.New(arg)
+
 		fn := func(s *lua.LState) int {
 			table := s.ToTable(1)
 
-			in0 := fromType.In(0)
-			in0val := reflect.New(in0)
-
-			dest := in0val.Interface()
-			if err := Unmarshal(table, dest); err != nil {
+			if err := Unmarshal(table, argReal.Interface()); err != nil {
 				fmt.Println(err)
 			}
-			props := []reflect.Value{}
-			props = append(props, in0val.Elem())
-			fmt.Println("aaaaaa")
+			results := fromReal.Call([]reflect.Value{
+				argReal.Elem(),
+			})
 
-			results := fromReal.Call(props)
-
-			luaVal, err := Marshal(results[0].Interface())
+			result, err := Marshal(results[0].Interface())
 			if err != nil {
 				fmt.Println(err)
 				return 0
 			}
-			s.Push(luaVal)
+			s.Push(result)
 
 			return 1
 		}
 		return state.NewFunction(fn), nil
 	}
 
-	if fromType.Kind() != reflect.Struct {
+	if kind != reflect.Struct {
 		return nil, fmt.Errorf("unsupported value supplied %s", fromType)
 	}
 

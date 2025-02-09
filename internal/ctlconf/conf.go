@@ -40,12 +40,12 @@ func (c *Conf) RunHandler(req *http.Request, next libserve.FnNext) *http.Respons
 	}
 
 	args := []interface{}{}
-	args = append(args, ConfHandlerRequest{})
 	args = append(args, func(ConfHandlerRequest) ConfHandlerResponse {
 		httpres = next(req)
 		res.Status = httpres.StatusCode
 		return res
 	})
+	args = append(args, ConfHandlerRequest{})
 
 	if err := c.Handler(args, &res); err != nil {
 		return nil
