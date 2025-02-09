@@ -1,3 +1,3 @@
 package liblua
 
-type Fn func(arg interface{}) interface{}
+type Fn func(args []interface{}, ret interface{}) error

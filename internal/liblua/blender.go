@@ -35,17 +35,7 @@ func Inject(state *lua.LState, from interface{}) error {
 			}
 			state.SetGlobal(name, table)
 		case reflect.Func:
-			fn := func(s *lua.LState) int {
-				props := []reflect.Value{}
-				props = append(props, reflect.ValueOf(s.Get(1)))
-
-				results := fromReal.Call(props)
-
-				s.Push(results[0].Addr().Interface().(lua.LValue))
-			
-				return 1
-			}
-			state.SetGlobal(name, state.NewFunction(fn))
+			// pass
 		default:
 			return fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}
@@ -82,22 +72,24 @@ func Eject(state *lua.LState, dest interface{}) error {
 		case reflect.Func:
 			luafn := luaValue.(*lua.LFunction)
 
-			fn := func(arg interface{}) interface{} {
-				luaArg, err := Marshal(arg)
-				if err != nil {
-					return err
+			fn := func(args []interface{}, ret interface{}) error {
+				luaArgs := []lua.LValue{}
+				for _, arg := range args {
+					luaArg, err := Marshal(arg)
+					if err != nil {
+						return err
+					}
+					luaArgs = append(luaArgs, luaArg)
 				}
-		
-				state := lua.NewState()
-		
-				_, err, values := state.Resume(state, luafn, luaArg)
+
+				_, err, values := state.Resume(lua.NewState(), luafn, luaArgs...)
 				if err != nil {
 					return err
 				}
 				if len(values) == 0 {
 					return nil
 				}
-				return values[0]
+				return Unmarshal(values[0], ret)
 			}
 			value.Set(reflect.ValueOf(fn))
 		default:
