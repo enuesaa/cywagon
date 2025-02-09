@@ -3,24 +3,11 @@
 ## Planning
 ### Commands
 ```console
-$ cywagon create
-failed to create project due to admin server does not started.
-please run `cywagon up`
+$ cywagon plan -help
+`plan` validates config files like `nginx -t`.
 
-$ cywagon up
-
-$ cywagon create <project-name> --hostname <hostname>
-
-$ cywagon ls --filter <project-name>:<prefix>
-<project-name>:<version-name> published
-<project-name>:<version-name>
-
-$ cywagon push <project-name>:<version-name> --from-dir .
-<project-name>:<version-name>
-
-$ cywagon publish <project-name>:<version-name>
-
-$ cywagon down
+$ cywagon start -help
+`start` starts web server.
 ```
 
 ### Features
@@ -29,8 +16,24 @@ $ cywagon down
   - 静的コンテンツも配信できればベストだが一旦スコープアウト
 - logging
 - 設定ファイルを lua で記述する
-- systemd で start できる
-  - なのでコマンドとしては --foreground と --config-check のみ
+- lua で handler を書くことができ、リクエストパスやステータスコードを override できる
+
+```lua
+host = "example.com"
+
+origin.host = "https://example.com"
+
+function handler(next, req)
+    if (req.path == "/favicon.ico") then
+        req.path = "/aaa"
+    end
+
+    res = next(req)
+    res.status = 200
+
+    return res
+end
+```
 
 ### Stacks
 - Go
