@@ -21,12 +21,33 @@ func extarctLuaTagValue(m reflect.StructTag) (string, error) {
 	return value.Name, nil
 }
 
-func Marshal(from interface{}) (*lua.LTable, error) {
+func Marshal(from interface{}) (lua.LValue, error) {
 	state := lua.NewState()
 	table := state.NewTable()
 
 	fromType := reflect.TypeOf(from)
 	fromReal := reflect.ValueOf(from)
+	if fromType.Kind() == reflect.Func {
+		fn := func(s *lua.LState) int {
+			args := []reflect.Value{}
+			for i := range fromType.NumIn() {
+				luaVal := s.Get(i+1)
+				arg := reflect.New(fromType.In(i)).Elem()
+				Unmarshal(luaVal, arg)
+				args[i] = arg
+			}
+
+			results := fromReal.Call(args)
+
+			for _, result := range results {
+				luaVal, _ := Marshal(result)
+				s.Push(luaVal)
+			}
+			return len(results)
+		}
+		return state.NewFunction(fn), nil
+	}
+
 	if fromType.Kind() != reflect.Struct {
 		return nil, fmt.Errorf("unsupported value supplied")
 	}
@@ -52,7 +73,7 @@ func Marshal(from interface{}) (*lua.LTable, error) {
 	return table, nil
 }
 
-func Unmarshal(table *lua.LTable, dest interface{}) error {
+func Unmarshal(table lua.LValue, dest interface{}) error {
 	state := lua.NewState()
 
 	destType := reflect.TypeOf(dest).Elem()
