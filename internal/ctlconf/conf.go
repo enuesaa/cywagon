@@ -9,7 +9,7 @@ type Conf struct {
 	Host        string          `lua:"host"`
 	Entry       ConfEntry       `lua:"entry"`
 	HealthCheck ConfHealthCheck `lua:"healthCheck"`
-	Handler     liblua.FnI      `lua:"handler"`
+	Handler     liblua.Fn       `lua:"handler"`
 }
 
 type ConfEntry struct {

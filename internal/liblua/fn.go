@@ -1,37 +1,39 @@
 package liblua
 
 import (
-	"fmt"
 	"reflect"
 
 	lua "github.com/yuin/gopher-lua"
 )
 
-type FnI = func(args []interface{}) []interface{}
+type Fn = func(args []interface{}) []interface{}
 
+func NewFn(luafn *lua.LFunction) Fn {
+	state := lua.NewState()
 
-type Fn = func(args ...interface{}) (*lua.LTable, error)
-
-func NewFn(luafn *lua.LFunction) FnI {
 	return func(args []interface{}) []interface{} {
-		results := make([]interface{}, 0)
-		state := lua.NewState()
+		var results []interface{}
+		var luaargs []lua.LValue
 
-		var luaArgs []lua.LValue
 		for _, arg := range args {
-			if arg == nil {
-				luaArgs = append(luaArgs, lua.LNil)
-				continue
-			}
-			switch reflect.TypeOf(arg).Kind() {
+			argType := reflect.TypeOf(arg)
+
+			switch argType.Kind() {
 			case reflect.Struct:
 				val, err := Marshal(arg)
 				if err != nil {
 					return results
 				}
-				luaArgs = append(luaArgs, val)
+				luaargs = append(luaargs, val)
 			case reflect.Func:
 				callback := arg.(func(interface{}) interface{})
+
+				fnargs := []lua.LValue{}
+				for i := range argType.NumIn() {
+					val, _ := Marshal(argType.In(i))
+					fnargs = append(fnargs, val)
+				}
+
 				fn := func(s *lua.LState) int {
 					table := s.ToTable(1)
 					res := callback(table)
@@ -39,13 +41,13 @@ func NewFn(luafn *lua.LFunction) FnI {
 					s.Push(luares)
 					return 1
 				}
-				luaArgs = append(luaArgs, state.NewFunction(fn))
+				luaargs = append(luaargs, state.NewFunction(fn))
 			default:
 				return results
 			}
 		}
 
-		_, err, values := state.Resume(lua.NewState(), luafn, luaArgs...)
+		_, err, values := state.Resume(lua.NewState(), luafn, luaargs...)
 		if err != nil {
 			return results
 		}
