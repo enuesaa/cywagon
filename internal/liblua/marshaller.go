@@ -28,27 +28,6 @@ func Marshal(from interface{}) (lua.LValue, error) {
 	fromType := reflect.TypeOf(from)
 	fromReal := reflect.ValueOf(from)
 
-	if fromType.Kind() == reflect.Func {
-		fn := func(s *lua.LState) int {
-			args := []reflect.Value{}
-			for i := range fromType.NumIn() {
-				luaVal := s.Get(i+1)
-				arg := reflect.New(fromType.In(i)).Elem()
-				Unmarshal(luaVal, arg)
-				args[i] = arg
-			}
-
-			results := fromReal.Call(args)
-
-			for _, result := range results {
-				luaVal, _ := Marshal(result)
-				s.Push(luaVal)
-			}
-			return len(results)
-		}
-		return state.NewFunction(fn), nil
-	}
-
 	if fromType.Kind() != reflect.Struct {
 		return nil, fmt.Errorf("unsupported value supplied")
 	}
@@ -67,6 +46,20 @@ func Marshal(from interface{}) (lua.LValue, error) {
 			state.SetField(table, name, lua.LNumber(value.(int)))
 		case reflect.String:
 			state.SetField(table, name, lua.LString(value.(string)))
+		case reflect.Func:
+			fn := func(s *lua.LState) int {
+				args := []reflect.Value{}
+				// args = append(args, table)
+
+				results := fromReal.Call(args)
+	
+				for _, result := range results {
+					luaVal, _ := Marshal(result)
+					s.Push(luaVal)
+				}
+				return len(results)
+			}
+			state.SetField(table, name, state.NewFunction(fn))
 		default:
 			return nil, fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}

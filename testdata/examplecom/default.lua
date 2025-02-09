@@ -2,10 +2,10 @@ host = "example.com"
 
 entry.host = "https://example.com"
 
-function handler(next, req)
+function handler(req)
     print('handle')
 
-    res = next(req)
+    res = req.invoke()
     res.status = 201
 
     return res

@@ -25,23 +25,22 @@ type ConfHealthCheck struct {
 	Path     string `lua:"path"`
 }
 
-type ConfHandlerRequest struct{}
+type ConfHandlerRequest struct{
+	Invoke func(ConfHandlerRequest) ConfHandlerResponse `lua:"invoke"`
+}
 type ConfHandlerResponse struct{
 	Status int `lua:"status"`
 }
 
 func (c *Conf) RunHandler(serveNext libserve.FnNext) error {
-	next := func(req ConfHandlerRequest) ConfHandlerResponse {
-		serveRes := serveNext(nil)
-		res := ConfHandlerResponse{
-			Status: serveRes.StatusCode,
-		}
-		return res
-	}
-	req := ConfHandlerRequest{}
 	res := ConfHandlerResponse{
 		Status: 200,
 	}
+	req := ConfHandlerRequest{
+		Invoke: func(req ConfHandlerRequest) ConfHandlerResponse {
 
-	return c.Handler(&res, next, req)
+			return res
+		},
+	}
+	return c.Handler(&res, req)
 }
