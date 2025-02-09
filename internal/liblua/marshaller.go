@@ -42,13 +42,14 @@ func Marshal(from interface{}) (lua.LValue, error) {
 			results := fromReal.Call([]reflect.Value{
 				argReal.Elem(),
 			})
+			result := results[0]
 
-			result, err := Marshal(results[0].Interface())
+			luaResult, err := Marshal(result.Interface())
 			if err != nil {
 				fmt.Println(err)
 				return 0
 			}
-			s.Push(result)
+			s.Push(luaResult)
 
 			return 1
 		}

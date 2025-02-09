@@ -36,8 +36,8 @@ func Start(ctx context.Context, confDir string) error {
 		sites = append(sites, libserve.ServeOptsSite{
 			Host:      conf.Host,
 			OriginUrl: conf.Entry.Host,
-			Handler: func(req *http.Request, fn libserve.FnNext) *http.Response {
-				return conf.RunHandler(req, fn)
+			Handler: func(req *http.Request, fn libserve.FnNext, res *http.Response) error {
+				return conf.RunHandler(req, fn, res)
 			},
 		})
 	}
