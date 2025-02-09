@@ -7,10 +7,14 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
+type FnI = func(args []interface{}) []interface{}
+
+
 type Fn = func(args ...interface{}) (*lua.LTable, error)
 
-func NewFn(luafn *lua.LFunction) Fn {
-	return func(args ...interface{}) (*lua.LTable, error) {
+func NewFn(luafn *lua.LFunction) FnI {
+	return func(args []interface{}) []interface{} {
+		results := make([]interface{}, 0)
 		state := lua.NewState()
 
 		var luaArgs []lua.LValue
@@ -23,7 +27,7 @@ func NewFn(luafn *lua.LFunction) Fn {
 			case reflect.Struct:
 				val, err := Marshal(arg)
 				if err != nil {
-					return nil, err
+					return results
 				}
 				luaArgs = append(luaArgs, val)
 			case reflect.Func:
@@ -37,17 +41,17 @@ func NewFn(luafn *lua.LFunction) Fn {
 				}
 				luaArgs = append(luaArgs, state.NewFunction(fn))
 			default:
-				return nil, fmt.Errorf("not implemented")
+				return results
 			}
 		}
 
 		_, err, values := state.Resume(lua.NewState(), luafn, luaArgs...)
 		if err != nil {
-			return nil, err
+			return results
 		}
 		if len(values) == 0 {
-			return nil, nil
+			return results
 		}
-		return values[0].(*lua.LTable), nil
+		return results
 	}
 }

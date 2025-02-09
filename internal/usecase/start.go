@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/enuesaa/cywagon/internal/ctlconf"
 	"github.com/enuesaa/cywagon/internal/ctlengine"
@@ -35,7 +36,10 @@ func Start(ctx context.Context, confDir string) error {
 		sites = append(sites, libserve.ServeOptsSite{
 			Host: conf.Host,
 			OriginUrl: conf.Entry.Host,
-			Handler: func() {},
+			Handler: func(r *http.Request, fn libserve.FnNext) *http.Response {
+				
+				return nil
+			},
 		})
 	}
 	serveOpts := libserve.ServeOpts{

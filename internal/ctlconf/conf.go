@@ -1,16 +1,15 @@
 package ctlconf
 
 import (
-	"net/http"
-
 	"github.com/enuesaa/cywagon/internal/liblua"
+	"github.com/enuesaa/cywagon/internal/libserve"
 )
 
 type Conf struct {
 	Host        string          `lua:"host"`
 	Entry       ConfEntry       `lua:"entry"`
 	HealthCheck ConfHealthCheck `lua:"healthCheck"`
-	Handler     liblua.Fn       `lua:"handler"`
+	Handler     liblua.FnI      `lua:"handler"`
 }
 
 type ConfEntry struct {
@@ -26,25 +25,24 @@ type ConfHealthCheck struct {
 	Path     string `lua:"path"`
 }
 
-func (c *Conf) RunHandler(realnext func() *http.Response) (int, error) {
-	type Request struct{}
-	type Response struct {
-		Status int `lua:"status"`
-	}
-	var req Request
-	var res Response
+type ConfHandlerRequest struct{}
+type ConfHandlerResponse struct{
+	Status int `lua:"status"`
+}
 
-	next := func(req interface{}) interface{} {
-		httpres := realnext()
-		res.Status = httpres.StatusCode
+func (c *Conf) RunHandler(serveNext libserve.FnNext) error {
+	next := func(req ConfHandlerRequest) ConfHandlerResponse {
+		serveRes := serveNext(nil)
+		res := ConfHandlerResponse{
+			Status: serveRes.StatusCode,
+		}
 		return res
 	}
-	luaval, err := c.Handler(next, req)
-	if err != nil {
-		return 0, err
-	}
-	if err := liblua.Unmarshal(luaval, &res); err != nil {
-		return 0, err
-	}
-	return res.Status, nil
+	req := ConfHandlerRequest{}
+	args := []interface{}{next, req}
+	
+	// TODO
+	c.Handler(args)
+
+	return nil
 }
