@@ -7,6 +7,8 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
+type Fn func(args []interface{}, ret interface{}) error
+
 func Inject(state *lua.LState, from interface{}) error {
 	fromType := reflect.TypeOf(from)
 	fromReal := reflect.ValueOf(from)

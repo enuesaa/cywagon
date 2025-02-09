@@ -34,7 +34,7 @@ func Start(ctx context.Context, confDir string) error {
 	sites := make([]libserve.ServeOptsSite, 0)
 	for _, conf := range confs {
 		sites = append(sites, libserve.ServeOptsSite{
-			Host: conf.Host,
+			Host:      conf.Host,
 			OriginUrl: conf.Entry.Host,
 			Handler: func(req *http.Request, fn libserve.FnNext) *http.Response {
 				return conf.RunHandler(req, fn)
@@ -42,7 +42,7 @@ func Start(ctx context.Context, confDir string) error {
 		})
 	}
 	serveOpts := libserve.ServeOpts{
-		Port: 3000,
+		Port:  3000,
 		Sites: sites,
 	}
 

@@ -1,7 +1,6 @@
 package ctlconf
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/enuesaa/cywagon/internal/liblua"
@@ -29,30 +28,28 @@ type ConfHealthCheck struct {
 }
 
 type ConfHandlerRequest struct{}
-type ConfHandlerResponse struct{
+type ConfHandlerResponse struct {
 	Status int `lua:"status"`
 }
 
-//
 func (c *Conf) RunHandler(req *http.Request, next libserve.FnNext) *http.Response {
 	var httpres *http.Response
+
+	res := ConfHandlerResponse{
+		Status: 0,
+	}
 
 	args := []interface{}{}
 	args = append(args, ConfHandlerRequest{})
 	args = append(args, func(ConfHandlerRequest) ConfHandlerResponse {
 		httpres = next(req)
-		return ConfHandlerResponse{ Status: 200 }
+		res.Status = httpres.StatusCode
+		return res
 	})
-	res := ConfHandlerResponse{
-		Status: 200,
-	}
 
 	if err := c.Handler(args, &res); err != nil {
-		fmt.Println(err)
 		return nil
 	}
-	fmt.Printf("%+v\n", res)
-
 	httpres.StatusCode = res.Status
 
 	return httpres

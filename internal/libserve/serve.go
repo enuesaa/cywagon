@@ -7,14 +7,14 @@ import (
 )
 
 type ServeOpts struct {
-	Port  int
-	Sites []ServeOptsSite
+	Port    int
+	Sites   []ServeOptsSite
 	siteMap map[string]ServeOptsSite
 }
 type ServeOptsSite struct {
-	Host string // Example: `example.com`
-	OriginUrl string // Example: `https://example.com`
-	Handler FnHandler
+	Host            string // Example: `example.com`
+	OriginUrl       string // Example: `https://example.com`
+	Handler         FnHandler
 	parsedOriginUrl *url.URL
 }
 type FnHandler func(*http.Request, FnNext) *http.Response
