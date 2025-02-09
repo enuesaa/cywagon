@@ -43,7 +43,7 @@ func (m *ServeOpts) getByHost(host string) ServeOptsSite {
 	if ok {
 		return site
 	}
-	site, ok =  m.siteMap[host]
+	site, ok = m.siteMap["default"]
 	if ok {
 		return site
 	}

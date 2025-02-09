@@ -27,6 +27,7 @@ func Marshal(from interface{}) (lua.LValue, error) {
 
 	fromType := reflect.TypeOf(from)
 	fromReal := reflect.ValueOf(from)
+
 	if fromType.Kind() == reflect.Func {
 		fn := func(s *lua.LState) int {
 			args := []reflect.Value{}

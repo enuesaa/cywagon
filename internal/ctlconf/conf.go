@@ -1,12 +1,15 @@
 package ctlconf
 
-import "github.com/enuesaa/cywagon/internal/libserve"
+import (
+	"github.com/enuesaa/cywagon/internal/liblua"
+	"github.com/enuesaa/cywagon/internal/libserve"
+)
 
 type Conf struct {
 	Host        string          `lua:"host"`
 	Entry       ConfEntry       `lua:"entry"`
 	HealthCheck ConfHealthCheck `lua:"healthCheck"`
-	Handler     func(func(ConfHandlerRequest) ConfHandlerResponse, ConfHandlerRequest) `lua:"handler"`
+	Handler     liblua.Fn       `lua:"handler"`
 }
 
 type ConfEntry struct {
@@ -36,9 +39,9 @@ func (c *Conf) RunHandler(serveNext libserve.FnNext) error {
 		return res
 	}
 	req := ConfHandlerRequest{}
-	
-	// TODO
-	c.Handler(next, req)
+	res := ConfHandlerResponse{
+		Status: 200,
+	}
 
-	return nil
+	return c.Handler(&res, next, req)
 }

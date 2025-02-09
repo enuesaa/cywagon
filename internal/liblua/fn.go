@@ -2,22 +2,29 @@ package liblua
 
 import lua "github.com/yuin/gopher-lua"
 
-type Fn func(args []interface{}) []interface{}
+type Fn func(result interface{}, args ...interface{}) error
 
 func NewFn(luafn *lua.LFunction) Fn {
-	state := lua.NewState()
+	return func(result interface{}, args ...interface{}) error {
+		var luaArgs []lua.LValue
+		for _, arg := range args {
+			luaArg, err := Marshal(arg)
+			if err != nil {
+				return err
+			}
+			luaArgs = append(luaArgs, luaArg)
+		}
 
-	return func(args []interface{}) []interface{} {
-		var results []interface{}
-		var luaargs []lua.LValue
+		state := lua.NewState()
 
-		_, err, values := state.Resume(lua.NewState(), luafn, luaargs...)
+		_, err, values := state.Resume(state, luafn, luaArgs...)
 		if err != nil {
-			return results
+			return err
 		}
 		if len(values) == 0 {
-			return results
+			return nil
 		}
-		return results
+
+		return Unmarshal(values[0], result)
 	}
 }
