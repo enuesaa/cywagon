@@ -1,4 +1,4 @@
-package ctlconf
+package model
 
 import (
 	"net/http"
