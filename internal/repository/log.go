@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"log"
+	"os"
 )
 
 func init() {
@@ -27,5 +28,5 @@ func (repo *LogRepository) Info(format string, a ...any) {
 
 func (repo *LogRepository) Error(err error) {
 	text := fmt.Sprintf("Error: %s", err.Error())
-	repo.print(text)
+	fmt.Fprintf(os.Stderr, "%s\n", text)
 }

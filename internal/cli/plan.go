@@ -2,46 +2,41 @@ package cli
 
 import (
 	"context"
+	"errors"
 	"flag"
-	"fmt"
 
 	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/enuesaa/cywagon/internal/usecase"
 	"github.com/google/subcommands"
 )
 
-func newPlanCmd() *planCmd {
-	return &planCmd{
-		conf: ".",
-	}
-}
+var ErrPlanMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
-type planCmd struct {
+type PlanCmd struct {
 	conf string
 }
 
-func (c *planCmd) Name() string {
+func (c *PlanCmd) Name() string {
 	return "plan"
 }
 
-func (c *planCmd) Synopsis() string {
+func (c *PlanCmd) Synopsis() string {
 	return "plan"
 }
 
-func (c *planCmd) Usage() string {
+func (c *PlanCmd) Usage() string {
 	return "cywagon plan\n"
 }
 
-func (c *planCmd) SetFlags(f *flag.FlagSet) {
+func (c *PlanCmd) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&c.conf, "conf", "", "conf files dir. required")
 }
 
-func (c *planCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *PlanCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	repos := repository.Use(ctx)
 
 	if c.conf == "" {
-		err := fmt.Errorf("missing required flag: -conf")
-		repos.Log.Error(err)
+		repos.Log.Error(ErrPlanMissingRequiredFlagConf)
 		return subcommands.ExitFailure
 	}
 

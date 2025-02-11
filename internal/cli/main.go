@@ -9,8 +9,8 @@ import (
 
 func Run(ctx context.Context) int {
 	// cli
-	subcommands.Register(newPlanCmd(), "")
-	subcommands.Register(newStartCmd(), "")
+	subcommands.Register(&PlanCmd{}, "")
+	subcommands.Register(&StartCmd{}, "")
 
 	// parse
 	flag.Parse()
