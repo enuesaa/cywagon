@@ -7,7 +7,7 @@ import (
 )
 
 // To generate mock file, run following command:
-//   mockgen -source=fs.go -destination=fs_mock.go -package=isitory
+//   mockgen -source=fs.go -destination=fs_mock.go -package=infra
 
 type FsInterface interface {
 	IsExist(path string) bool

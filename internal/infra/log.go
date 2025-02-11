@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+// To generate mock file, run following command:
+//   mockgen -source=log.go -destination=log_mock.go -package=infra
+
 func init() {
 	log.SetFlags(0)
 }

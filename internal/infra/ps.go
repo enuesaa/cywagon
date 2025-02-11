@@ -2,6 +2,9 @@ package infra
 
 import "os"
 
+// To generate mock file, run following command:
+//   mockgen -source=ps.go -destination=ps_mock.go -package=infra
+
 type PsInterface interface {
 	Exit(code int)
 }
