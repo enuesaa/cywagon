@@ -3,20 +3,23 @@ package usecase
 import (
 	"context"
 
-	"github.com/enuesaa/cywagon/internal/ctlconf"
 	"github.com/enuesaa/cywagon/internal/ctlengine"
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/repository"
+	"github.com/enuesaa/cywagon/internal/service"
+	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
 func Start(ctx context.Context, confDir string) error {
 	repos := repository.Use(ctx)
 
-	var confs []ctlconf.Conf
+	confsrv := service.NewConfService(repos)
 
-	files := ctlconf.List(ctx, confDir)
+	var confs []model.Conf
+
+	files := confsrv.List(confDir)
 	for _, file := range files {
-		conf, err := ctlconf.Read(ctx, file)
+		conf, err := confsrv.Read(file)
 		if err != nil {
 			return err
 		}

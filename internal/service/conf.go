@@ -1,8 +1,6 @@
 package service
 
 import (
-	"context"
-
 	"github.com/enuesaa/cywagon/internal/liblua"
 	"github.com/enuesaa/cywagon/internal/repository"
 	"github.com/enuesaa/cywagon/internal/service/model"
@@ -10,18 +8,16 @@ import (
 
 func NewConfService(repos repository.Repos) ConfService {
 	return ConfService{
-		repos,
+		repos: repos,
 	}
 }
 
 type ConfService struct {
-	repository.Repos
+	repos repository.Repos
 }
 
-func (c *ConfService) List(ctx context.Context, dir string) []string {
-	repos := repository.Use(ctx)
-
-	list, err := repos.Fs.ListFiles(dir)
+func (c *ConfService) List(dir string) []string {
+	list, err := c.repos.Fs.ListFiles(dir)
 	if err != nil {
 		return []string{}
 	}
@@ -29,19 +25,17 @@ func (c *ConfService) List(ctx context.Context, dir string) []string {
 }
 
 
-func Read(ctx context.Context, path string) (model.Conf, error) {
-	repos := repository.Use(ctx)
-
-	codeb, err := repos.Fs.Read(path)
+func (c *ConfService) Read(path string) (model.Conf, error) {
+	codeb, err := c.repos.Fs.Read(path)
 	if err != nil {
 		return model.Conf{}, err
 	}
 	code := string(codeb)
 
-	return parse(code)
+	return c.parse(code)
 }
 
-func parse(code string) (model.Conf, error) {
+func (c *ConfService) parse(code string) (model.Conf, error) {
 	config := model.Conf{
 		Host: "aa",
 		Entry: model.ConfEntry{
