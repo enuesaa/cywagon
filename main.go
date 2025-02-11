@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	container := infra.New()
+	ctn := infra.New()
 
-	code := cli.Run(container)
+	code := cli.Run(ctn)
 	os.Exit(code)
 }

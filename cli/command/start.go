@@ -12,14 +12,14 @@ import (
 
 var ErrStartMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
-func NewStartCommand(container infra.Container) subcommands.Command {
+func NewStartCommand(ctn infra.Container) subcommands.Command {
 	return &StartCommand{
-		Container: container,
+		ctn: ctn,
 	}
 }
 
 type StartCommand struct {
-	infra.Container
+	ctn infra.Container
 	conf string
 }
 
@@ -41,12 +41,12 @@ func (c *StartCommand) SetFlags(f *flag.FlagSet) {
 
 func (c *StartCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if c.conf == "" {
-		c.Log.Error(ErrStartMissingRequiredFlagConf)
+		c.ctn.Log.Error(ErrStartMissingRequiredFlagConf)
 		return subcommands.ExitFailure
 	}
 
-	if err := handle.Start(c.Container, c.conf); err != nil {
-		c.Log.Error(err)
+	if err := handle.Start(c.ctn, c.conf); err != nil {
+		c.ctn.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 

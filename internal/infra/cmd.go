@@ -5,12 +5,12 @@ import (
 	"os/exec"
 )
 
-type CmdRepositoryInterface interface {
+type CmdInterface interface {
 	Start(workdir string, command string) error
 }
-type CmdRepository struct{}
+type Cmd struct{}
 
-func (c *CmdRepository) Start(workdir string, command string) error {
+func (c *Cmd) Start(workdir string, command string) error {
 	cmd := exec.Command("bash", "-c", command)
 	cmd.Dir = workdir
 

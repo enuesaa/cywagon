@@ -7,9 +7,9 @@ import (
 )
 
 // To generate mock file, run following command:
-//   mockgen -source=fs.go -destination=fs_mock.go -package=repository
+//   mockgen -source=fs.go -destination=fs_mock.go -package=isitory
 
-type FsRepositoryInterface interface {
+type FsInterface interface {
 	IsExist(path string) bool
 	IsDir(path string) (bool, error)
 	CreateDir(path string) error
@@ -21,16 +21,16 @@ type FsRepositoryInterface interface {
 	ListDirs(path string) ([]string, error)
 	ListFiles(path string) ([]string, error)
 }
-type FsRepository struct{}
+type Fs struct{}
 
-func (repo *FsRepository) IsExist(path string) bool {
+func (i *Fs) IsExist(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return false
 	}
 	return true
 }
 
-func (repo *FsRepository) IsDir(path string) (bool, error) {
+func (i *Fs) IsDir(path string) (bool, error) {
 	f, err := os.Stat(path)
 	if err != nil {
 		return false, err
@@ -38,11 +38,11 @@ func (repo *FsRepository) IsDir(path string) (bool, error) {
 	return f.IsDir(), nil
 }
 
-func (repo *FsRepository) CreateDir(path string) error {
+func (i *Fs) CreateDir(path string) error {
 	return os.MkdirAll(path, os.ModePerm)
 }
 
-func (repo *FsRepository) Create(path string, body []byte) error {
+func (i *Fs) Create(path string, body []byte) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err
@@ -54,19 +54,19 @@ func (repo *FsRepository) Create(path string, body []byte) error {
 	return nil
 }
 
-func (repo *FsRepository) HomeDir() (string, error) {
+func (i *Fs) HomeDir() (string, error) {
 	return os.UserHomeDir()
 }
 
-func (repo *FsRepository) WorkDir() (string, error) {
+func (i *Fs) WorkDir() (string, error) {
 	return os.Getwd()
 }
 
-func (repo *FsRepository) Remove(path string) error {
+func (i *Fs) Remove(path string) error {
 	return os.RemoveAll(path)
 }
 
-func (repo *FsRepository) Read(path string) ([]byte, error) {
+func (i *Fs) Read(path string) ([]byte, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return make([]byte, 0), err
@@ -75,7 +75,7 @@ func (repo *FsRepository) Read(path string) ([]byte, error) {
 	return io.ReadAll(f)
 }
 
-func (repo *FsRepository) ListDirs(path string) ([]string, error) {
+func (i *Fs) ListDirs(path string) ([]string, error) {
 	list := make([]string, 0)
 	err := filepath.Walk(path, func(fpath string, file os.FileInfo, err error) error {
 		if err != nil {
@@ -89,7 +89,7 @@ func (repo *FsRepository) ListDirs(path string) ([]string, error) {
 	return list, err
 }
 
-func (repo *FsRepository) ListFiles(path string) ([]string, error) {
+func (i *Fs) ListFiles(path string) ([]string, error) {
 	list := make([]string, 0)
 	err := filepath.Walk(path, func(fpath string, file os.FileInfo, err error) error {
 		if err != nil {

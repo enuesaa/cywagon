@@ -10,23 +10,23 @@ func init() {
 	log.SetFlags(0)
 }
 
-type LogRepositoryInterface interface {
+type LogInterface interface {
 	Error(err error)
 	Info(format string, a ...any)
 }
 
-type LogRepository struct{}
+type Log struct{}
 
-func (repo *LogRepository) print(text string) {
+func (i *Log) print(text string) {
 	log.Printf("%s\n", text)
 }
 
-func (repo *LogRepository) Info(format string, a ...any) {
+func (i *Log) Info(format string, a ...any) {
 	text := fmt.Sprintf(format, a...)
-	repo.print(text)
+	i.print(text)
 }
 
-func (repo *LogRepository) Error(err error) {
+func (i *Log) Error(err error) {
 	text := fmt.Sprintf("Error: %s", err.Error())
 	fmt.Fprintf(os.Stderr, "%s\n", text)
 }

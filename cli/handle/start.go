@@ -1,8 +1,6 @@
 package handle
 
 import (
-	"context"
-
 	"github.com/enuesaa/cywagon/internal/enginectl"
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/infra"
@@ -10,8 +8,8 @@ import (
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func Start(container infra.Container, confDir string) error {
-	confsrv := service.NewConfService(container)
+func Start(ctn infra.Container, confDir string) error {
+	confsrv := service.NewConfService(ctn)
 
 	var confs []model.Conf
 
@@ -22,14 +20,14 @@ func Start(container infra.Container, confDir string) error {
 			return err
 		}
 		if conf.Entry.Cmd != "" {
-			enginectl.RunCmd(context.Background(), enginectl.RunCmdArg{
+			enginectl.RunCmd(ctn, enginectl.RunCmdArg{
 				Workdir: conf.Entry.Workdir,
 				Command: conf.Entry.Cmd,
 			})
 		}
 		confs = append(confs, conf)
 	}
-	container.Log.Info("start serving")
+	ctn.Log.Info("start serving")
 
 	sites := make([]libserve.ServeOptsSite, 0)
 	for _, conf := range confs {

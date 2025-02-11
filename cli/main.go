@@ -9,10 +9,10 @@ import (
 	"github.com/google/subcommands"
 )
 
-func Run(container infra.Container) int {
+func Run(ctn infra.Container) int {
 	// cli
-	subcommands.Register(command.NewPlanCommand(container), "")
-	subcommands.Register(command.NewStartCommand(container), "")
+	subcommands.Register(command.NewPlanCommand(ctn), "")
+	subcommands.Register(command.NewStartCommand(ctn), "")
 
 	// parse
 	flag.Parse()
