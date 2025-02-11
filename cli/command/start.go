@@ -12,41 +12,41 @@ import (
 
 var ErrStartMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
-func NewStartCmd(repos infra.Container) subcommands.Command {
-	return &StartCmd{
-		repos: repos,
+func NewStartCommand(container infra.Container) subcommands.Command {
+	return &StartCommand{
+		Container: container,
 	}
 }
 
-type StartCmd struct {
-	repos infra.Container
+type StartCommand struct {
+	infra.Container
 	conf string
 }
 
-func (c *StartCmd) Name() string {
+func (c *StartCommand) Name() string {
 	return "start"
 }
 
-func (c *StartCmd) Synopsis() string {
+func (c *StartCommand) Synopsis() string {
 	return "Start"
 }
 
-func (c *StartCmd) Usage() string {
+func (c *StartCommand) Usage() string {
 	return "cywagon start\n"
 }
 
-func (c *StartCmd) SetFlags(f *flag.FlagSet) {
+func (c *StartCommand) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&c.conf, "conf", "", "conf files dir. required")
 }
 
-func (c *StartCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *StartCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if c.conf == "" {
-		c.repos.Log.Error(ErrStartMissingRequiredFlagConf)
+		c.Log.Error(ErrStartMissingRequiredFlagConf)
 		return subcommands.ExitFailure
 	}
 
-	if err := handle.Start(c.repos, c.conf); err != nil {
-		c.repos.Log.Error(err)
+	if err := handle.Start(c.Container, c.conf); err != nil {
+		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 

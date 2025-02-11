@@ -10,8 +10,8 @@ import (
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func Start(repos infra.Container, confDir string) error {
-	confsrv := service.NewConfService(repos)
+func Start(container infra.Container, confDir string) error {
+	confsrv := service.NewConfService(container)
 
 	var confs []model.Conf
 
@@ -29,7 +29,7 @@ func Start(repos infra.Container, confDir string) error {
 		}
 		confs = append(confs, conf)
 	}
-	repos.Log.Info("start serving")
+	container.Log.Info("start serving")
 
 	sites := make([]libserve.ServeOptsSite, 0)
 	for _, conf := range confs {

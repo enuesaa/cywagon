@@ -11,8 +11,8 @@ import (
 
 func Run(container infra.Container) int {
 	// cli
-	subcommands.Register(command.NewPlanCmd(container), "")
-	subcommands.Register(command.NewStartCmd(container), "")
+	subcommands.Register(command.NewPlanCommand(container), "")
+	subcommands.Register(command.NewStartCommand(container), "")
 
 	// parse
 	flag.Parse()

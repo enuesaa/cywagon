@@ -5,8 +5,8 @@ import (
 	"github.com/enuesaa/cywagon/internal/infra"
 )
 
-func Plan(repos infra.Container, confDir string) error {
-	confsrv := service.NewConfService(repos)
+func Plan(container infra.Container, confDir string) error {
+	confsrv := service.NewConfService(container)
 
 	files := confsrv.List(confDir)
 
@@ -15,7 +15,7 @@ func Plan(repos infra.Container, confDir string) error {
 		if err != nil {
 			return err
 		}
-		repos.Log.Info("hostname: %s", config.Host)
+		container.Log.Info("hostname: %s", config.Host)
 	}
 	return nil
 }

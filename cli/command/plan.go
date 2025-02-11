@@ -12,41 +12,41 @@ import (
 
 var ErrPlanMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
-func NewPlanCmd(repos infra.Container) subcommands.Command {
-	return &PlanCmd{
-		repos: repos,
+func NewPlanCommand(container infra.Container) subcommands.Command {
+	return &PlanCommand{
+		Container: container,
 	}
 }
 
-type PlanCmd struct {
-	repos infra.Container
+type PlanCommand struct {
+	infra.Container
 	conf string
 }
 
-func (c *PlanCmd) Name() string {
+func (c *PlanCommand) Name() string {
 	return "plan"
 }
 
-func (c *PlanCmd) Synopsis() string {
+func (c *PlanCommand) Synopsis() string {
 	return "plan"
 }
 
-func (c *PlanCmd) Usage() string {
+func (c *PlanCommand) Usage() string {
 	return "cywagon plan\n"
 }
 
-func (c *PlanCmd) SetFlags(f *flag.FlagSet) {
+func (c *PlanCommand) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&c.conf, "conf", "", "conf files dir. required")
 }
 
-func (c *PlanCmd) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *PlanCommand) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if c.conf == "" {
-		c.repos.Log.Error(ErrPlanMissingRequiredFlagConf)
+		c.Log.Error(ErrPlanMissingRequiredFlagConf)
 		return subcommands.ExitFailure
 	}
 
-	if err := handle.Plan(c.repos, c.conf); err != nil {
-		c.repos.Log.Error(err)
+	if err := handle.Plan(c.Container, c.conf); err != nil {
+		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 
