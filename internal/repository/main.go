@@ -2,6 +2,8 @@ package repository
 
 import "context"
 
+// container
+
 func NewRepos() Repos {
 	return Repos{
 		Fs:  &FsRepository{},
@@ -25,6 +27,7 @@ func NewContext() context.Context {
 	return ctx
 }
 
+// Deprecated
 func Use(ctx context.Context) Repos {
 	repos, ok := ctx.Value(reposKey{}).(Repos)
 	if !ok {
