@@ -3,13 +3,13 @@ package main
 import (
 	"os"
 
-	"github.com/enuesaa/cywagon/internal/cli"
-	"github.com/enuesaa/cywagon/internal/repository"
+	"github.com/enuesaa/cywagon/cli"
+	"github.com/enuesaa/cywagon/internal/infra"
 )
 
 func main() {
-	repos := repository.New()
+	container := infra.New()
 
-	code := cli.Run(repos)
+	code := cli.Run(container)
 	os.Exit(code)
 }

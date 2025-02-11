@@ -1,9 +1,9 @@
-package ctlengine
+package enginectl
 
 import (
 	"context"
 
-	"github.com/enuesaa/cywagon/internal/repository"
+	"github.com/enuesaa/cywagon/internal/infra"
 )
 
 type RunCmdArg struct {
@@ -16,7 +16,7 @@ func RunCmd(ctx context.Context, arg RunCmdArg) {
 }
 
 func runCmd(ctx context.Context, arg RunCmdArg) {
-	repos := repository.Use(ctx)
+	repos := infra.Use(ctx)
 
 	if err := repos.Cmd.Start(arg.Workdir, arg.Command); err != nil {
 		repos.Log.Error(err)

@@ -1,11 +1,11 @@
-package usecase
+package handle
 
 import (
 	"github.com/enuesaa/cywagon/internal/service"
-	"github.com/enuesaa/cywagon/internal/repository"
+	"github.com/enuesaa/cywagon/internal/infra"
 )
 
-func Plan(repos repository.Repos, confDir string) error {
+func Plan(repos infra.Container, confDir string) error {
 	confsrv := service.NewConfService(repos)
 
 	files := confsrv.List(confDir)

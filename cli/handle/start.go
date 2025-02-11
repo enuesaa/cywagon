@@ -1,16 +1,16 @@
-package usecase
+package handle
 
 import (
 	"context"
 
-	"github.com/enuesaa/cywagon/internal/ctlengine"
+	"github.com/enuesaa/cywagon/internal/enginectl"
 	"github.com/enuesaa/cywagon/internal/libserve"
-	"github.com/enuesaa/cywagon/internal/repository"
+	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/service"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func Start(repos repository.Repos, confDir string) error {
+func Start(repos infra.Container, confDir string) error {
 	confsrv := service.NewConfService(repos)
 
 	var confs []model.Conf
@@ -22,7 +22,7 @@ func Start(repos repository.Repos, confDir string) error {
 			return err
 		}
 		if conf.Entry.Cmd != "" {
-			ctlengine.RunCmd(context.Background(), ctlengine.RunCmdArg{
+			enginectl.RunCmd(context.Background(), enginectl.RunCmdArg{
 				Workdir: conf.Entry.Workdir,
 				Command: conf.Entry.Cmd,
 			})

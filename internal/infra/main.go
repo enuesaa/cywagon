@@ -1,16 +1,16 @@
-package repository
+package infra
 
 import "context"
 
-func New() Repos {
-	return Repos{
+func New() Container {
+	return Container{
 		Fs:  &FsRepository{},
 		Log: &LogRepository{},
 		Cmd: &CmdRepository{},
 	}
 }
 
-type Repos struct {
+type Container struct {
 	Fs  FsRepositoryInterface
 	Log LogRepositoryInterface
 	Cmd CmdRepositoryInterface
@@ -26,8 +26,8 @@ func NewContext() context.Context {
 }
 
 // Deprecated
-func Use(ctx context.Context) Repos {
-	repos, ok := ctx.Value(reposKey{}).(Repos)
+func Use(ctx context.Context) Container {
+	repos, ok := ctx.Value(reposKey{}).(Container)
 	if !ok {
 		return New()
 	}

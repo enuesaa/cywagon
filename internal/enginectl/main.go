@@ -1,3 +1,3 @@
-package ctlengine
+package enginectl
 
 type Engine struct {}

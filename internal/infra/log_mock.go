@@ -7,7 +7,7 @@
 //
 
 // Package repository is a generated GoMock package.
-package repository
+package infra
 
 import (
 	reflect "reflect"

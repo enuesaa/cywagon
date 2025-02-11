@@ -2,18 +2,18 @@ package service
 
 import (
 	"github.com/enuesaa/cywagon/internal/liblua"
-	"github.com/enuesaa/cywagon/internal/repository"
+	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func NewConfService(repos repository.Repos) ConfService {
+func NewConfService(repos infra.Container) ConfService {
 	return ConfService{
 		repos: repos,
 	}
 }
 
 type ConfService struct {
-	repos repository.Repos
+	repos infra.Container
 }
 
 func (c *ConfService) List(dir string) []string {
