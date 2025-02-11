@@ -12,7 +12,14 @@ import (
 
 var ErrStartMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
+func NewStartCmd(repos repository.Repos) subcommands.Command {
+	return &StartCmd{
+		repos: repos,
+	}
+}
+
 type StartCmd struct {
+	repos repository.Repos
 	conf string
 }
 
@@ -33,15 +40,13 @@ func (c *StartCmd) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *StartCmd) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	repos := repository.Use(ctx)
-
 	if c.conf == "" {
-		repos.Log.Error(ErrStartMissingRequiredFlagConf)
+		c.repos.Log.Error(ErrStartMissingRequiredFlagConf)
 		return subcommands.ExitFailure
 	}
 
-	if err := usecase.Start(ctx, c.conf); err != nil {
-		repos.Log.Error(err)
+	if err := usecase.Start(c.repos, c.conf); err != nil {
+		c.repos.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 

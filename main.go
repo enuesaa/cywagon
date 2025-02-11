@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	ctx := repository.NewContext()
+	repos := repository.New()
 
-	code := cli.Run(ctx)
+	code := cli.Run(repos)
 	os.Exit(code)
 }

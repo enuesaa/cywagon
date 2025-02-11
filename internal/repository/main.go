@@ -2,9 +2,7 @@ package repository
 
 import "context"
 
-// container
-
-func NewRepos() Repos {
+func New() Repos {
 	return Repos{
 		Fs:  &FsRepository{},
 		Log: &LogRepository{},
@@ -22,7 +20,7 @@ type reposKey struct{}
 
 func NewContext() context.Context {
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, reposKey{}, NewRepos())
+	ctx = context.WithValue(ctx, reposKey{}, New())
 
 	return ctx
 }
@@ -31,7 +29,7 @@ func NewContext() context.Context {
 func Use(ctx context.Context) Repos {
 	repos, ok := ctx.Value(reposKey{}).(Repos)
 	if !ok {
-		return NewRepos()
+		return New()
 	}
 	return repos
 }

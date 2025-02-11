@@ -10,9 +10,7 @@ import (
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func Start(ctx context.Context, confDir string) error {
-	repos := repository.Use(ctx)
-
+func Start(repos repository.Repos, confDir string) error {
 	confsrv := service.NewConfService(repos)
 
 	var confs []model.Conf
@@ -24,7 +22,7 @@ func Start(ctx context.Context, confDir string) error {
 			return err
 		}
 		if conf.Entry.Cmd != "" {
-			ctlengine.RunCmd(ctx, ctlengine.RunCmdArg{
+			ctlengine.RunCmd(context.Background(), ctlengine.RunCmdArg{
 				Workdir: conf.Entry.Workdir,
 				Command: conf.Entry.Cmd,
 			})

@@ -1,15 +1,11 @@
 package usecase
 
 import (
-	"context"
-
 	"github.com/enuesaa/cywagon/internal/service"
 	"github.com/enuesaa/cywagon/internal/repository"
 )
 
-func Plan(ctx context.Context, confDir string) error {
-	repos := repository.Use(ctx)
-
+func Plan(repos repository.Repos, confDir string) error {
 	confsrv := service.NewConfService(repos)
 
 	files := confsrv.List(confDir)

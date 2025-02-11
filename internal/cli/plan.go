@@ -12,7 +12,14 @@ import (
 
 var ErrPlanMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
+func NewPlanCmd(repos repository.Repos) subcommands.Command {
+	return &PlanCmd{
+		repos: repos,
+	}
+}
+
 type PlanCmd struct {
+	repos repository.Repos
 	conf string
 }
 
@@ -32,16 +39,14 @@ func (c *PlanCmd) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&c.conf, "conf", "", "conf files dir. required")
 }
 
-func (c *PlanCmd) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	repos := repository.Use(ctx)
-
+func (c *PlanCmd) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if c.conf == "" {
-		repos.Log.Error(ErrPlanMissingRequiredFlagConf)
+		c.repos.Log.Error(ErrPlanMissingRequiredFlagConf)
 		return subcommands.ExitFailure
 	}
 
-	if err := usecase.Plan(ctx, c.conf); err != nil {
-		repos.Log.Error(err)
+	if err := usecase.Plan(c.repos, c.conf); err != nil {
+		c.repos.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 
