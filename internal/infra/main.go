@@ -3,6 +3,7 @@ package infra
 func New() Container {
 	return Container{
 		Fs:  &Fs{},
+		Ps:  &Ps{},
 		Log: &Log{},
 		Cmd: &Cmd{},
 	}
@@ -10,6 +11,7 @@ func New() Container {
 
 type Container struct {
 	Fs  FsInterface
+	Ps  PsInterface
 	Log LogInterface
 	Cmd CmdInterface
 }
