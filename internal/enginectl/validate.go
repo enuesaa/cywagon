@@ -1,18 +1,16 @@
 package enginectl
 
-import "github.com/enuesaa/cywagon/internal/service"
+import (
+	"fmt"
 
-func (e *Engine) Validate(confDir string) error {
-	confsrv := service.NewConfService()
+	"github.com/enuesaa/cywagon/internal/service/model"
+)
 
-	files := confsrv.List(confDir)
-
-	for _, file := range files {
-		config, err := confsrv.Read(file)
-		if err != nil {
-			return err
+func (e *Engine) Validate(confs []model.Conf) error {
+	for _, conf := range confs {
+		if conf.Host == "" {
+			return fmt.Errorf("host is required")
 		}
-		e.Log.Info("hostname: %s", config.Host)
 	}
 	return nil
 }

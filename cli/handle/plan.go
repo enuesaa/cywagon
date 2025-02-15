@@ -5,5 +5,10 @@ import "github.com/enuesaa/cywagon/internal/enginectl"
 func Plan(confDir string) error {
 	engine := enginectl.New()
 
-	return engine.Validate(confDir)
+	confs, err := engine.ListConfs(confDir)
+	if err != nil {
+		return err
+	}
+
+	return engine.Validate(confs)
 }
