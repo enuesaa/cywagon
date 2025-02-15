@@ -14,7 +14,7 @@ var ErrStartMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
 func NewStartCommand() subcommands.Command {
 	return &StartCommand{
-		Container: infra.I,
+		Container: infra.Default,
 	}
 }
 

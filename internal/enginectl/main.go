@@ -1,10 +1,12 @@
 package enginectl
 
-import "github.com/enuesaa/cywagon/internal/infra"
+import (
+	"github.com/enuesaa/cywagon/internal/infra"
+)
 
 func New() Engine {
 	return Engine{
-		Container: infra.I,
+		Container: infra.Default,
 	}
 }
 

@@ -4,6 +4,7 @@ import "github.com/enuesaa/cywagon/internal/enginectl"
 
 func Start(confDir string) error {
 	engine := enginectl.New()
+
 	confs, err := engine.ListConfs(confDir)
 	if err != nil {
 		return err

@@ -7,5 +7,5 @@ import (
 
 func main() {
 	code := cli.Run()
-	infra.I.Ps.Exit(code)
+	infra.Default.Ps.Exit(code)
 }

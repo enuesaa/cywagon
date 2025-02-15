@@ -14,7 +14,7 @@ var ErrPlanMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
 func NewPlanCommand() subcommands.Command {
 	return &PlanCommand{
-		Container: infra.I,
+		Container: infra.Default,
 	}
 }
 
