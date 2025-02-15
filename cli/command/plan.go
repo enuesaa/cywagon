@@ -5,8 +5,8 @@ import (
 	"errors"
 	"flag"
 
-	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/cli/handle"
+	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/google/subcommands"
 )
 
@@ -40,15 +40,16 @@ func (c *PlanCommand) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *PlanCommand) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if c.conf == "" {
-		c.ctn.Log.Error(ErrPlanMissingRequiredFlagConf)
-		return subcommands.ExitFailure
-	}
-
-	if err := handle.Plan(c.ctn, c.conf); err != nil {
+	if err := c.execute(); err != nil {
 		c.ctn.Log.Error(err)
 		return subcommands.ExitFailure
 	}
-
 	return subcommands.ExitSuccess
+}
+
+func (c *PlanCommand) execute() error {
+	if c.conf == "" {
+		return ErrPlanMissingRequiredFlagConf
+	}
+	return handle.Plan(c.ctn, c.conf)
 }
