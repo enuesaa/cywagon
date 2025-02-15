@@ -40,16 +40,20 @@ func (c *StartCommand) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *StartCommand) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if err := c.execute(); err != nil {
+	if err := c.validate(); err != nil {
+		c.Log.Error(err)
+		return subcommands.ExitFailure
+	}
+	if err := handle.Start(c.conf); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 	return subcommands.ExitSuccess
 }
 
-func (c *StartCommand) execute() error {
+func (c *StartCommand) validate() error {
 	if c.conf == "" {
 		return ErrStartMissingRequiredFlagConf
 	}
-	return handle.Start(c.conf)
+	return nil
 }

@@ -40,16 +40,20 @@ func (c *PlanCommand) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *PlanCommand) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if err := c.execute(); err != nil {
+	if err := c.validate(); err != nil {
+		c.Log.Error(err)
+		return subcommands.ExitFailure
+	}
+	if err := handle.Plan(c.conf); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 	return subcommands.ExitSuccess
 }
 
-func (c *PlanCommand) execute() error {
+func (c *PlanCommand) validate() error {
 	if c.conf == "" {
 		return ErrPlanMissingRequiredFlagConf
 	}
-	return handle.Plan(c.conf)
+	return nil
 }
