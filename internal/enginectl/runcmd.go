@@ -2,17 +2,12 @@ package enginectl
 
 import "github.com/enuesaa/cywagon/internal/infra"
 
-type RunCmdArg struct {
-	Workdir string
-	Command string
+func RunCmd(ctn infra.Container, workdir string, command string) {
+	go runCmd(ctn, workdir, command)
 }
 
-func RunCmd(ctn infra.Container, arg RunCmdArg) {
-	go runCmd(ctn, arg)
-}
-
-func runCmd(ctn infra.Container, arg RunCmdArg) {
-	if err := ctn.Cmd.Start(arg.Workdir, arg.Command); err != nil {
+func runCmd(ctn infra.Container, workdir string, command string) {
+	if err := ctn.Cmd.Start(workdir, command); err != nil {
 		ctn.Log.Error(err)
 	}
 }
