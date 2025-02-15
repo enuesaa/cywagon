@@ -1,12 +1,11 @@
 package enginectl
 
 import (
-	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func Serve(ctn infra.Container, confs []model.Conf) error {
+func (e *Engine) Serve(confs []model.Conf) error {
 	sites := make([]libserve.ServeOptsSite, 0)
 	for _, conf := range confs {
 		sites = append(sites, libserve.ServeOptsSite{

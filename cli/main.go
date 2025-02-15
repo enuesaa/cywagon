@@ -5,14 +5,13 @@ import (
 	"flag"
 
 	"github.com/enuesaa/cywagon/cli/command"
-	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/google/subcommands"
 )
 
-func Run(ctn infra.Container) int {
+func Run() int {
 	// cli
-	subcommands.Register(command.NewPlanCommand(ctn), "")
-	subcommands.Register(command.NewStartCommand(ctn), "")
+	subcommands.Register(command.NewPlanCommand(), "")
+	subcommands.Register(command.NewStartCommand(), "")
 
 	// parse
 	flag.Parse()

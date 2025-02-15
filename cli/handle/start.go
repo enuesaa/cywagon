@@ -1,20 +1,18 @@
 package handle
 
-import (
-	"github.com/enuesaa/cywagon/internal/enginectl"
-	"github.com/enuesaa/cywagon/internal/infra"
-)
+import "github.com/enuesaa/cywagon/internal/enginectl"
 
-func Start(ctn infra.Container, confDir string) error {
-	confs, err := enginectl.ListConfs(ctn, confDir)
+func Start(confDir string) error {
+	engine := enginectl.New()
+	confs, err := engine.ListConfs(confDir)
 	if err != nil {
 		return err
 	}
 	for _, conf := range confs {
 		if conf.Entry.Cmd != "" {
-			enginectl.RunCmd(ctn, conf.Entry.Workdir, conf.Entry.Cmd)
+			engine.RunCmd(conf.Entry.Workdir, conf.Entry.Cmd)
 		}
 	}
 
-	return enginectl.Serve(ctn, confs)
+	return engine.Serve(confs)
 }

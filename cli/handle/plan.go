@@ -1,12 +1,9 @@
 package handle
 
-import (
-	"github.com/enuesaa/cywagon/internal/enginectl"
-	"github.com/enuesaa/cywagon/internal/infra"
-)
+import "github.com/enuesaa/cywagon/internal/enginectl"
 
-func Plan(ctn infra.Container, confDir string) error {
-	engine := enginectl.New(ctn)
+func Plan(confDir string) error {
+	engine := enginectl.New()
 	
 	return engine.Validate(confDir)
 }

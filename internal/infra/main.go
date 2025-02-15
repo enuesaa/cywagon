@@ -1,12 +1,10 @@
 package infra
 
-func New() Container {
-	return Container{
-		Fs:  &Fs{},
-		Ps:  &Ps{},
-		Log: &Log{},
-		Cmd: &Cmd{},
-	}
+var I = Container{
+	Fs:  &Fs{},
+	Ps:  &Ps{},
+	Log: &Log{},
+	Cmd: &Cmd{},
 }
 
 type Container struct {

@@ -2,12 +2,12 @@ package enginectl
 
 import "github.com/enuesaa/cywagon/internal/infra"
 
-func New(ctn infra.Container) Engine {
+func New() Engine {
 	return Engine{
-		ctn: ctn,
+		Container: infra.I,
 	}
 }
 
 type Engine struct {
-	ctn infra.Container
+	infra.Container
 }

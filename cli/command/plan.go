@@ -12,14 +12,14 @@ import (
 
 var ErrPlanMissingRequiredFlagConf = errors.New("missing required flag: -conf")
 
-func NewPlanCommand(ctn infra.Container) subcommands.Command {
+func NewPlanCommand() subcommands.Command {
 	return &PlanCommand{
-		ctn: ctn,
+		Container: infra.I,
 	}
 }
 
 type PlanCommand struct {
-	ctn infra.Container
+	infra.Container
 	conf string
 }
 
@@ -41,7 +41,7 @@ func (c *PlanCommand) SetFlags(f *flag.FlagSet) {
 
 func (c *PlanCommand) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if err := c.execute(); err != nil {
-		c.ctn.Log.Error(err)
+		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 	return subcommands.ExitSuccess
@@ -51,5 +51,5 @@ func (c *PlanCommand) execute() error {
 	if c.conf == "" {
 		return ErrPlanMissingRequiredFlagConf
 	}
-	return handle.Plan(c.ctn, c.conf)
+	return handle.Plan(c.conf)
 }

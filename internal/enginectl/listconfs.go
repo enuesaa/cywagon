@@ -1,13 +1,12 @@
 package enginectl
 
 import (
-	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/service"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func ListConfs(ctn infra.Container, confDir string) ([]model.Conf, error) {
-	confsrv := service.NewConfService(ctn)
+func (e *Engine) ListConfs(confDir string) ([]model.Conf, error) {
+	confsrv := service.NewConfService(e.Container)
 
 	var confs []model.Conf
 
@@ -19,7 +18,7 @@ func ListConfs(ctn infra.Container, confDir string) ([]model.Conf, error) {
 		}
 		confs = append(confs, conf)
 	}
-	ctn.Log.Info("start serving")	
+	e.Log.Info("start serving")	
 
 	return confs, nil
 }
