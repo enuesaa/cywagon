@@ -1,13 +1,12 @@
 # cywagon
 
-## Planning
 ### Commands
 ```console
-$ cywagon plan -help
-`plan` validates config files like `nginx -t`.
+$ cywagon check -help
+`check` validates config files like `nginx -t`.
 
-$ cywagon start -help
-`start` starts web server.
+$ cywagon up -help
+`up` starts web server.
 ```
 
 ### Features

@@ -5,7 +5,7 @@ import (
 	"github.com/enuesaa/cywagon/internal/infra"
 )
 
-func Start(confDir string) error {
+func Up(confDir string) error {
 	engine := enginectl.New()
 
 	confs, err := engine.ListConfs(confDir)

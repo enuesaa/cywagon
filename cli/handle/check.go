@@ -2,7 +2,7 @@ package handle
 
 import "github.com/enuesaa/cywagon/internal/enginectl"
 
-func Plan(confDir string) error {
+func Check(confDir string) error {
 	engine := enginectl.New()
 
 	confs, err := engine.ListConfs(confDir)

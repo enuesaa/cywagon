@@ -10,8 +10,8 @@ import (
 
 func Run() int {
 	// cli
-	subcommands.Register(command.NewPlanCommand(), "")
-	subcommands.Register(command.NewStartCommand(), "")
+	subcommands.Register(command.NewCheckCommand(), "")
+	subcommands.Register(command.NewUpCommand(), "")
 
 	// parse
 	flag.Parse()
