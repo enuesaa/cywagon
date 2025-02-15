@@ -28,8 +28,8 @@ func NewMock(t *testing.T) Container {
 	ctrl := gomock.NewController(t)
 
 	return Container{
-		Fs: NewMockFsInterface(ctrl),
-		Ps: NewMockPsInterface(ctrl),
+		Fs:  NewMockFsInterface(ctrl),
+		Ps:  NewMockPsInterface(ctrl),
 		Log: NewMockLogInterface(ctrl),
 		Cmd: NewMockCmdInterface(ctrl),
 	}

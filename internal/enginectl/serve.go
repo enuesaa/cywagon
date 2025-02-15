@@ -7,6 +7,7 @@ import (
 
 func (e *Engine) Serve(confs []model.Conf) error {
 	sites := make([]libserve.ServeOptsSite, 0)
+
 	for _, conf := range confs {
 		sites = append(sites, libserve.ServeOptsSite{
 			Host:      conf.Host,
@@ -14,6 +15,7 @@ func (e *Engine) Serve(confs []model.Conf) error {
 			Handler:   conf.RunHandler,
 		})
 	}
+
 	serveOpts := libserve.ServeOpts{
 		Port:  3000,
 		Sites: sites,

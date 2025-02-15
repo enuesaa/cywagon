@@ -6,7 +6,7 @@ import (
 )
 
 func (e *Engine) ListConfs(confDir string) ([]model.Conf, error) {
-	confsrv := service.NewConfService(e.Container)
+	confsrv := service.NewConfService()
 
 	var confs []model.Conf
 
@@ -18,7 +18,7 @@ func (e *Engine) ListConfs(confDir string) ([]model.Conf, error) {
 		}
 		confs = append(confs, conf)
 	}
-	e.Log.Info("start serving")	
+	e.Log.Info("start serving")
 
 	return confs, nil
 }

@@ -1,32 +1,31 @@
 package service
 
 import (
-	"github.com/enuesaa/cywagon/internal/liblua"
 	"github.com/enuesaa/cywagon/internal/infra"
+	"github.com/enuesaa/cywagon/internal/liblua"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func NewConfService(repos infra.Container) ConfService {
+func NewConfService() ConfService {
 	return ConfService{
-		repos: repos,
+		Container: infra.Default,
 	}
 }
 
 type ConfService struct {
-	repos infra.Container
+	infra.Container
 }
 
 func (c *ConfService) List(dir string) []string {
-	list, err := c.repos.Fs.ListFiles(dir)
+	list, err := c.Fs.ListFiles(dir)
 	if err != nil {
 		return []string{}
 	}
 	return list
 }
 
-
 func (c *ConfService) Read(path string) (model.Conf, error) {
-	codeb, err := c.repos.Fs.Read(path)
+	codeb, err := c.Fs.Read(path)
 	if err != nil {
 		return model.Conf{}, err
 	}

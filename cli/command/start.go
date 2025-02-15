@@ -5,8 +5,8 @@ import (
 	"errors"
 	"flag"
 
-	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/cli/handle"
+	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/google/subcommands"
 )
 
@@ -44,7 +44,6 @@ func (c *StartCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interf
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
-
 	return subcommands.ExitSuccess
 }
 

@@ -2,9 +2,8 @@ package enginectl
 
 import "github.com/enuesaa/cywagon/internal/service"
 
-// TODO: validate
 func (e *Engine) Validate(confDir string) error {
-	confsrv := service.NewConfService(e.Container)
+	confsrv := service.NewConfService()
 
 	files := confsrv.List(confDir)
 
