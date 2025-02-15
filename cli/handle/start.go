@@ -1,6 +1,9 @@
 package handle
 
-import "github.com/enuesaa/cywagon/internal/enginectl"
+import (
+	"github.com/enuesaa/cywagon/internal/enginectl"
+	"github.com/enuesaa/cywagon/internal/infra"
+)
 
 func Start(confDir string) error {
 	engine := enginectl.New()
@@ -14,6 +17,7 @@ func Start(confDir string) error {
 			engine.RunCmd(conf.Entry.Workdir, conf.Entry.Cmd)
 		}
 	}
+	infra.Default.Log.Info("start serving")
 
 	return engine.Serve(confs)
 }

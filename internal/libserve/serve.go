@@ -61,10 +61,7 @@ func Serve(opts ServeOpts) error {
 		req.SetURL(site.parsedOriginUrl)
 	}
 	proxy.Transport = &Transport{ServeOpts: opts}
-	// proxy.ModifyResponse = func(resp *http.Response) error {
-	// 	return nil
-	// }
-	// proxy.ErrorHandler = func(w http.ResponseWriter, req *http.Request, err error) {}
+	// also see ModifyResponse, ErrorHandler if need
 
 	return http.ListenAndServe(":3000", &proxy)
 }

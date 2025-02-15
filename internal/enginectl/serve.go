@@ -6,7 +6,7 @@ import (
 )
 
 func (e *Engine) Serve(confs []model.Conf) error {
-	sites := make([]libserve.ServeOptsSite, 0)
+	var sites []libserve.ServeOptsSite
 
 	for _, conf := range confs {
 		sites = append(sites, libserve.ServeOptsSite{
