@@ -1,20 +1,13 @@
 package libfetch
 
-import (
-	"fmt"
-	"net/http"
-)
+import "github.com/enuesaa/cywagon/internal/infra"
 
-func Fetch() error {
-	res, err := http.Get("https://example.com")
-	if err != nil {
-		return err
+func New() Fetcher {
+	return Fetcher{
+		Container: infra.Default,
 	}
+}
 
-	if res.StatusCode != 200 {
-		return fmt.Errorf("faild")
-	}
-	fmt.Println(res.StatusCode)
-
-	return nil
+type Fetcher struct {
+	infra.Container
 }
