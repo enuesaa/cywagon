@@ -16,9 +16,11 @@ func (e *Engine) Serve(confs []model.Conf) error {
 		})
 	}
 
+	server := libserve.New()
+
 	serveOpts := libserve.ServeOpts{
 		Port:  3000,
 		Sites: sites,
 	}
-	return libserve.Serve(serveOpts)
+	return server.Serve(serveOpts)
 }

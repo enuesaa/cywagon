@@ -9,7 +9,7 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-func extarctLuaTagValue(m reflect.StructTag) (string, error) {
+func (r *Runner) extarctLuaTagValue(m reflect.StructTag) (string, error) {
 	tags, err := structtag.Parse(string(m))
 	if err != nil {
 		return "", fmt.Errorf("lua tag not found: %s", err.Error())
@@ -21,7 +21,7 @@ func extarctLuaTagValue(m reflect.StructTag) (string, error) {
 	return value.Name, nil
 }
 
-func Marshal(from interface{}) (lua.LValue, error) {
+func (r *Runner) Marshal(from interface{}) (lua.LValue, error) {
 	state := lua.NewState()
 	table := state.NewTable()
 
@@ -36,7 +36,7 @@ func Marshal(from interface{}) (lua.LValue, error) {
 		fn := func(s *lua.LState) int {
 			table := s.ToTable(1)
 
-			if err := Unmarshal(table, argReal.Interface()); err != nil {
+			if err := r.Unmarshal(table, argReal.Interface()); err != nil {
 				fmt.Println(err)
 			}
 			results := fromReal.Call([]reflect.Value{
@@ -44,7 +44,7 @@ func Marshal(from interface{}) (lua.LValue, error) {
 			})
 			result := results[0]
 
-			luaResult, err := Marshal(result.Interface())
+			luaResult, err := r.Marshal(result.Interface())
 			if err != nil {
 				fmt.Println(err)
 				return 0
@@ -64,7 +64,7 @@ func Marshal(from interface{}) (lua.LValue, error) {
 		field := fromType.Field(i)
 		value := fromReal.Field(i).Interface()
 
-		name, err := extarctLuaTagValue(field.Tag)
+		name, err := r.extarctLuaTagValue(field.Tag)
 		if err != nil {
 			return nil, err
 		}
@@ -81,7 +81,7 @@ func Marshal(from interface{}) (lua.LValue, error) {
 	return table, nil
 }
 
-func Unmarshal(table lua.LValue, dest interface{}) error {
+func (r *Runner) Unmarshal(table lua.LValue, dest interface{}) error {
 	state := lua.NewState()
 
 	destType := reflect.TypeOf(dest).Elem()
@@ -91,7 +91,7 @@ func Unmarshal(table lua.LValue, dest interface{}) error {
 		field := destType.Field(i)
 		value := destReal.Field(i)
 
-		name, err := extarctLuaTagValue(field.Tag)
+		name, err := r.extarctLuaTagValue(field.Tag)
 		if err != nil {
 			return err
 		}

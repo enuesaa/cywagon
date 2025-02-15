@@ -50,7 +50,7 @@ func (m *ServeOpts) getByHost(host string) ServeOptsSite {
 	return ServeOptsSite{}
 }
 
-func Serve(opts ServeOpts) error {
+func (s *Server) Serve(opts ServeOpts) error {
 	if err := opts.createSiteMap(); err != nil {
 		return err
 	}

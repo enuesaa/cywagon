@@ -15,7 +15,7 @@ type Runner struct {
 }
 
 func (r *Runner) Inject(value interface{}) error {
-	return Inject(r.state, value)
+	return r.inject(r.state, value)
 }
 
 func (r *Runner) Run() error {
@@ -23,5 +23,5 @@ func (r *Runner) Run() error {
 }
 
 func (r *Runner) Eject(value interface{}) error {
-	return Eject(r.state, value)
+	return r.eject(r.state, value)
 }

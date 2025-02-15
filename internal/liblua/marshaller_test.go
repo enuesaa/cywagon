@@ -17,7 +17,8 @@ func TestMarshal(t *testing.T) {
 		A: "aaa",
 		B: 1,
 	}
-	table, err := Marshal(entry)
+	runner := NewRunner("")
+	table, err := runner.Marshal(entry)
 	require.Nil(t, err)
 
 	state := lua.NewState()
@@ -42,7 +43,8 @@ func TestUnmarshal(t *testing.T) {
 	require.Nil(t, err)
 
 	table := state.GetGlobal("entry").(*lua.LTable)
-	err = Unmarshal(table, &entry)
+	runner := NewRunner("")
+	err = runner.Unmarshal(table, &entry)
 	require.Nil(t, err)
 
 	assert.Equal(t, "aaa", entry.A)
