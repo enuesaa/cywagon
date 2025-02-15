@@ -17,5 +17,9 @@ func Up(confDir string) error {
 	}
 	infra.Default.Log.Info("start serving")
 
+	if err := engine.CheckHealth(); err != nil {
+		return err
+	}
+
 	return engine.Serve(confs)
 }
