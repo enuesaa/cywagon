@@ -12,10 +12,8 @@ func Start(confDir string) error {
 	if err != nil {
 		return err
 	}
-	for _, conf := range confs {
-		if conf.Entry.Cmd != "" {
-			engine.RunCmd(conf.Entry.Workdir, conf.Entry.Cmd)
-		}
+	if err := engine.StartUp(confs); err != nil {
+		return err
 	}
 	infra.Default.Log.Info("start serving")
 

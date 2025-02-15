@@ -39,7 +39,7 @@ func (c *StartCommand) SetFlags(f *flag.FlagSet) {
 	f.StringVar(&c.conf, "conf", "", "conf files dir. required")
 }
 
-func (c *StartCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *StartCommand) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if err := c.execute(); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
