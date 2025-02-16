@@ -17,7 +17,7 @@ func TestMarshal(t *testing.T) {
 		A: "aaa",
 		B: 1,
 	}
-	runner := NewRunner("")
+	runner := NewForTesting(t)
 	table, err := runner.Marshal(entry)
 	require.Nil(t, err)
 
@@ -43,7 +43,7 @@ func TestUnmarshal(t *testing.T) {
 	require.Nil(t, err)
 
 	table := state.GetGlobal("entry").(*lua.LTable)
-	runner := NewRunner("")
+	runner := NewForTesting(t)
 	err = runner.Unmarshal(table, &entry)
 	require.Nil(t, err)
 

@@ -9,7 +9,7 @@ import (
 
 type Fn func(res interface{}, args ...interface{}) error
 
-func (r *Runner) inject(state *lua.LState, from interface{}) error {
+func (r *Runner) Inject(from interface{}) error {
 	fromType := reflect.TypeOf(from)
 	fromReal := reflect.ValueOf(from)
 	if fromType.Kind() != reflect.Struct {
@@ -24,15 +24,15 @@ func (r *Runner) inject(state *lua.LState, from interface{}) error {
 
 		switch field.Type.Kind() {
 		case reflect.Int:
-			state.SetGlobal(name, lua.LNumber(value.(int)))
+			r.state.SetGlobal(name, lua.LNumber(value.(int)))
 		case reflect.String:
-			state.SetGlobal(name, lua.LString(value.(string)))
+			r.state.SetGlobal(name, lua.LString(value.(string)))
 		case reflect.Struct:
 			table, err := r.Marshal(value)
 			if err != nil {
 				return err
 			}
-			state.SetGlobal(name, table)
+			r.state.SetGlobal(name, table)
 		case reflect.Func:
 			// pass
 		default:
@@ -42,7 +42,7 @@ func (r *Runner) inject(state *lua.LState, from interface{}) error {
 	return nil
 }
 
-func (r *Runner) eject(state *lua.LState, dest interface{}) error {
+func (r *Runner) Eject(dest interface{}) error {
 	destType := reflect.TypeOf(dest).Elem()
 	destReal := reflect.ValueOf(dest).Elem()
 	if destType.Kind() != reflect.Struct {
@@ -54,7 +54,7 @@ func (r *Runner) eject(state *lua.LState, dest interface{}) error {
 		value := destReal.Field(i)
 
 		name := r.extarctLuaTagValue(field.Tag, field.Name)
-		luaValue := state.GetGlobal(name)
+		luaValue := r.state.GetGlobal(name)
 
 		switch field.Type.Kind() {
 		case reflect.Int:
@@ -78,7 +78,7 @@ func (r *Runner) eject(state *lua.LState, dest interface{}) error {
 					luaArgs = append(luaArgs, luaArg)
 				}
 
-				_, err, values := state.Resume(lua.NewState(), luafn, luaArgs...)
+				_, err, values := r.state.Resume(lua.NewState(), luafn, luaArgs...)
 				if err != nil {
 					return err
 				}
