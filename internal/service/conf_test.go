@@ -22,6 +22,9 @@ func TestConfServiceValidate(t *testing.T) {
 		{
 			conf: model.Conf{
 				Host: "example.com",
+				Entry: model.ConfEntry{
+					Cmd: "go run .",
+				},
 			},
 		},
 		{
