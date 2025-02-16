@@ -15,8 +15,8 @@ func New() Server {
 type Server struct {
 	infra.Container
 
-	Port    int
-	Sites   Sites
+	Port  int
+	Sites Sites
 }
 
 type Site struct {

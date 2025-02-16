@@ -12,7 +12,7 @@ func (e *Engine) Serve(confs []model.Conf) error {
 		site := libserve.Site{
 			Host:      conf.Host,
 			OriginUrl: conf.Entry.Host,
-			Handler:   func(res *libserve.HandlerResponse, next libserve.Next, req libserve.HandlerRequest) error {
+			Handler: func(res *libserve.HandlerResponse, next libserve.Next, req libserve.HandlerRequest) error {
 				return conf.Handler(res, next, req)
 			},
 		}

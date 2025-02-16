@@ -1,3 +1,3 @@
 package model
 
-type Log struct {}
+type Log struct{}

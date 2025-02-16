@@ -9,7 +9,7 @@ import (
 )
 
 func TestConfServiceValidate(t *testing.T) {
-	cases := []struct{
+	cases := []struct {
 		conf model.Conf
 		err  error
 	}{

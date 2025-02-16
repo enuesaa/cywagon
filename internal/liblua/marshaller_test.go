@@ -10,6 +10,9 @@ import (
 )
 
 func TestMarshal(t *testing.T) {
+	runner := New()
+	runner.Container = infra.NewMock(t)
+
 	type Entry struct {
 		A string `lua:"a"`
 		B int    `lua:"b"`
@@ -18,8 +21,6 @@ func TestMarshal(t *testing.T) {
 		A: "aaa",
 		B: 1,
 	}
-	runner := New()
-	runner.Container = infra.NewMock(t)
 	table, err := runner.Marshal(entry)
 	require.Nil(t, err)
 
@@ -29,6 +30,9 @@ func TestMarshal(t *testing.T) {
 }
 
 func TestUnmarshal(t *testing.T) {
+	runner := New()
+	runner.Container = infra.NewMock(t)
+
 	code := `
 	entry = {}
 	entry.a = "aaa"
@@ -45,8 +49,6 @@ func TestUnmarshal(t *testing.T) {
 	require.Nil(t, err)
 
 	table := state.GetGlobal("entry").(*lua.LTable)
-	runner := New()
-	runner.Container = infra.NewMock(t)
 	err = runner.Unmarshal(table, &entry)
 	require.Nil(t, err)
 

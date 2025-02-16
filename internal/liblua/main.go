@@ -5,11 +5,10 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-
 func New() Runner {
 	runner := Runner{
 		Container: infra.Default,
-		state: lua.NewState(),	
+		state:     lua.NewState(),
 	}
 	return runner
 }

@@ -13,7 +13,7 @@ func TestValidateConfs(t *testing.T) {
 	engine := New()
 	engine.Container = infra.NewMock(t)
 
-	table := []struct{
+	table := []struct {
 		confs []model.Conf
 		err   error
 	}{

@@ -13,9 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/env
+      - uses: gacts/install-hurl@v1
+
       - run: go install
 
       - run: cywagon -help
+      - run: cywagon check -conf testdata/examplecom
 
       - run: nohup cywagon up -conf testdata/examplecom &
-      - run: curl http://localhost:3000
+      - run: hurl --test testdata/examplecom
