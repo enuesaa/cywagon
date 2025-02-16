@@ -3,6 +3,7 @@ package liblua
 import (
 	"testing"
 
+	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	lua "github.com/yuin/gopher-lua"
@@ -17,7 +18,9 @@ func TestMarshal(t *testing.T) {
 		A: "aaa",
 		B: 1,
 	}
-	runner := NewForTesting(t)
+	runner := New(func(e *Runner) {
+		e.Container = infra.NewMock(t)
+	})
 	table, err := runner.Marshal(entry)
 	require.Nil(t, err)
 
@@ -43,7 +46,9 @@ func TestUnmarshal(t *testing.T) {
 	require.Nil(t, err)
 
 	table := state.GetGlobal("entry").(*lua.LTable)
-	runner := NewForTesting(t)
+	runner := New(func(e *Runner) {
+		e.Container = infra.NewMock(t)
+	})
 	err = runner.Unmarshal(table, &entry)
 	require.Nil(t, err)
 

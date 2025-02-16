@@ -10,9 +10,9 @@ import (
 )
 
 func TestValidateConfs(t *testing.T) {
-	engine := Engine{
-		Container: infra.NewMock(t),
-	}
+	engine := New(func(e *Engine) {
+		e.Container = infra.NewMock(t)
+	})
 
 	table := []struct{
 		confs []model.Conf

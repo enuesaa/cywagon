@@ -5,11 +5,16 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-func New() Runner {
-	return Runner{
+
+func New(opts ...func(*Runner)) Runner {
+	runner := Runner{
 		Container: infra.Default,
-		state: lua.NewState(),
+		state: lua.NewState(),	
 	}
+	for _, opt := range opts {
+		opt(&runner)
+	}
+	return runner
 }
 
 type Runner struct {
