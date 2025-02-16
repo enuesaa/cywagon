@@ -9,7 +9,7 @@ import (
 )
 
 func TestConfServiceValidate(t *testing.T) {
-	table := []struct{
+	cases := []struct{
 		conf model.Conf
 		err  error
 	}{
@@ -38,10 +38,10 @@ func TestConfServiceValidate(t *testing.T) {
 		},
 	}
 
-	confsrv := ConfService{
-		Container: infra.NewMock(t),
-	}
-	for _, tt := range table {
+	confsrv := NewConfService()
+	confsrv.Container = infra.NewMock(t)
+
+	for _, tt := range cases {
 		err := confsrv.Validate(tt.conf)
 		assert.Equal(t, err, tt.err)
 	}

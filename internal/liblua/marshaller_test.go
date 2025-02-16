@@ -18,9 +18,8 @@ func TestMarshal(t *testing.T) {
 		A: "aaa",
 		B: 1,
 	}
-	runner := New(func(e *Runner) {
-		e.Container = infra.NewMock(t)
-	})
+	runner := New()
+	runner.Container = infra.NewMock(t)
 	table, err := runner.Marshal(entry)
 	require.Nil(t, err)
 
@@ -46,9 +45,8 @@ func TestUnmarshal(t *testing.T) {
 	require.Nil(t, err)
 
 	table := state.GetGlobal("entry").(*lua.LTable)
-	runner := New(func(e *Runner) {
-		e.Container = infra.NewMock(t)
-	})
+	runner := New()
+	runner.Container = infra.NewMock(t)
 	err = runner.Unmarshal(table, &entry)
 	require.Nil(t, err)
 

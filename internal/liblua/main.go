@@ -6,13 +6,10 @@ import (
 )
 
 
-func New(opts ...func(*Runner)) Runner {
+func New() Runner {
 	runner := Runner{
 		Container: infra.Default,
 		state: lua.NewState(),	
-	}
-	for _, opt := range opts {
-		opt(&runner)
 	}
 	return runner
 }

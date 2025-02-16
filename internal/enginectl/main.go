@@ -2,12 +2,9 @@ package enginectl
 
 import "github.com/enuesaa/cywagon/internal/infra"
 
-func New(opts ...func(*Engine)) Engine {
+func New() Engine {
 	engine := Engine{
 		Container: infra.Default,
-	}
-	for _, opt := range opts {
-		opt(&engine)
 	}
 	return engine
 }
