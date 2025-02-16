@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/liblua"
 	"github.com/enuesaa/cywagon/internal/service/model"
@@ -61,4 +63,17 @@ func (c *ConfService) parse(code string) (model.Conf, error) {
 		return config, err
 	}
 	return config, nil
+}
+
+var ErrConfHostRequired = fmt.Errorf("host is required")
+var ErrConfEntryCmdRequired = fmt.Errorf("entry.cmd is required")
+
+func (c *ConfService) Validate(conf model.Conf) error {
+	if conf.Host == "" {
+		return ErrConfHostRequired
+	}
+	if conf.Entry.Cmd == "" {
+		return ErrConfEntryCmdRequired
+	}
+	return nil
 }

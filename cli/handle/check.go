@@ -10,5 +10,5 @@ func Check(confDir string) error {
 		return err
 	}
 
-	return engine.Validate(confs)
+	return engine.ValidateConfs(confs)
 }

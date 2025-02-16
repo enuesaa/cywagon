@@ -21,3 +21,14 @@ func (e *Engine) ListConfs(dir string) ([]model.Conf, error) {
 
 	return confs, nil
 }
+
+func (e *Engine) ValidateConfs(confs []model.Conf) error {
+	confsrv := service.NewConfService()
+
+	for _, conf := range confs {
+		if err := confsrv.Validate(conf); err != nil {
+			return err
+		}
+	}
+	return nil
+}
