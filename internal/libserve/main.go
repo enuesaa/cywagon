@@ -1,7 +1,6 @@
 package libserve
 
 import (
-	"net/http"
 	"net/url"
 
 	"github.com/enuesaa/cywagon/internal/infra"
@@ -26,5 +25,12 @@ type Site struct {
 	Handler         FnHandler
 	parsedOriginUrl *url.URL
 }
-type FnHandler func(FnNext, *http.Request) (*http.Response, error)
-type FnNext func(*http.Request) *http.Response
+type FnHandler func(*FnHandlerResponse, FnNext, FnHandlerRequest) error
+type FnNext func(FnHandlerRequest) FnHandlerResponse
+
+type FnHandlerRequest struct {
+	Path string
+}
+type FnHandlerResponse struct {
+	Status int
+}

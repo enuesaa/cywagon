@@ -1,8 +1,6 @@
 package model
 
 import (
-	"net/http"
-
 	"github.com/enuesaa/cywagon/internal/liblua"
 	"github.com/enuesaa/cywagon/internal/libserve"
 )
@@ -25,33 +23,6 @@ type ConfHealthCheck struct {
 	Path     string `lua:"path"`
 }
 
-func (c *Conf) RunHandler(next libserve.FnNext, req *http.Request) (*http.Response, error) {
-	var res *http.Response
-
-	type Request struct {
-		Path string
-	}
-	type Response struct {
-		Status int
-	}
-
-	handlerReq := Request{
-		Path: req.URL.Path,
-	}
-	handlerRes := Response{
-		Status: 0,
-	}
-	handlerNext := func(r Request) Response {
-		req.URL.Path = r.Path
-		res = next(req)
-		handlerRes.Status = res.StatusCode
-		return handlerRes
-	}
-
-	if err := c.Handler(&handlerRes, handlerNext, handlerReq); err != nil {
-		return res, err
-	}
-	res.StatusCode = handlerRes.Status
-
-	return res, nil
+func (c *Conf) RunHandler(res *libserve.FnHandlerResponse, next libserve.FnNext, req libserve.FnHandlerRequest) error {
+	return c.Handler(res, next, req)
 }
