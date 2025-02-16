@@ -20,7 +20,7 @@ func (r *Runner) Inject(from interface{}) error {
 		field := fromType.Field(i)
 		value := fromReal.Field(i).Interface()
 
-		name := r.extarctLuaTagValue(field.Tag, field.Name)
+		name := r.extarctVarName(field.Tag, field.Name)
 
 		switch field.Type.Kind() {
 		case reflect.Int:
@@ -53,7 +53,7 @@ func (r *Runner) Eject(dest interface{}) error {
 		field := destType.Field(i)
 		value := destReal.Field(i)
 
-		name := r.extarctLuaTagValue(field.Tag, field.Name)
+		name := r.extarctVarName(field.Tag, field.Name)
 		luaValue := r.state.GetGlobal(name)
 
 		switch field.Type.Kind() {

@@ -10,8 +10,8 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-func (r *Runner) extarctLuaTagValue(m reflect.StructTag, fieldName string) string {
-	defaultName := strings.ToLower(fieldName)
+func (r *Runner) extarctVarName(m reflect.StructTag, fieldName string) string {
+	defaultName := strings.ToLower(fieldName[:1]) + fieldName[1:]
 
 	tags, err := structtag.Parse(string(m))
 	if err != nil {
@@ -67,7 +67,7 @@ func (r *Runner) Marshal(from interface{}) (lua.LValue, error) {
 		field := fromType.Field(i)
 		value := fromReal.Field(i).Interface()
 
-		name := r.extarctLuaTagValue(field.Tag, field.Name)
+		name := r.extarctVarName(field.Tag, field.Name)
 
 		switch field.Type.Kind() {
 		case reflect.Int:
@@ -91,7 +91,7 @@ func (r *Runner) Unmarshal(table lua.LValue, dest interface{}) error {
 		field := destType.Field(i)
 		value := destReal.Field(i)
 
-		name := r.extarctLuaTagValue(field.Tag, field.Name)
+		name := r.extarctVarName(field.Tag, field.Name)
 		luaValue := state.GetField(table, name)
 
 		switch field.Type.Kind() {
