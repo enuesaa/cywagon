@@ -2,30 +2,29 @@ package libserve
 
 import "net/http"
 
-// see https://engineering.mercari.com/blog/entry/2018-12-05-105737/
 type Transport struct {
-	SiteMap SiteMap
+	Sites Sites
 }
 
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	var res *http.Response
 
-	site := t.SiteMap.getByHost(req.Host)
+	site := t.Sites.getByHost(req.Host)
 
-	next := func(rq FnHandlerRequest) FnHandlerResponse {
+	next := func(rq HandlerRequest) HandlerResponse {
 		req.URL.Path = rq.Path
 
 		res, _ = http.DefaultTransport.RoundTrip(req)
 
-		rs := FnHandlerResponse{
+		rs := HandlerResponse{
 			Status: res.StatusCode,
 		}
 		return rs
 	}
-	rq := FnHandlerRequest{
+	rq := HandlerRequest{
 		Path: req.URL.Path,
 	}
-	rs := FnHandlerResponse{
+	rs := HandlerResponse{
 		Status: 0,
 	}
 	if err := site.Handler(&rs, next, rq); err != nil {

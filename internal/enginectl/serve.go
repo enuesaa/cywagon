@@ -6,14 +6,19 @@ import (
 )
 
 func (e *Engine) Serve(confs []model.Conf) error {
-	var sites []libserve.Site
+	sites := libserve.NewSites()
 
 	for _, conf := range confs {
-		sites = append(sites, libserve.Site{
+		site := libserve.Site{
 			Host:      conf.Host,
 			OriginUrl: conf.Entry.Host,
-			Handler:   conf.RunHandler,
-		})
+			Handler:   func(res *libserve.HandlerResponse, next libserve.Next, req libserve.HandlerRequest) error {
+				return conf.Handler(res, next, req)
+			},
+		}
+		if err := sites.Push(site); err != nil {
+			return err
+		}
 	}
 
 	server := libserve.New()

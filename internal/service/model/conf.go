@@ -1,9 +1,6 @@
 package model
 
-import (
-	"github.com/enuesaa/cywagon/internal/liblua"
-	"github.com/enuesaa/cywagon/internal/libserve"
-)
+import "github.com/enuesaa/cywagon/internal/liblua"
 
 type Conf struct {
 	Host        string          `lua:"host"`
@@ -21,8 +18,4 @@ type ConfHealthCheck struct {
 	Protocol string `lua:"protocol"`
 	Method   string `lua:"method"`
 	Path     string `lua:"path"`
-}
-
-func (c *Conf) RunHandler(res *libserve.FnHandlerResponse, next libserve.FnNext, req libserve.FnHandlerRequest) error {
-	return c.Handler(res, next, req)
 }

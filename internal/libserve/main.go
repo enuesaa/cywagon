@@ -16,21 +16,21 @@ type Server struct {
 	infra.Container
 
 	Port    int
-	Sites   []Site
+	Sites   Sites
 }
 
 type Site struct {
 	Host            string // Example: `example.com`
 	OriginUrl       string // Example: `https://example.com`
-	Handler         FnHandler
+	Handler         Handler
 	parsedOriginUrl *url.URL
 }
-type FnHandler func(*FnHandlerResponse, FnNext, FnHandlerRequest) error
-type FnNext func(FnHandlerRequest) FnHandlerResponse
+type Handler func(*HandlerResponse, Next, HandlerRequest) error
+type Next func(HandlerRequest) HandlerResponse
 
-type FnHandlerRequest struct {
+type HandlerRequest struct {
 	Path string
 }
-type FnHandlerResponse struct {
+type HandlerResponse struct {
 	Status int
 }
