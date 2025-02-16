@@ -13,36 +13,35 @@ type Conf struct {
 	HealthCheck ConfHealthCheck `lua:"healthCheck"`
 	Handler     liblua.Fn       `lua:"handler"`
 }
-
 type ConfEntry struct {
 	Workdir        string `lua:"workdir"`
 	Cmd            string `lua:"cmd"`
 	WaitForHealthy int    `lua:"waitForHealthy"`
 	Host           string `lua:"host"`
 }
-
 type ConfHealthCheck struct {
 	Protocol string `lua:"protocol"`
 	Method   string `lua:"method"`
 	Path     string `lua:"path"`
 }
-type ConfHandlerRequest struct {
-	Path string `lua:"path"`
-}
-type ConfHandlerResponse struct {
-	Status int `lua:"status"`
-}
 
-func (c *Conf) RunHandler(req *http.Request, next libserve.FnNext) (*http.Response, error) {
+func (c *Conf) RunHandler(next libserve.FnNext, req *http.Request) (*http.Response, error) {
 	var res *http.Response
 
-	handlerReq := ConfHandlerRequest{
+	type Request struct {
+		Path string
+	}
+	type Response struct {
+		Status int
+	}
+
+	handlerReq := Request{
 		Path: req.URL.Path,
 	}
-	handlerRes := ConfHandlerResponse{
+	handlerRes := Response{
 		Status: 0,
 	}
-	handlerNext := func(r ConfHandlerRequest) ConfHandlerResponse {
+	handlerNext := func(r Request) Response {
 		req.URL.Path = r.Path
 		res = next(req)
 		handlerRes.Status = res.StatusCode

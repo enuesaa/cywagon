@@ -2,6 +2,7 @@ package liblua
 
 import (
 	"fmt"
+	"strings"
 
 	"reflect"
 
@@ -9,16 +10,18 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-func (r *Runner) extarctLuaTagValue(m reflect.StructTag) (string, error) {
+func (r *Runner) extarctLuaTagValue(m reflect.StructTag, fieldName string) string {
+	defaultName := strings.ToLower(fieldName)
+
 	tags, err := structtag.Parse(string(m))
 	if err != nil {
-		return "", fmt.Errorf("lua tag not found: %s", err.Error())
+		return defaultName
 	}
 	value, err := tags.Get("lua")
 	if err != nil {
-		return "", fmt.Errorf("lua tag not found: %s", err.Error())
+		return defaultName
 	}
-	return value.Name, nil
+	return value.Name
 }
 
 func (r *Runner) Marshal(from interface{}) (lua.LValue, error) {
@@ -64,10 +67,7 @@ func (r *Runner) Marshal(from interface{}) (lua.LValue, error) {
 		field := fromType.Field(i)
 		value := fromReal.Field(i).Interface()
 
-		name, err := r.extarctLuaTagValue(field.Tag)
-		if err != nil {
-			return nil, err
-		}
+		name := r.extarctLuaTagValue(field.Tag, field.Name)
 
 		switch field.Type.Kind() {
 		case reflect.Int:
@@ -91,10 +91,7 @@ func (r *Runner) Unmarshal(table lua.LValue, dest interface{}) error {
 		field := destType.Field(i)
 		value := destReal.Field(i)
 
-		name, err := r.extarctLuaTagValue(field.Tag)
-		if err != nil {
-			return err
-		}
+		name := r.extarctLuaTagValue(field.Tag, field.Name)
 		luaValue := state.GetField(table, name)
 
 		switch field.Type.Kind() {

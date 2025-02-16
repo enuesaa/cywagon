@@ -26,5 +26,5 @@ type Site struct {
 	Handler         FnHandler
 	parsedOriginUrl *url.URL
 }
-type FnHandler func(*http.Request, FnNext) (*http.Response, error)
+type FnHandler func(FnNext, *http.Request) (*http.Response, error)
 type FnNext func(*http.Request) *http.Response
