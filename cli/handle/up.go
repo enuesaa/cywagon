@@ -1,11 +1,8 @@
 package handle
 
-import (
-	"github.com/enuesaa/cywagon/internal/enginectl"
-	"github.com/enuesaa/cywagon/internal/infra"
-)
+import "github.com/enuesaa/cywagon/internal/enginectl"
 
-func Up(confDir string) error {
+func (h *Handler) Up(confDir string) error {
 	engine := enginectl.New()
 
 	confs, err := engine.ListConfs(confDir)
@@ -15,7 +12,7 @@ func Up(confDir string) error {
 	if err := engine.StartUp(confs); err != nil {
 		return err
 	}
-	infra.Default.Log.Info("start serving")
+	h.Log.Info("start serving")
 
 	return engine.Serve(confs)
 }

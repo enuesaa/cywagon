@@ -40,11 +40,13 @@ func (c *UpCommand) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *UpCommand) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	handler := handle.New()
+
 	if err := c.validate(); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
-	if err := handle.Up(c.conf); err != nil {
+	if err := handler.Up(c.conf); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}

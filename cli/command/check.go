@@ -40,11 +40,13 @@ func (c *CheckCommand) SetFlags(f *flag.FlagSet) {
 }
 
 func (c *CheckCommand) Execute(_ context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	handler := handle.New()
+
 	if err := c.validate(); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
-	if err := handle.Check(c.conf); err != nil {
+	if err := handler.Check(c.conf); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
