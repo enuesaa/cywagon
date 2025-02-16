@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/liblua"
@@ -23,7 +24,14 @@ func (c *ConfService) List(dir string) []string {
 	if err != nil {
 		return []string{}
 	}
-	return list
+
+	var ret []string
+	for _, item := range list {
+		if strings.HasSuffix(item, ".lua") {
+			ret = append(ret, item)
+		}
+	}
+	return ret
 }
 
 func (c *ConfService) Read(path string) (model.Conf, error) {
