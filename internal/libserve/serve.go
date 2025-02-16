@@ -1,6 +1,7 @@
 package libserve
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httputil"
 )
@@ -9,6 +10,10 @@ import (
 // also see ModifyResponse, ErrorHandler if need
 
 func (s *Server) Serve() error {
+	if err := s.Sites.Validate(); err != nil {
+		return err
+	}
+
 	proxy := httputil.ReverseProxy{}
 	proxy.Rewrite = func(req *httputil.ProxyRequest) {
 		site := s.Sites.getByHost(req.In.Host)
@@ -17,6 +22,7 @@ func (s *Server) Serve() error {
 	proxy.Transport = &Transport{
 		Sites: s.Sites,
 	}
+	addr := fmt.Sprintf(":%d", s.Port)
 
-	return http.ListenAndServe(":3000", &proxy)
+	return http.ListenAndServe(addr, &proxy)
 }

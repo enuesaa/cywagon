@@ -1,6 +1,9 @@
 package libserve
 
-import "net/url"
+import (
+	"fmt"
+	"net/url"
+)
 
 func NewSites() Sites {
 	return map[string]Site{}
@@ -28,10 +31,14 @@ func (m *Sites) getByHost(host string) Site {
 	if ok {
 		return site
 	}
-	site, ok = (*m)["default"]
-	if ok {
-		return site
-	}
+	return (*m)["default"]
+}
 
-	return Site{}
+var ErrSitesNeedAtLeast1SiteDef = fmt.Errorf("sites need at least 1 def")
+
+func (m *Sites) Validate() error {
+	if _, ok := (*m)["default"]; !ok {
+		return ErrSitesNeedAtLeast1SiteDef
+	}
+	return nil
 }
