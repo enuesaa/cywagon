@@ -74,14 +74,10 @@ func (c *ConfService) parse(code string) (model.Conf, error) {
 }
 
 var ErrConfHostRequired = fmt.Errorf("host is required")
-var ErrConfEntryCmdRequired = fmt.Errorf("entry.cmd is required")
 
 func (c *ConfService) Validate(conf model.Conf) error {
 	if conf.Host == "" {
 		return ErrConfHostRequired
-	}
-	if conf.Entry.Cmd == "" {
-		return ErrConfEntryCmdRequired
 	}
 	return nil
 }
