@@ -3,6 +3,7 @@ package service
 import (
 	"testing"
 
+	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/service/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -34,8 +35,10 @@ func TestConfServiceValidate(t *testing.T) {
 		},
 	}
 
+	confsrv := ConfService{
+		Container: infra.NewMock(t),
+	}
 	for _, tt := range table {
-		confsrv := NewConfService()
 		err := confsrv.Validate(tt.conf)
 		assert.Equal(t, err, tt.err)
 	}

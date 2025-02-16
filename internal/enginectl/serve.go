@@ -6,10 +6,10 @@ import (
 )
 
 func (e *Engine) Serve(confs []model.Conf) error {
-	var sites []libserve.ServeOptsSite
+	var sites []libserve.Site
 
 	for _, conf := range confs {
-		sites = append(sites, libserve.ServeOptsSite{
+		sites = append(sites, libserve.Site{
 			Host:      conf.Host,
 			OriginUrl: conf.Entry.Host,
 			Handler:   conf.RunHandler,
@@ -17,10 +17,8 @@ func (e *Engine) Serve(confs []model.Conf) error {
 	}
 
 	server := libserve.New()
+	server.Port = 3000
+	server.Sites = sites
 
-	serveOpts := libserve.ServeOpts{
-		Port:  3000,
-		Sites: sites,
-	}
-	return server.Serve(serveOpts)
+	return server.Serve()
 }

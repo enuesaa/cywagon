@@ -26,8 +26,6 @@ type ConfHealthCheck struct {
 	Method   string `lua:"method"`
 	Path     string `lua:"path"`
 }
-
-// libserve に移したい
 type ConfHandlerRequest struct {
 	Path string `lua:"path"`
 }
