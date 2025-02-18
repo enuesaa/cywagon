@@ -1,23 +1,17 @@
 package libfetch
 
 import (
-	"fmt"
 	"net"
 	"net/http"
 )
 
-func (f *Fetcher) CheckHttpFetch() error {
-	res, err := http.Get("https://example.com")
+func (f *Fetcher) CheckHttpFetch(url string) int {
+	res, err := http.Get(url)
 	if err != nil {
-		return err
+		return 0
 	}
 
-	if res.StatusCode != 200 {
-		return fmt.Errorf("faild")
-	}
-	fmt.Println(res.StatusCode)
-
-	return nil
+	return res.StatusCode
 }
 
 func (f *Fetcher) CheckTcpConn() error {
