@@ -1,6 +1,7 @@
 host = "example.com"
 
 entry.host = "https://example.com"
+entry.secure = true
 
 healthCheck.protocol = "HTTP"
 healthCheck.path = "/"

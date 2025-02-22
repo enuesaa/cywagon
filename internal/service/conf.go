@@ -51,6 +51,8 @@ func (c *ConfService) parse(code string) (model.Conf, error) {
 			Workdir:        ".",
 			Cmd:            "",
 			WaitForHealthy: 5,
+			Host:           "",
+			Secure:         false,
 		},
 		HealthCheck: model.ConfHealthCheck{
 			Protocol: "HTTP",

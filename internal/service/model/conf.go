@@ -13,6 +13,7 @@ type ConfEntry struct {
 	Cmd            string `lua:"cmd"`
 	WaitForHealthy int    `lua:"waitForHealthy"`
 	Host           string `lua:"host"`
+	Secure         bool   `lua:"secure"`
 }
 type ConfHealthCheck struct {
 	Protocol string `lua:"protocol"`
