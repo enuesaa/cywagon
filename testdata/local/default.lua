@@ -10,10 +10,8 @@ healthCheck.method = "GET"
 healthCheck.path = "/"
 
 function handler(next, req)
-    print('handle')
-
     res = next(req)
-    res.status = 201
+    -- res.status = 201
 
     return res
 end

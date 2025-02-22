@@ -8,8 +8,26 @@ import (
 )
 
 func (e *Engine) StartHealthCheck(confs []model.Conf) error {
+	wait := e.calcMaxWaitForHealthy(confs)
+	time.Sleep(time.Duration(wait) * time.Second)
+
+	// first check must healthy
+	if err := e.runHealthCheck(confs); err != nil {
+		return err
+	}
 	go e.poolHealthCheck(confs)
+
 	return nil
+}
+
+func (e *Engine) calcMaxWaitForHealthy(confs []model.Conf) int {
+	wait := 1
+	for _, conf := range confs {
+		if conf.Origin.WaitForHealthy > wait {
+			wait = conf.Origin.WaitForHealthy
+		}
+	}
+	return wait
 }
 
 func (e *Engine) poolHealthCheck(confs []model.Conf) {
