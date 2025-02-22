@@ -57,6 +57,7 @@ func (c *ConfService) parse(code string) (model.Conf, error) {
 			Protocol: "HTTP",
 			Method:   "GET",
 			Path:     "/",
+			Matcher:  "200",
 		},
 		Handler: nil,
 	}

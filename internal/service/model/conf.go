@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/enuesaa/cywagon/internal/liblua"
@@ -19,17 +20,18 @@ type ConfOrigin struct {
 	Cmd            string `lua:"cmd"`
 	WaitForHealthy int    `lua:"waitForHealthy"`
 }
-func (c *ConfOrigin) Host() string {
-	ur, err := url.Parse(c.Url)
-	if err != nil {
-		return ""
-	}
-	return ur.Host
-}
 
 type ConfHealthCheck struct {
 	Protocol string `lua:"protocol"`
 	Method   string `lua:"method"`
 	Path     string `lua:"path"`
+	Matcher  string `lua:"matcher"`
 }
 
+func (c *Conf) HealthCheckUrl() string {
+	u, err := url.Parse(c.Origin.Url)
+	if err != nil {
+		return ""
+	}
+	return fmt.Sprintf("%s%s", u.Host, c.HealthCheck.Path)
+}

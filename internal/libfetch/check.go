@@ -1,25 +1,16 @@
 package libfetch
 
-import (
-	"net"
-	"net/http"
-)
+func (f *Fetcher) CheckHTTP(url string, matcher string) error {
+	status := f.FetchHTTP(url)
 
-func (f *Fetcher) CheckHttpFetch(url string) int {
-	res, err := http.Get(url)
-	if err != nil {
-		return 0
+	if status == matcher {
+		return nil
 	}
 
-	return res.StatusCode
+	// TODO
+	return nil
 }
 
-func (f *Fetcher) CheckTcpConn(address string) error {
-	conn, err := net.Dial("tcp", address)
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
-
-	return nil
+func (f *Fetcher) CheckTCP(address string) error {
+	return f.ConnectTCP(address)
 }
