@@ -4,19 +4,11 @@ import "github.com/enuesaa/cywagon/internal/service/model"
 
 func (e *Engine) StartUp(confs []model.Conf) error {
 	for _, conf := range confs {
-		if err := e.siteInit(conf); err != nil {
-			// TODO: unregister other sites here.
-			return err
+		if conf.Entry.Cmd != "" {
+			go e.runCmd(conf.Entry.Workdir, conf.Entry.Cmd)
 		}
+		// TODO: unregister other sites here.
 	}
-	return nil
-}
-
-func (e *Engine) siteInit(conf model.Conf) error {
-	if conf.Entry.Cmd != "" {
-		go e.runCmd(conf.Entry.Workdir, conf.Entry.Cmd)
-	}
-
 	return nil
 }
 

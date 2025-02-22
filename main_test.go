@@ -14,5 +14,6 @@ func TestMain(m *testing.M) {
 }
 
 func TestDoNotUseDefaultContainer(t *testing.T) {
+	// Since the default DI container is overwritten by TestMain(), this is expected to be nil.
 	assert.Equal(t, infra.Default.Cmd, nil)
 }

@@ -14,8 +14,8 @@ func (f *Fetcher) CheckHttpFetch(url string) int {
 	return res.StatusCode
 }
 
-func (f *Fetcher) CheckTcpConn() error {
-	conn, err := net.Dial("tcp", "example.com:80")
+func (f *Fetcher) CheckTcpConn(address string) error {
+	conn, err := net.Dial("tcp", address)
 	if err != nil {
 		return err
 	}
