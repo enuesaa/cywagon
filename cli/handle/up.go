@@ -15,7 +15,7 @@ func (h *Handler) Up(confDir string) error {
 	if err := engine.StartHealthCheck(confs); err != nil {
 		return err
 	}
-	h.Log.Info("start serving")
+	engine.PrintBanner(confs)
 
 	return engine.Serve(confs)
 }
