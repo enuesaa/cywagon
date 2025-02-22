@@ -1,22 +1,35 @@
 package model
 
-import "github.com/enuesaa/cywagon/internal/liblua"
+import (
+	"net/url"
+
+	"github.com/enuesaa/cywagon/internal/liblua"
+)
 
 type Conf struct {
 	Host        string          `lua:"host"`
-	Entry       ConfEntry       `lua:"entry"`
+	Origin      ConfOrigin      `lua:"origin"`
 	HealthCheck ConfHealthCheck `lua:"healthCheck"`
 	Handler     liblua.Fn       `lua:"handler"`
 }
-type ConfEntry struct {
+
+type ConfOrigin struct {
+	Url            string `lua:"url"`
 	Workdir        string `lua:"workdir"`
 	Cmd            string `lua:"cmd"`
 	WaitForHealthy int    `lua:"waitForHealthy"`
-	Host           string `lua:"host"`
-	Secure         bool   `lua:"secure"`
 }
+func (c *ConfOrigin) Host() string {
+	ur, err := url.Parse(c.Url)
+	if err != nil {
+		return ""
+	}
+	return ur.Host
+}
+
 type ConfHealthCheck struct {
 	Protocol string `lua:"protocol"`
 	Method   string `lua:"method"`
 	Path     string `lua:"path"`
 }
+

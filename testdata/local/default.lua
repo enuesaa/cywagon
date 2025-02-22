@@ -1,9 +1,9 @@
 host = "example.com"
 
-entry.workdir = "../kakkofn"
-entry.cmd = "pnpm vite preview"
-entry.waitForHealthy = 5
-entry.host = "localhost:4173"
+origin.url = "http://localhost:4173"
+origin.workdir = "../kakkofn"
+origin.cmd = "pnpm vite preview"
+origin.waitForHealthy = 5
 
 healthCheck.protocol = "HTTP"
 healthCheck.method = "GET"

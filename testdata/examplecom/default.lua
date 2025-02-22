@@ -1,7 +1,6 @@
 host = "example.com"
 
-entry.host = "https://example.com"
-entry.secure = true
+origin.url = "https://example.com"
 
 healthCheck.protocol = "HTTP"
 healthCheck.path = "/"

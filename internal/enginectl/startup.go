@@ -4,8 +4,8 @@ import "github.com/enuesaa/cywagon/internal/service/model"
 
 func (e *Engine) StartUp(confs []model.Conf) error {
 	for _, conf := range confs {
-		if conf.Entry.Cmd != "" {
-			go e.runCmd(conf.Entry.Workdir, conf.Entry.Cmd)
+		if conf.Origin.Cmd != "" {
+			go e.runCmd(conf.Origin.Workdir, conf.Origin.Cmd)
 		}
 		// TODO: unregister other sites here.
 	}

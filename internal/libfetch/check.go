@@ -1,16 +1,11 @@
 package libfetch
 
 import (
-	"fmt"
 	"net"
 	"net/http"
-	"strings"
 )
 
-func (f *Fetcher) CheckHttpFetch(protocol string, host string, path string) int {
-	protocol = strings.ToLower(protocol)
-	url := fmt.Sprintf("%s://%s%s", protocol, host, path)
-
+func (f *Fetcher) CheckHttpFetch(url string) int {
 	res, err := http.Get(url)
 	if err != nil {
 		return 0

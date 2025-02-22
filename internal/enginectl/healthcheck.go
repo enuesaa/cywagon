@@ -1,6 +1,8 @@
 package enginectl
 
 import (
+	"fmt"
+
 	"github.com/enuesaa/cywagon/internal/libfetch"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
@@ -16,9 +18,10 @@ func (e *Engine) runHealthCheck(confs []model.Conf) {
 	for _, conf := range confs {
 		switch conf.HealthCheck.Protocol {
 		case "HTTP":
-			fetcher.CheckHttpFetch(conf.HealthCheck.Protocol, conf.Entry.Host, conf.HealthCheck.Path)
+			url := fmt.Sprintf("%s%s", conf.Origin.Host(), conf.HealthCheck.Path)
+			fetcher.CheckHttpFetch(url)
 		case "TCP":
-			fetcher.CheckTcpConn(conf.Entry.Host)
+			fetcher.CheckTcpConn(conf.Origin.Url)
 		}
 	}
 }

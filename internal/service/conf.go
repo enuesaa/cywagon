@@ -47,12 +47,11 @@ func (c *ConfService) Read(path string) (model.Conf, error) {
 func (c *ConfService) parse(code string) (model.Conf, error) {
 	config := model.Conf{
 		Host: "",
-		Entry: model.ConfEntry{
+		Origin: model.ConfOrigin{
 			Workdir:        ".",
 			Cmd:            "",
 			WaitForHealthy: 5,
-			Host:           "",
-			Secure:         false,
+			Url:            "",
 		},
 		HealthCheck: model.ConfHealthCheck{
 			Protocol: "HTTP",
