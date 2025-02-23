@@ -1,8 +1,13 @@
 package libserve
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/enuesaa/cywagon/internal/infra"
+)
 
 type Transport struct {
+	infra.Container
 	Sites Sites
 }
 
@@ -29,6 +34,8 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 		return res, err
 	}
 	res.StatusCode = rs.Status
+
+	t.Log.Info("[http] %d %s %s %s", res.StatusCode, req.Method, site.Host, req.URL.Path)
 
 	return res, nil
 }

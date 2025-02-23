@@ -20,6 +20,7 @@ func (s *Server) Serve() error {
 		req.SetURL(site.parsedOriginUrl)
 	}
 	proxy.Transport = &Transport{
+		Container: s.Container,
 		Sites: s.Sites,
 	}
 	addr := fmt.Sprintf(":%d", s.Port)
