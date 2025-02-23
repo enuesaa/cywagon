@@ -19,19 +19,8 @@ type ConfService struct {
 	infra.Container
 }
 
-func (c *ConfService) List(dir string) []string {
-	list, err := c.Fs.ListFiles(dir)
-	if err != nil {
-		return []string{}
-	}
-
-	var ret []string
-	for _, item := range list {
-		if strings.HasSuffix(item, ".lua") {
-			ret = append(ret, item)
-		}
-	}
-	return ret
+func (c *ConfService) IsConfPath(path string) bool {
+	return strings.HasSuffix(path, ".lua")
 }
 
 func (c *ConfService) Read(path string) (model.Conf, error) {
