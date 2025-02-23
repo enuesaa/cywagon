@@ -40,19 +40,18 @@ func (m *Mock) Container() Container {
 	}
 }
 
-func (m *Mock) With(prepare func(*Mock)) Container {
-	prepare(m)
-
-	return m.Container()
-}
-
-func NewMock(t *testing.T) *Mock {
+func NewMock(t *testing.T, prepares... func(*Mock)) Container {
 	ctrl := gomock.NewController(t)
 
-	return &Mock{
+	mock := Mock{
 		Fs:  NewMockFsInterface(ctrl),
 		Ps:  NewMockPsInterface(ctrl),
 		Log: NewMockLogInterface(ctrl),
 		Cmd: NewMockCmdInterface(ctrl),
 	}
+	for _, prepare := range prepares {
+		prepare(&mock)
+	}
+
+	return mock.Container()
 }

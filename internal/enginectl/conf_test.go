@@ -11,7 +11,7 @@ import (
 
 func TestValidateConfs(t *testing.T) {
 	engine := New()
-	engine.Container = infra.NewMock(t).Container()
+	engine.Container = infra.NewMock(t)
 
 	cases := []struct {
 		confs []model.Conf
