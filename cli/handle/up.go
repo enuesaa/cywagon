@@ -9,9 +9,13 @@ func (h *Handler) Up(paths []string) error {
 	if err != nil {
 		return err
 	}
+
+	h.Log.Info("Start up sites..")
 	if err := engine.StartUp(confs); err != nil {
 		return err
 	}
+
+	h.Log.Info("Start health check..")
 	if err := engine.StartHealthCheck(confs); err != nil {
 		return err
 	}
