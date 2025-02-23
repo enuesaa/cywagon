@@ -26,7 +26,7 @@ func (c *CheckCommand) Name() string {
 }
 
 func (c *CheckCommand) Synopsis() string {
-	return "check"
+	return "Check"
 }
 
 func (c *CheckCommand) Usage() string {

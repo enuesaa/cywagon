@@ -11,6 +11,7 @@ import (
 )
 
 var versionFlag = flag.Bool("version", false, "Print version")
+var helpFlag    = flag.Bool("help", false, "Print command usage")
 
 func Run() int {
 	// cli
@@ -29,6 +30,13 @@ func Run() int {
 	// execute
 	status := subcommands.Execute(context.Background())
 
+	if *helpFlag {
+		status = subcommands.ExitSuccess
+	}
+	if flag.NArg() == 0 {
+		status = subcommands.ExitSuccess
+	}
+
 	return int(status)
 }
 
@@ -37,15 +45,14 @@ func Explain(w io.Writer) {
 
 	fmt.Fprintf(w, "Usage: %s <subcommand>\n\n", cdr.Name())
 
-	fmt.Fprintf(w, "Subcommands:\n")
-	cdr.VisitCommands(func(cg *subcommands.CommandGroup, c subcommands.Command) {
-		fmt.Fprintf(w, "\t%s\t\t%s\n", c.Name(), c.Synopsis())
+	fmt.Fprintf(w, "Commands:\n")
+	cdr.VisitCommands(func(_ *subcommands.CommandGroup, c subcommands.Command) {
+		fmt.Fprintf(w, "\t%s      \t%s\n", c.Name(), c.Synopsis())
 	})
 
 	fmt.Fprintf(w, "\n")
 	fmt.Fprintf(w, "Flags:\n")
 	flag.VisitAll(func(f *flag.Flag) {
-		fmt.Fprintf(w, "\t-%s\t%s\n", f.Name, f.Usage)
+		fmt.Fprintf(w, "\t-%s      \t%s\n", f.Name, f.Usage)
 	})
-	fmt.Fprintf(w, "\n")
 }
