@@ -1,6 +1,8 @@
 package handle
 
 import (
+	"fmt"
+
 	"github.com/enuesaa/cywagon/internal/service"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
@@ -24,28 +26,27 @@ func (h *Handler) listConfs(search []string) ([]model.Conf, error) {
 	return list, nil
 }
 
-func (h *Handler) listConfPaths(paths []string) ([]string, error) {
+func (h *Handler) listConfPaths(search []string) ([]string, error) {
 	confsrv := service.NewConfService()
 
 	var list []string
 
-	for _, path := range paths {
-		isDir, err := h.Fs.IsDir(path)
+	for _, path := range search {
+		if !h.Fs.IsExist(path) {
+			return nil, fmt.Errorf("path not found: %s", path)
+		}
+		if h.Fs.IsFile(path) {
+			list = append(list, path)
+			continue
+		}
+		files, err := h.Fs.ListFiles(path)
 		if err != nil {
 			return nil, err
 		}
-		if isDir {
-			files, err := h.Fs.ListFiles(path)
-			if err != nil {
-				return nil, err
+		for _, file := range files {
+			if confsrv.IsConfPath(file) {
+				list = append(list, file)
 			}
-			for _, file := range files {
-				if confsrv.IsConfPath(file) {
-					list = append(list, file)
-				}
-			}
-		} else {
-			list = append(list, path)
 		}
 	}
 	return list, nil

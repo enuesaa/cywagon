@@ -11,7 +11,7 @@ import (
 
 type FsInterface interface {
 	IsExist(path string) bool
-	IsDir(path string) (bool, error)
+	IsFile(path string) bool
 	CreateDir(path string) error
 	Create(path string, body []byte) error
 	HomeDir() (string, error)
@@ -30,12 +30,12 @@ func (i *Fs) IsExist(path string) bool {
 	return true
 }
 
-func (i *Fs) IsDir(path string) (bool, error) {
+func (i *Fs) IsFile(path string) bool {
 	f, err := os.Stat(path)
 	if err != nil {
-		return false, err
+		return false
 	}
-	return f.IsDir(), nil
+	return !f.IsDir()
 }
 
 func (i *Fs) CreateDir(path string) error {

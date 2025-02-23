@@ -82,21 +82,6 @@ func (mr *MockFsInterfaceMockRecorder) HomeDir() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HomeDir", reflect.TypeOf((*MockFsInterface)(nil).HomeDir))
 }
 
-// IsDir mocks base method.
-func (m *MockFsInterface) IsDir(path string) (bool, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IsDir", path)
-	ret0, _ := ret[0].(bool)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// IsDir indicates an expected call of IsDir.
-func (mr *MockFsInterfaceMockRecorder) IsDir(path any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsDir", reflect.TypeOf((*MockFsInterface)(nil).IsDir), path)
-}
-
 // IsExist mocks base method.
 func (m *MockFsInterface) IsExist(path string) bool {
 	m.ctrl.T.Helper()
@@ -109,6 +94,20 @@ func (m *MockFsInterface) IsExist(path string) bool {
 func (mr *MockFsInterfaceMockRecorder) IsExist(path any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsExist", reflect.TypeOf((*MockFsInterface)(nil).IsExist), path)
+}
+
+// IsFile mocks base method.
+func (m *MockFsInterface) IsFile(path string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsFile", path)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// IsFile indicates an expected call of IsFile.
+func (mr *MockFsInterfaceMockRecorder) IsFile(path any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsFile", reflect.TypeOf((*MockFsInterface)(nil).IsFile), path)
 }
 
 // ListDirs mocks base method.
