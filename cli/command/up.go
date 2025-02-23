@@ -2,7 +2,6 @@ package command
 
 import (
 	"context"
-	"errors"
 	"flag"
 
 	"github.com/enuesaa/cywagon/cli/handle"
@@ -10,17 +9,16 @@ import (
 	"github.com/google/subcommands"
 )
 
-var ErrUpMissingRequiredFlagConf = errors.New("missing required flag: -conf")
-
 func NewUpCommand() subcommands.Command {
 	return &UpCommand{
 		Container: infra.Default,
+		handler: handle.New(),
 	}
 }
 
 type UpCommand struct {
 	infra.Container
-	conf string
+	handler handle.Handler
 }
 
 func (c *UpCommand) Name() string {
@@ -32,30 +30,17 @@ func (c *UpCommand) Synopsis() string {
 }
 
 func (c *UpCommand) Usage() string {
-	return "cywagon up\n"
+	return "cywagon up [confpath...]\n"
 }
 
-func (c *UpCommand) SetFlags(f *flag.FlagSet) {
-	f.StringVar(&c.conf, "conf", "", "conf files dir. required")
-}
+func (c *UpCommand) SetFlags(_ *flag.FlagSet) {}
 
-func (c *UpCommand) Execute(ctx context.Context, _ *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	handler := handle.New()
+func (c *UpCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	paths := f.Args()
 
-	if err := c.validate(); err != nil {
-		c.Log.Error(err)
-		return subcommands.ExitFailure
-	}
-	if err := handler.Up(c.conf); err != nil {
+	if err := c.handler.Up(paths); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
 	return subcommands.ExitSuccess
-}
-
-func (c *UpCommand) validate() error {
-	if c.conf == "" {
-		return ErrUpMissingRequiredFlagConf
-	}
-	return nil
 }

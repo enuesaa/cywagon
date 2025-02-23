@@ -2,10 +2,10 @@ package handle
 
 import "github.com/enuesaa/cywagon/internal/enginectl"
 
-func (h *Handler) Up(confDir string) error {
+func (h *Handler) Up(paths []string) error {
 	engine := enginectl.New()
 
-	confs, err := engine.ListConfs(confDir)
+	confs, err := h.listConfs(paths)
 	if err != nil {
 		return err
 	}
