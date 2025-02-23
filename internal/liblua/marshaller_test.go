@@ -11,7 +11,7 @@ import (
 
 func TestMarshal(t *testing.T) {
 	runner := New()
-	runner.Container = infra.NewMock(t)
+	runner.Container = infra.NewMock(t).Container()
 
 	type Entry struct {
 		A string `lua:"a"`
@@ -31,7 +31,7 @@ func TestMarshal(t *testing.T) {
 
 func TestUnmarshal(t *testing.T) {
 	runner := New()
-	runner.Container = infra.NewMock(t)
+	runner.Container = infra.NewMock(t).Container()
 
 	code := `
 	entry = {}

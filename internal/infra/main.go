@@ -24,10 +24,32 @@ func New() Container {
 	}
 }
 
-func NewMock(t *testing.T) Container {
+type Mock struct {
+	Fs  *MockFsInterface
+	Ps  *MockPsInterface
+	Log *MockLogInterface
+	Cmd *MockCmdInterface
+}
+
+func (m *Mock) Container() Container {
+	return Container{
+		Fs:  m.Fs,
+		Ps:  m.Ps,
+		Log: m.Log,
+		Cmd: m.Cmd,
+	}
+}
+
+func (m *Mock) With(prepare func(*Mock)) Container {
+	prepare(m)
+
+	return m.Container()
+}
+
+func NewMock(t *testing.T) *Mock {
 	ctrl := gomock.NewController(t)
 
-	return Container{
+	return &Mock{
 		Fs:  NewMockFsInterface(ctrl),
 		Ps:  NewMockPsInterface(ctrl),
 		Log: NewMockLogInterface(ctrl),
