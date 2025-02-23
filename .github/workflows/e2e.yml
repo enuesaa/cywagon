@@ -18,7 +18,7 @@ jobs:
       - run: go install
 
       - run: cywagon -help
-      - run: cywagon check -conf testdata/examplecom
+      - run: cywagon check testdata/examplecom.lua
 
-      - run: nohup cywagon up -conf testdata/examplecom &
-      - run: hurl --test testdata/examplecom
+      - run: nohup cywagon up testdata/examplecom.lua &
+      - run: hurl --test testdata/examplecom.hurl

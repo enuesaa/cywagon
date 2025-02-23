@@ -33,7 +33,3 @@ function handler(next, req)
     return res
 end
 ```
-
-### Stacks
-- Go
-- AWS EC2
