@@ -3,7 +3,7 @@ package handle
 import "github.com/enuesaa/cywagon/internal/enginectl"
 
 func (h *Handler) Up(paths []string) error {
-	engine := enginectl.New()
+	engine := enginectl.New(h.Container)
 
 	confs, err := h.listConfs(paths)
 	if err != nil {

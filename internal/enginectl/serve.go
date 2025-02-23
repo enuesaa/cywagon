@@ -21,9 +21,8 @@ func (e *Engine) Serve(confs []model.Conf) error {
 		}
 	}
 
-	server := libserve.New()
-	server.Port = 3000
-	server.Sites = sites
+	e.Server.Port = 3000
+	e.Server.Sites = sites
 
-	return server.Serve()
+	return e.Server.Serve()
 }
