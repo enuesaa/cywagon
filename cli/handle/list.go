@@ -8,7 +8,7 @@ import (
 )
 
 func (h *Handler) listConfs(search []string) ([]model.Conf, error) {
-	confsrv := service.NewConfService()
+	confsrv := service.NewConfService(h.Container)
 
 	confpaths, err := h.listConfPaths(search)
 	if err != nil {
@@ -27,7 +27,7 @@ func (h *Handler) listConfs(search []string) ([]model.Conf, error) {
 }
 
 func (h *Handler) listConfPaths(search []string) ([]string, error) {
-	confsrv := service.NewConfService()
+	confsrv := service.NewConfService(h.Container)
 
 	var list []string
 

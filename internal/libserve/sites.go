@@ -5,7 +5,7 @@ import (
 	"net/url"
 )
 
-func NewSites() Sites {
+func newSites() Sites {
 	return map[string]Site{}
 }
 

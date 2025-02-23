@@ -9,9 +9,9 @@ import (
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func NewConfService() ConfService {
+func NewConfService(container infra.Container) ConfService {
 	return ConfService{
-		Container: infra.Default,
+		Container: container,
 	}
 }
 

@@ -9,7 +9,8 @@ import (
 )
 
 func TestCalcMaxWaitForHealthy(t *testing.T) {
-	engine := New(infra.NewMock(t))
+	mock := infra.NewMock(t)
+	engine := New(mock)
 
 	cases := []struct {
 		confs []model.Conf

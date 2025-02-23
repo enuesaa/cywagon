@@ -29,8 +29,8 @@ func TestConfServiceValidate(t *testing.T) {
 		},
 	}
 
-	confsrv := NewConfService()
-	confsrv.Container = infra.NewMock(t)
+	container := infra.NewMock(t)
+	confsrv := NewConfService(container)
 
 	for _, tt := range cases {
 		err := confsrv.Validate(tt.conf)

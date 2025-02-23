@@ -2,9 +2,9 @@ package libfetch
 
 import "github.com/enuesaa/cywagon/internal/infra"
 
-func New() Fetcher {
+func New(container infra.Container) Fetcher {
 	return Fetcher{
-		Container: infra.Default,
+		Container: container,
 	}
 }
 
