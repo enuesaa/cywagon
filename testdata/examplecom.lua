@@ -1,4 +1,5 @@
 host = "example.com"
+port = 3000
 
 origin.url = "https://example.com"
 
