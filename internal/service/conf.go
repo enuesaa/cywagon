@@ -3,20 +3,80 @@ package service
 import (
 	"fmt"
 	"strings"
+	"testing"
 
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/liblua"
 	"github.com/enuesaa/cywagon/internal/service/model"
+	"go.uber.org/mock/gomock"
 )
 
-func NewConfService(container infra.Container) ConfService {
-	return ConfService{
+func NewConfService(container infra.Container) ConfServicer {
+	return &ConfService{
 		Container: container,
 	}
 }
 
+func NewConfServiceMock(t *testing.T, prepares... func(*MockConfServicer)) ConfServicer {
+	ctrl := gomock.NewController(t)
+	mock := NewMockConfServicer(ctrl)
+	for _, prepare := range prepares {
+		prepare(mock)
+	}
+	return mock
+}
+
+type ConfServicer interface {
+	List(search []string) ([]model.Conf, error)
+	ListConfPaths(search []string) ([]string, error)
+	IsConfPath(path string) bool
+	Read(path string) (model.Conf, error)
+	Validate(conf model.Conf) error
+}
+
 type ConfService struct {
 	infra.Container
+}
+
+func (c *ConfService) List(search []string) ([]model.Conf, error) {
+	confpaths, err := c.ListConfPaths(search)
+	if err != nil {
+		return nil, err
+	}
+	var list []model.Conf
+
+	for _, confpath := range confpaths {
+		conf, err := c.Read(confpath)
+		if err != nil {
+			return nil, err
+		}
+		list = append(list, conf)
+	}
+	return list, nil
+}
+
+func (c *ConfService) ListConfPaths(search []string) ([]string, error) {
+	var list []string
+
+	for _, path := range search {
+		if !c.Fs.IsExist(path) {
+			return nil, fmt.Errorf("path not found: %s", path)
+		}
+		if c.Fs.IsFile(path) {
+			list = append(list, path)
+			continue
+		}
+		files, err := c.Fs.ListFiles(path)
+		if err != nil {
+			return nil, err
+		}
+		for _, file := range files {
+			if c.IsConfPath(file) {
+				list = append(list, file)
+			}
+		}
+	}
+	return list, nil
 }
 
 func (c *ConfService) IsConfPath(path string) bool {

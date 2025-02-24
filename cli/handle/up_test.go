@@ -5,6 +5,8 @@ import (
 
 	"github.com/enuesaa/cywagon/internal/enginectl"
 	"github.com/enuesaa/cywagon/internal/infra"
+	"github.com/enuesaa/cywagon/internal/service"
+	"github.com/enuesaa/cywagon/internal/service/model"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 )
@@ -15,6 +17,7 @@ func TestUp(t *testing.T) {
 		err error
 		prepareContainer func(*infra.Mock)
 		prepareEngine func(*enginectl.MockEngineCtl)
+		prepareConfSrv func(*service.MockConfServicer)
 	}{
 		{
 			paths: []string{},
@@ -28,6 +31,12 @@ func TestUp(t *testing.T) {
 				e.EXPECT().PrintBanner(gomock.Any()).Return()
 				e.EXPECT().Serve(gomock.Any()).Return(nil)
 			},
+			prepareConfSrv: func(s *service.MockConfServicer) {
+				confs := []model.Conf{
+					{ Host: "example.com" },
+				}
+				s.EXPECT().List(gomock.Any()).Return(confs, nil)
+			},
 		},
 	}
 
@@ -36,6 +45,7 @@ func TestUp(t *testing.T) {
 
 		handler := New(container)
 		handler.Engine = enginectl.NewMock(t, tt.prepareEngine)
+		handler.ConfSrv = service.NewConfServiceMock(t, tt.prepareConfSrv)
 
 		err := handler.Up(tt.paths)
 		assert.Equal(t, err, tt.err)

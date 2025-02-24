@@ -1,7 +1,7 @@
 package handle
 
 func (h *Handler) Up(paths []string) error {
-	confs, err := h.listConfs(paths)
+	confs, err := h.ConfSrv.List(paths)
 	if err != nil {
 		return err
 	}

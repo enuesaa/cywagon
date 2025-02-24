@@ -33,7 +33,7 @@ type Engine struct {
 	infra.Container
 
 	Server libserve.Server
-	ConfSrv service.ConfService
+	ConfSrv service.ConfServicer
 	Fetcher libfetch.Fetcher
 }
 

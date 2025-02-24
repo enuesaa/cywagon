@@ -17,5 +17,5 @@ func New(container infra.Container) Handler {
 type Handler struct {
 	infra.Container
 	Engine enginectl.EngineCtl
-	ConfSrv service.ConfService
+	ConfSrv service.ConfServicer
 }
