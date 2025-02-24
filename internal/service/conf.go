@@ -11,22 +11,22 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func NewConfService() ConfServicer {
-	return &ConfService{
+func NewConfSrv() ConfSrvInterface {
+	return &ConfSrv{
 		Container: infra.Default,
 	}
 }
 
-func NewConfServiceMock(t *testing.T, prepares... func(*MockConfServicer)) ConfServicer {
+func NewConfSrvMock(t *testing.T, prepares... func(*MockConfSrvInterface)) ConfSrvInterface {
 	ctrl := gomock.NewController(t)
-	mock := NewMockConfServicer(ctrl)
+	mock := NewMockConfSrvInterface(ctrl)
 	for _, prepare := range prepares {
 		prepare(mock)
 	}
 	return mock
 }
 
-type ConfServicer interface {
+type ConfSrvInterface interface {
 	List(search []string) ([]model.Conf, error)
 	ListConfPaths(search []string) ([]string, error)
 	IsConfPath(path string) bool
@@ -34,11 +34,11 @@ type ConfServicer interface {
 	Validate(conf model.Conf) error
 }
 
-type ConfService struct {
+type ConfSrv struct {
 	infra.Container
 }
 
-func (c *ConfService) List(search []string) ([]model.Conf, error) {
+func (c *ConfSrv) List(search []string) ([]model.Conf, error) {
 	confpaths, err := c.ListConfPaths(search)
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (c *ConfService) List(search []string) ([]model.Conf, error) {
 	return list, nil
 }
 
-func (c *ConfService) ListConfPaths(search []string) ([]string, error) {
+func (c *ConfSrv) ListConfPaths(search []string) ([]string, error) {
 	var list []string
 
 	for _, path := range search {
@@ -79,11 +79,11 @@ func (c *ConfService) ListConfPaths(search []string) ([]string, error) {
 	return list, nil
 }
 
-func (c *ConfService) IsConfPath(path string) bool {
+func (c *ConfSrv) IsConfPath(path string) bool {
 	return strings.HasSuffix(path, ".lua")
 }
 
-func (c *ConfService) Read(path string) (model.Conf, error) {
+func (c *ConfSrv) Read(path string) (model.Conf, error) {
 	codeb, err := c.Fs.Read(path)
 	if err != nil {
 		return model.Conf{}, err
@@ -93,7 +93,7 @@ func (c *ConfService) Read(path string) (model.Conf, error) {
 	return c.parse(code)
 }
 
-func (c *ConfService) parse(code string) (model.Conf, error) {
+func (c *ConfSrv) parse(code string) (model.Conf, error) {
 	config := model.Conf{
 		Host: "",
 		Origin: model.ConfOrigin{
@@ -126,7 +126,7 @@ func (c *ConfService) parse(code string) (model.Conf, error) {
 
 var ErrConfHostRequired = fmt.Errorf("host is required")
 
-func (c *ConfService) Validate(conf model.Conf) error {
+func (c *ConfSrv) Validate(conf model.Conf) error {
 	if conf.Host == "" {
 		return ErrConfHostRequired
 	}

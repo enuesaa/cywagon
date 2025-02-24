@@ -10,12 +10,12 @@ func New() Handler {
 	return Handler{
 		Container: infra.Default,
 		Engine: enginectl.New(),
-		ConfSrv: service.NewConfService(),
+		ConfSrv: service.NewConfSrv(),
 	}
 }
 
 type Handler struct {
 	infra.Container
-	Engine enginectl.EngineCtl
-	ConfSrv service.ConfServicer
+	Engine enginectl.EngineInterface
+	ConfSrv service.ConfSrvInterface
 }

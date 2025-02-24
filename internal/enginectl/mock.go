@@ -16,44 +16,44 @@ import (
 	gomock "go.uber.org/mock/gomock"
 )
 
-// MockEngineCtl is a mock of EngineCtl interface.
-type MockEngineCtl struct {
+// MockEngineInterface is a mock of EngineInterface interface.
+type MockEngineInterface struct {
 	ctrl     *gomock.Controller
-	recorder *MockEngineCtlMockRecorder
+	recorder *MockEngineInterfaceMockRecorder
 	isgomock struct{}
 }
 
-// MockEngineCtlMockRecorder is the mock recorder for MockEngineCtl.
-type MockEngineCtlMockRecorder struct {
-	mock *MockEngineCtl
+// MockEngineInterfaceMockRecorder is the mock recorder for MockEngineInterface.
+type MockEngineInterfaceMockRecorder struct {
+	mock *MockEngineInterface
 }
 
-// NewMockEngineCtl creates a new mock instance.
-func NewMockEngineCtl(ctrl *gomock.Controller) *MockEngineCtl {
-	mock := &MockEngineCtl{ctrl: ctrl}
-	mock.recorder = &MockEngineCtlMockRecorder{mock}
+// NewMockEngineInterface creates a new mock instance.
+func NewMockEngineInterface(ctrl *gomock.Controller) *MockEngineInterface {
+	mock := &MockEngineInterface{ctrl: ctrl}
+	mock.recorder = &MockEngineInterfaceMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockEngineCtl) EXPECT() *MockEngineCtlMockRecorder {
+func (m *MockEngineInterface) EXPECT() *MockEngineInterfaceMockRecorder {
 	return m.recorder
 }
 
 // PrintBanner mocks base method.
-func (m *MockEngineCtl) PrintBanner(confs []model.Conf) {
+func (m *MockEngineInterface) PrintBanner(confs []model.Conf) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "PrintBanner", confs)
 }
 
 // PrintBanner indicates an expected call of PrintBanner.
-func (mr *MockEngineCtlMockRecorder) PrintBanner(confs any) *gomock.Call {
+func (mr *MockEngineInterfaceMockRecorder) PrintBanner(confs any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PrintBanner", reflect.TypeOf((*MockEngineCtl)(nil).PrintBanner), confs)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PrintBanner", reflect.TypeOf((*MockEngineInterface)(nil).PrintBanner), confs)
 }
 
 // Serve mocks base method.
-func (m *MockEngineCtl) Serve(confs []model.Conf) error {
+func (m *MockEngineInterface) Serve(confs []model.Conf) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Serve", confs)
 	ret0, _ := ret[0].(error)
@@ -61,13 +61,13 @@ func (m *MockEngineCtl) Serve(confs []model.Conf) error {
 }
 
 // Serve indicates an expected call of Serve.
-func (mr *MockEngineCtlMockRecorder) Serve(confs any) *gomock.Call {
+func (mr *MockEngineInterfaceMockRecorder) Serve(confs any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Serve", reflect.TypeOf((*MockEngineCtl)(nil).Serve), confs)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Serve", reflect.TypeOf((*MockEngineInterface)(nil).Serve), confs)
 }
 
 // StartHealthCheck mocks base method.
-func (m *MockEngineCtl) StartHealthCheck(confs []model.Conf) error {
+func (m *MockEngineInterface) StartHealthCheck(confs []model.Conf) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "StartHealthCheck", confs)
 	ret0, _ := ret[0].(error)
@@ -75,13 +75,13 @@ func (m *MockEngineCtl) StartHealthCheck(confs []model.Conf) error {
 }
 
 // StartHealthCheck indicates an expected call of StartHealthCheck.
-func (mr *MockEngineCtlMockRecorder) StartHealthCheck(confs any) *gomock.Call {
+func (mr *MockEngineInterfaceMockRecorder) StartHealthCheck(confs any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StartHealthCheck", reflect.TypeOf((*MockEngineCtl)(nil).StartHealthCheck), confs)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StartHealthCheck", reflect.TypeOf((*MockEngineInterface)(nil).StartHealthCheck), confs)
 }
 
 // StartUp mocks base method.
-func (m *MockEngineCtl) StartUp(confs []model.Conf) error {
+func (m *MockEngineInterface) StartUp(confs []model.Conf) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "StartUp", confs)
 	ret0, _ := ret[0].(error)
@@ -89,13 +89,13 @@ func (m *MockEngineCtl) StartUp(confs []model.Conf) error {
 }
 
 // StartUp indicates an expected call of StartUp.
-func (mr *MockEngineCtlMockRecorder) StartUp(confs any) *gomock.Call {
+func (mr *MockEngineInterfaceMockRecorder) StartUp(confs any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StartUp", reflect.TypeOf((*MockEngineCtl)(nil).StartUp), confs)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StartUp", reflect.TypeOf((*MockEngineInterface)(nil).StartUp), confs)
 }
 
 // ValidateConfs mocks base method.
-func (m *MockEngineCtl) ValidateConfs(confs []model.Conf) error {
+func (m *MockEngineInterface) ValidateConfs(confs []model.Conf) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ValidateConfs", confs)
 	ret0, _ := ret[0].(error)
@@ -103,7 +103,7 @@ func (m *MockEngineCtl) ValidateConfs(confs []model.Conf) error {
 }
 
 // ValidateConfs indicates an expected call of ValidateConfs.
-func (mr *MockEngineCtlMockRecorder) ValidateConfs(confs any) *gomock.Call {
+func (mr *MockEngineInterfaceMockRecorder) ValidateConfs(confs any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateConfs", reflect.TypeOf((*MockEngineCtl)(nil).ValidateConfs), confs)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateConfs", reflect.TypeOf((*MockEngineInterface)(nil).ValidateConfs), confs)
 }

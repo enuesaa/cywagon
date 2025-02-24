@@ -16,32 +16,32 @@ import (
 	gomock "go.uber.org/mock/gomock"
 )
 
-// MockConfServicer is a mock of ConfServicer interface.
-type MockConfServicer struct {
+// MockConfSrvInterface is a mock of ConfSrvInterface interface.
+type MockConfSrvInterface struct {
 	ctrl     *gomock.Controller
-	recorder *MockConfServicerMockRecorder
+	recorder *MockConfSrvInterfaceMockRecorder
 	isgomock struct{}
 }
 
-// MockConfServicerMockRecorder is the mock recorder for MockConfServicer.
-type MockConfServicerMockRecorder struct {
-	mock *MockConfServicer
+// MockConfSrvInterfaceMockRecorder is the mock recorder for MockConfSrvInterface.
+type MockConfSrvInterfaceMockRecorder struct {
+	mock *MockConfSrvInterface
 }
 
-// NewMockConfServicer creates a new mock instance.
-func NewMockConfServicer(ctrl *gomock.Controller) *MockConfServicer {
-	mock := &MockConfServicer{ctrl: ctrl}
-	mock.recorder = &MockConfServicerMockRecorder{mock}
+// NewMockConfSrvInterface creates a new mock instance.
+func NewMockConfSrvInterface(ctrl *gomock.Controller) *MockConfSrvInterface {
+	mock := &MockConfSrvInterface{ctrl: ctrl}
+	mock.recorder = &MockConfSrvInterfaceMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockConfServicer) EXPECT() *MockConfServicerMockRecorder {
+func (m *MockConfSrvInterface) EXPECT() *MockConfSrvInterfaceMockRecorder {
 	return m.recorder
 }
 
 // IsConfPath mocks base method.
-func (m *MockConfServicer) IsConfPath(path string) bool {
+func (m *MockConfSrvInterface) IsConfPath(path string) bool {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IsConfPath", path)
 	ret0, _ := ret[0].(bool)
@@ -49,13 +49,13 @@ func (m *MockConfServicer) IsConfPath(path string) bool {
 }
 
 // IsConfPath indicates an expected call of IsConfPath.
-func (mr *MockConfServicerMockRecorder) IsConfPath(path any) *gomock.Call {
+func (mr *MockConfSrvInterfaceMockRecorder) IsConfPath(path any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsConfPath", reflect.TypeOf((*MockConfServicer)(nil).IsConfPath), path)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsConfPath", reflect.TypeOf((*MockConfSrvInterface)(nil).IsConfPath), path)
 }
 
 // List mocks base method.
-func (m *MockConfServicer) List(search []string) ([]model.Conf, error) {
+func (m *MockConfSrvInterface) List(search []string) ([]model.Conf, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", search)
 	ret0, _ := ret[0].([]model.Conf)
@@ -64,13 +64,13 @@ func (m *MockConfServicer) List(search []string) ([]model.Conf, error) {
 }
 
 // List indicates an expected call of List.
-func (mr *MockConfServicerMockRecorder) List(search any) *gomock.Call {
+func (mr *MockConfSrvInterfaceMockRecorder) List(search any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockConfServicer)(nil).List), search)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockConfSrvInterface)(nil).List), search)
 }
 
 // ListConfPaths mocks base method.
-func (m *MockConfServicer) ListConfPaths(search []string) ([]string, error) {
+func (m *MockConfSrvInterface) ListConfPaths(search []string) ([]string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListConfPaths", search)
 	ret0, _ := ret[0].([]string)
@@ -79,13 +79,13 @@ func (m *MockConfServicer) ListConfPaths(search []string) ([]string, error) {
 }
 
 // ListConfPaths indicates an expected call of ListConfPaths.
-func (mr *MockConfServicerMockRecorder) ListConfPaths(search any) *gomock.Call {
+func (mr *MockConfSrvInterfaceMockRecorder) ListConfPaths(search any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListConfPaths", reflect.TypeOf((*MockConfServicer)(nil).ListConfPaths), search)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListConfPaths", reflect.TypeOf((*MockConfSrvInterface)(nil).ListConfPaths), search)
 }
 
 // Read mocks base method.
-func (m *MockConfServicer) Read(path string) (model.Conf, error) {
+func (m *MockConfSrvInterface) Read(path string) (model.Conf, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Read", path)
 	ret0, _ := ret[0].(model.Conf)
@@ -94,13 +94,13 @@ func (m *MockConfServicer) Read(path string) (model.Conf, error) {
 }
 
 // Read indicates an expected call of Read.
-func (mr *MockConfServicerMockRecorder) Read(path any) *gomock.Call {
+func (mr *MockConfSrvInterfaceMockRecorder) Read(path any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockConfServicer)(nil).Read), path)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockConfSrvInterface)(nil).Read), path)
 }
 
 // Validate mocks base method.
-func (m *MockConfServicer) Validate(conf model.Conf) error {
+func (m *MockConfSrvInterface) Validate(conf model.Conf) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Validate", conf)
 	ret0, _ := ret[0].(error)
@@ -108,7 +108,7 @@ func (m *MockConfServicer) Validate(conf model.Conf) error {
 }
 
 // Validate indicates an expected call of Validate.
-func (mr *MockConfServicerMockRecorder) Validate(conf any) *gomock.Call {
+func (mr *MockConfSrvInterfaceMockRecorder) Validate(conf any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Validate", reflect.TypeOf((*MockConfServicer)(nil).Validate), conf)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Validate", reflect.TypeOf((*MockConfSrvInterface)(nil).Validate), conf)
 }

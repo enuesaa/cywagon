@@ -11,7 +11,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-type EngineCtl interface {
+type EngineInterface interface {
 	PrintBanner(confs []model.Conf)
 	StartHealthCheck(confs []model.Conf) error
 	Serve(confs []model.Conf) error
@@ -23,7 +23,7 @@ func New() *Engine {
 	engine := Engine{
 		Container: infra.Default,
 		Server: libserve.New(),
-		ConfSrv: service.NewConfService(),
+		ConfSrv: service.NewConfSrv(),
 		Fetcher: libfetch.New(),
 	}
 	return &engine
@@ -33,14 +33,14 @@ type Engine struct {
 	infra.Container
 
 	Server libserve.Server
-	ConfSrv service.ConfServicer
+	ConfSrv service.ConfSrvInterface
 	Fetcher libfetch.Fetcher
 }
 
-func NewMock(t *testing.T, prepares... func(*MockEngineCtl)) EngineCtl {
+func NewMock(t *testing.T, prepares... func(*MockEngineInterface)) EngineInterface {
 	ctrl := gomock.NewController(t)
 
-	mock := NewMockEngineCtl(ctrl)
+	mock := NewMockEngineInterface(ctrl)
 
 	for _, prepare := range prepares {
 		prepare(mock)

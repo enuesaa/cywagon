@@ -47,8 +47,9 @@ func TestConfServiceListConfPaths(t *testing.T) {
 	}
 
 	for _, tt := range cases {
-		confsrv := NewConfService()
-		// confsrv.Container = infra.NewMock(t, tt.prepare)
+		confsrv := ConfSrv{}
+		confsrv.Container = infra.NewMock(t, tt.prepare)
+
 		confpaths, err := confsrv.ListConfPaths(tt.paths)
 		assert.Equal(t, err, tt.err)
 		assert.Equal(t, confpaths, tt.expected)
@@ -76,10 +77,10 @@ func TestConfServiceValidate(t *testing.T) {
 		},
 	}
 
-	confsrv := NewConfService()
-	// confsrv.Container = infra.NewMock(t, tt.prepare)
-
 	for _, tt := range cases {
+		confsrv := ConfSrv{}
+		confsrv.Container = infra.NewMock(t)
+
 		err := confsrv.Validate(tt.conf)
 		assert.Equal(t, err, tt.err)
 	}

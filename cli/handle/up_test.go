@@ -16,8 +16,8 @@ func TestUp(t *testing.T) {
 		paths []string
 		err error
 		prepareContainer func(*infra.Mock)
-		prepareEngine func(*enginectl.MockEngineCtl)
-		prepareConfSrv func(*service.MockConfServicer)
+		prepareEngine func(*enginectl.MockEngineInterface)
+		prepareConfSrv func(*service.MockConfSrvInterface)
 	}{
 		{
 			paths: []string{},
@@ -25,13 +25,13 @@ func TestUp(t *testing.T) {
 				m.Log.EXPECT().Info("Start up sites..")
 				m.Log.EXPECT().Info("Start health check..")
 			},
-			prepareEngine: func(e *enginectl.MockEngineCtl) {
+			prepareEngine: func(e *enginectl.MockEngineInterface) {
 				e.EXPECT().StartUp(gomock.Any()).Return(nil)
 				e.EXPECT().StartHealthCheck(gomock.Any()).Return(nil)
 				e.EXPECT().PrintBanner(gomock.Any()).Return()
 				e.EXPECT().Serve(gomock.Any()).Return(nil)
 			},
-			prepareConfSrv: func(s *service.MockConfServicer) {
+			prepareConfSrv: func(s *service.MockConfSrvInterface) {
 				confs := []model.Conf{
 					{ Host: "example.com" },
 				}
@@ -44,7 +44,7 @@ func TestUp(t *testing.T) {
 		handler := New()
 		handler.Container = infra.NewMock(t, tt.prepareContainer)
 		handler.Engine = enginectl.NewMock(t, tt.prepareEngine)
-		handler.ConfSrv = service.NewConfServiceMock(t, tt.prepareConfSrv)
+		handler.ConfSrv = service.NewConfSrvMock(t, tt.prepareConfSrv)
 
 		err := handler.Up(tt.paths)
 		assert.Equal(t, err, tt.err)
