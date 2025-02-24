@@ -19,12 +19,12 @@ type EngineCtl interface {
 	ValidateConfs(confs []model.Conf) error
 }
 
-func New(container infra.Container) *Engine {
+func New() *Engine {
 	engine := Engine{
-		Container: container,
-		Server: libserve.New(container),
-		ConfSrv: service.NewConfService(container),
-		Fetcher: libfetch.New(container),
+		Container: infra.Default,
+		Server: libserve.New(),
+		ConfSrv: service.NewConfService(),
+		Fetcher: libfetch.New(),
 	}
 	return &engine
 }

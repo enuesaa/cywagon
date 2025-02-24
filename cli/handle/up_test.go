@@ -41,9 +41,8 @@ func TestUp(t *testing.T) {
 	}
 
 	for _, tt := range cases {
-		container := infra.NewMock(t, tt.prepareContainer)
-
-		handler := New(container)
+		handler := New()
+		handler.Container = infra.NewMock(t, tt.prepareContainer)
 		handler.Engine = enginectl.NewMock(t, tt.prepareEngine)
 		handler.ConfSrv = service.NewConfServiceMock(t, tt.prepareConfSrv)
 

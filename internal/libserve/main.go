@@ -6,9 +6,9 @@ import (
 	"github.com/enuesaa/cywagon/internal/infra"
 )
 
-func New(container infra.Container) Server {
+func New() Server {
 	return Server{
-		Container: container,
+		Container: infra.Default,
 		Port: 3000,
 		Sites: newSites(),
 	}

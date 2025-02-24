@@ -9,10 +9,10 @@ import (
 	"github.com/google/subcommands"
 )
 
-func NewCheckCommand(container infra.Container) subcommands.Command {
+func NewCheckCommand() subcommands.Command {
 	return &CheckCommand{
-		Container: container,
-		handler: handle.New(container),
+		Container: infra.Default,
+		handler: handle.New(),
 	}
 }
 

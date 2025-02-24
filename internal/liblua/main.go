@@ -5,9 +5,9 @@ import (
 	lua "github.com/yuin/gopher-lua"
 )
 
-func New(container infra.Container) Runner {
+func New() Runner {
 	runner := Runner{
-		Container: container,
+		Container: infra.Default,
 		state:     lua.NewState(),
 	}
 	return runner

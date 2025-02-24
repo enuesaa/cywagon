@@ -11,9 +11,9 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func NewConfService(container infra.Container) ConfServicer {
+func NewConfService() ConfServicer {
 	return &ConfService{
-		Container: container,
+		Container: infra.Default,
 	}
 }
 
@@ -110,7 +110,7 @@ func (c *ConfService) parse(code string) (model.Conf, error) {
 		},
 		Handler: nil,
 	}
-	runner := liblua.New(c.Container)
+	runner := liblua.New()
 
 	if err := runner.Inject(config); err != nil {
 		return config, err

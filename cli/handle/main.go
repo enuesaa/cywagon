@@ -6,11 +6,11 @@ import (
 	"github.com/enuesaa/cywagon/internal/service"
 )
 
-func New(container infra.Container) Handler {
+func New() Handler {
 	return Handler{
-		Container: container,
-		Engine: enginectl.New(container),
-		ConfSrv: service.NewConfService(container),
+		Container: infra.Default,
+		Engine: enginectl.New(),
+		ConfSrv: service.NewConfService(),
 	}
 }
 
