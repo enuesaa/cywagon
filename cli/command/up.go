@@ -9,10 +9,10 @@ import (
 	"github.com/google/subcommands"
 )
 
-func NewUpCommand() subcommands.Command {
+func NewUpCommand(container infra.Container) subcommands.Command {
 	return &UpCommand{
-		Container: infra.Default,
-		handler: handle.New(infra.Default),
+		Container: container,
+		handler: handle.New(container),
 	}
 }
 

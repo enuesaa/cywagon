@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
-	code := cli.Run()
-	infra.Default.Ps.Exit(code)
+	container := infra.New()
+
+	code := cli.Run(container)
+	container.Ps.Exit(code)
 }

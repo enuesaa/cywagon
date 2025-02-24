@@ -7,17 +7,18 @@ import (
 	"io"
 
 	"github.com/enuesaa/cywagon/cli/command"
+	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/google/subcommands"
 )
 
 var versionFlag = flag.Bool("version", false, "Print version")
 var helpFlag    = flag.Bool("help", false, "Print command usage")
 
-func Run() int {
+func Run(container infra.Container) int {
 	// cli
 	subcommands.DefaultCommander.Explain = Explain
-	subcommands.Register(command.NewCheckCommand(), "")
-	subcommands.Register(command.NewUpCommand(), "")
+	subcommands.Register(command.NewCheckCommand(container), "")
+	subcommands.Register(command.NewUpCommand(container), "")
 
 	// parse
 	flag.Parse()

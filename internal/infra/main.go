@@ -6,8 +6,6 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-var Default = New()
-
 type Container struct {
 	Fs  FsInterface
 	Ps  PsInterface

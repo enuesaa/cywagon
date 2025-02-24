@@ -50,7 +50,7 @@ func (c *ConfService) parse(code string) (model.Conf, error) {
 		},
 		Handler: nil,
 	}
-	runner := liblua.New()
+	runner := liblua.New(c.Container)
 
 	if err := runner.Inject(config); err != nil {
 		return config, err
