@@ -1,13 +1,21 @@
 package handle
 
-import "github.com/enuesaa/cywagon/internal/infra"
+import (
+	"github.com/enuesaa/cywagon/internal/enginectl"
+	"github.com/enuesaa/cywagon/internal/infra"
+	"github.com/enuesaa/cywagon/internal/service"
+)
 
-func New() Handler {
+func New(container infra.Container) Handler {
 	return Handler{
-		Container: infra.Default,
+		Container: container,
+		Engine: enginectl.New(container),
+		ConfSrv: service.NewConfService(container),
 	}
 }
 
 type Handler struct {
 	infra.Container
+	Engine enginectl.Engine
+	ConfSrv service.ConfService
 }

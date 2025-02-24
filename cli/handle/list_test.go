@@ -46,8 +46,8 @@ func TestListConfPaths(t *testing.T) {
 	}
 
 	for _, tt := range cases {
-		handler := New()
-		handler.Container = infra.NewMock(t, tt.prepare)
+		container := infra.NewMock(t, tt.prepare)
+		handler := New(container)
 
 		confpaths, err := handler.listConfPaths(tt.paths)
 		assert.Equal(t, err, tt.err)

@@ -12,7 +12,7 @@ import (
 func NewUpCommand() subcommands.Command {
 	return &UpCommand{
 		Container: infra.Default,
-		handler: handle.New(),
+		handler: handle.New(infra.Default),
 	}
 }
 

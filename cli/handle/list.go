@@ -3,13 +3,10 @@ package handle
 import (
 	"fmt"
 
-	"github.com/enuesaa/cywagon/internal/service"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
 func (h *Handler) listConfs(search []string) ([]model.Conf, error) {
-	confsrv := service.NewConfService(h.Container)
-
 	confpaths, err := h.listConfPaths(search)
 	if err != nil {
 		return nil, err
@@ -17,7 +14,7 @@ func (h *Handler) listConfs(search []string) ([]model.Conf, error) {
 	var list []model.Conf
 
 	for _, confpath := range confpaths {
-		conf, err := confsrv.Read(confpath)
+		conf, err := h.ConfSrv.Read(confpath)
 		if err != nil {
 			return nil, err
 		}
@@ -27,8 +24,6 @@ func (h *Handler) listConfs(search []string) ([]model.Conf, error) {
 }
 
 func (h *Handler) listConfPaths(search []string) ([]string, error) {
-	confsrv := service.NewConfService(h.Container)
-
 	var list []string
 
 	for _, path := range search {
@@ -44,7 +39,7 @@ func (h *Handler) listConfPaths(search []string) ([]string, error) {
 			return nil, err
 		}
 		for _, file := range files {
-			if confsrv.IsConfPath(file) {
+			if h.ConfSrv.IsConfPath(file) {
 				list = append(list, file)
 			}
 		}
