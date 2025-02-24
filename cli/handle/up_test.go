@@ -10,7 +10,6 @@ import (
 )
 
 func TestUp(t *testing.T) {
-
 	cases := []struct {
 		paths []string
 		err error
@@ -18,12 +17,10 @@ func TestUp(t *testing.T) {
 		prepareEngine func(*enginectl.MockEngineCtl)
 	}{
 		{
-			paths: []string{"aa.lua", "bb.lua"},
+			paths: []string{},
 			prepareContainer: func(m *infra.Mock) {
-				m.Fs.EXPECT().IsExist("aa.lua").Return(true)
-				m.Fs.EXPECT().IsFile("aa.lua").Return(true)
-				m.Fs.EXPECT().IsExist("bb.lua").Return(true)
-				m.Fs.EXPECT().IsFile("bb.lua").Return(true)
+				m.Log.EXPECT().Info("Start up sites..")
+				m.Log.EXPECT().Info("Start health check..")
 			},
 			prepareEngine: func(e *enginectl.MockEngineCtl) {
 				e.EXPECT().StartUp(gomock.Any()).Return(nil)
