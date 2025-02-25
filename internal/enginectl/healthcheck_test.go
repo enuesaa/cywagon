@@ -9,9 +9,6 @@ import (
 )
 
 func TestCalcMaxWaitForHealthy(t *testing.T) {
-	engine := New()
-	engine.Container = infra.NewMock(t)
-
 	cases := []struct {
 		confs []model.Conf
 		expect int
@@ -43,6 +40,9 @@ func TestCalcMaxWaitForHealthy(t *testing.T) {
 	}
 
 	for _, tt := range cases {
+		engine := New()
+		engine.Container = infra.NewMock(t)
+
 		assert.Equal(t, engine.calcMaxWaitForHealthy(tt.confs), tt.expect)
 	}
 }

@@ -17,7 +17,7 @@ func NewConfSrv() ConfSrvInterface {
 	}
 }
 
-func NewConfSrvMock(t *testing.T, prepares... func(*MockConfSrvInterface)) ConfSrvInterface {
+func NewConfSrvMock(t *testing.T, prepares... func(*MockConfSrvInterface)) *MockConfSrvInterface {
 	ctrl := gomock.NewController(t)
 	mock := NewMockConfSrvInterface(ctrl)
 	for _, prepare := range prepares {
