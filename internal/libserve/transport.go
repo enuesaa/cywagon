@@ -15,16 +15,15 @@ type Transport struct {
 }
 
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
-	var res *http.Response
-
 	site := t.Sites.getByHost(req.Host)
 
 	if t.Cacher.Has(req.URL.Path) {
-		res = t.Cacher.Get(req.URL.Path)
+		res := t.Cacher.Get(req.URL.Path)
 		t.Log.Info("[http] %d %s %s %s (cache)", res.StatusCode, req.Method, site.Host, req.URL.Path)
 		return res, nil
 	}
 
+	var res *http.Response
 	rq := HandlerRequest{
 		Path: req.URL.Path,
 	}
@@ -48,11 +47,12 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	res.StatusCode = rs.Status
 
 	var resbody bytes.Buffer
-	io.Copy(&resbody, res.Body)
+	if _, err := io.Copy(&resbody, res.Body); err != nil {
+		return res, err
+	}
 	defer res.Body.Close()
 
 	t.Cacher.Save(req.URL.Path, res, resbody)
-
 	res.Body = io.NopCloser(&resbody)
 
 	t.Log.Info("[http] %d %s %s %s", res.StatusCode, req.Method, site.Host, req.URL.Path)
