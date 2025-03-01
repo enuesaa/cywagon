@@ -37,3 +37,7 @@ func (s *Server) Serve() error {
 
 	return http.ListenAndServe(addr, &proxy)
 }
+
+type Middleware interface {
+	Handle(site Site, req *http.Request) (*http.Response, error)
+}
