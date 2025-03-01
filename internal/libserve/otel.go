@@ -6,7 +6,7 @@ import (
 )
 
 type OtelMiddleware struct {
-	Next HttpMiddleware
+	Next Middleware
 }
 
 func (m *OtelMiddleware) Handle(site Site, req *http.Request) (*http.Response, error) {

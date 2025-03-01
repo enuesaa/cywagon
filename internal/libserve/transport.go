@@ -9,7 +9,7 @@ import (
 type Transport struct {
 	infra.Container
 	Sites Sites	
-	Middleware HttpMiddleware
+	Middleware Middleware
 }
 
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {

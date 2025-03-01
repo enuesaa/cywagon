@@ -9,7 +9,7 @@ import (
 
 type CacheMiddleware struct {
 	cache map[string]HttpCache
-	Next HttpMiddleware
+	Next Middleware
 }
 
 type HttpCache struct {
