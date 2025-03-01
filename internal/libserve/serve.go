@@ -23,6 +23,7 @@ func (s *Server) Serve() error {
 		Container: s.Container,
 		Sites: s.Sites,
 		Middleware: &CacheMiddleware{
+			cache: make(map[string]HttpCache),
 			Next: &HandleMiddleware{},
 		},
 	}

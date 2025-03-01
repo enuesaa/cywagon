@@ -2,14 +2,14 @@ package libserve
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"net/http"
 )
 
-func NewCacher() Cacher {
-	return Cacher{
-		items: make(map[string]HttpCache),
-	}
+type CacheMiddleware struct {
+	cache map[string]HttpCache
+	Next HttpMiddleware
 }
 
 type HttpCache struct {
@@ -17,17 +17,25 @@ type HttpCache struct {
 	body bytes.Buffer
 }
 
-type Cacher struct {
-	items map[string]HttpCache
+func (m *CacheMiddleware) key(req *http.Request) string {
+	return fmt.Sprintf("%s/%s", req.Host, req.URL.Path)
 }
 
-func (c *Cacher) Has(path string) bool {
-	_, ok := c.items[path]
-	return ok
+func (m *CacheMiddleware) get(req *http.Request) (*http.Response, bool) {
+	key := m.key(req)
+	item, ok := m.cache[key]
+	if !ok {
+		return nil, false
+	}
+	res := item.res
+	res.Body = io.NopCloser(&item.body)
+
+	return res, true
 }
 
-func (c *Cacher) Save(path string, res *http.Response, resbody bytes.Buffer) {
-	c.items[path] = HttpCache{
+func (m *CacheMiddleware) save(req *http.Request, res *http.Response, resbody bytes.Buffer) {
+	key := m.key(req)
+	m.cache[key] = HttpCache{
 		res: &http.Response{
 			Status:        res.Status,
 			StatusCode:    res.StatusCode,
@@ -38,10 +46,26 @@ func (c *Cacher) Save(path string, res *http.Response, resbody bytes.Buffer) {
 	}
 }
 
-func (c *Cacher) Get(path string) *http.Response {
-	item := c.items[path]
-	res := item.res
-	res.Body = io.NopCloser(&item.body)
+func (m *CacheMiddleware) Handle(site Site, req *http.Request) (*http.Response, error) {
+	if res, ok := m.get(req); ok {
+		return res, nil
+	}
 
-	return res
+	// next
+	res, err := m.Next.Handle(site, req)
+	if err != nil {
+		return nil, err
+	}
+
+	var resbody bytes.Buffer
+
+	if _, err := io.Copy(&resbody, res.Body); err != nil {
+		return res, err
+	}
+	defer res.Body.Close()
+
+	m.save(req, res, resbody)
+	res.Body = io.NopCloser(&resbody)
+
+	return res, nil
 }
