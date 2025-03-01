@@ -22,6 +22,8 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 	next := func(rq HandlerRequest) HandlerResponse {
 		req.URL.Path = rq.Path
+		// https://seomis.cc/blog/content-encoding-golang-transport
+		req.Header.Set("Accept-Encoding", "deflate, br, zstd")
 
 		res, _ = http.DefaultTransport.RoundTrip(req)
 		rs.Status = res.StatusCode
