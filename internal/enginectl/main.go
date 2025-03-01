@@ -39,7 +39,6 @@ type Engine struct {
 
 func NewMock(t *testing.T, prepares... func(*MockEngineInterface)) EngineInterface {
 	ctrl := gomock.NewController(t)
-
 	mock := NewMockEngineInterface(ctrl)
 
 	for _, prepare := range prepares {

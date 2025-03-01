@@ -15,6 +15,7 @@ func New() Runner {
 
 type Runner struct {
 	infra.Container
+
 	state *lua.LState
 }
 
