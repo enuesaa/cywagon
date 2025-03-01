@@ -1,5 +1,6 @@
 host = "example.com"
 port = 3000
+cache = true
 
 origin.url = "https://example.com"
 

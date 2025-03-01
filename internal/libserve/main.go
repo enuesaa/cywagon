@@ -26,6 +26,7 @@ type Site struct {
 	OriginUrl       string // Example: `https://example.com`
 	Handler         Handler
 	parsedOriginUrl *url.URL
+	Cache           bool
 }
 type Handler func(*HandlerResponse, Next, HandlerRequest) error
 type Next func(HandlerRequest) HandlerResponse

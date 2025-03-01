@@ -109,6 +109,7 @@ func (c *ConfSrv) parse(code string) (model.Conf, error) {
 			Matcher:  "200",
 		},
 		Handler: nil,
+		Cache:   false,
 	}
 	runner := liblua.New()
 

@@ -47,7 +47,12 @@ func (m *CacheMiddleware) save(req *http.Request, res *http.Response, resbody by
 }
 
 func (m *CacheMiddleware) Handle(site Site, req *http.Request) (*http.Response, error) {
+	if !site.Cache {
+		return m.Next.Handle(site, req)
+	}
+
 	if res, ok := m.get(req); ok {
+		fmt.Printf("use cache\n")
 		return res, nil
 	}
 

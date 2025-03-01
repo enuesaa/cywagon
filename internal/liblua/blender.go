@@ -27,6 +27,8 @@ func (r *Runner) Inject(from interface{}) error {
 			r.state.SetGlobal(name, lua.LNumber(value.(int)))
 		case reflect.String:
 			r.state.SetGlobal(name, lua.LString(value.(string)))
+		case reflect.Bool:
+			r.state.SetGlobal(name, lua.LBool(value.(bool)))
 		case reflect.Struct:
 			table, err := r.Marshal(value)
 			if err != nil {
@@ -61,6 +63,8 @@ func (r *Runner) Eject(dest interface{}) error {
 			value.SetInt(int64(luaValue.(lua.LNumber)))
 		case reflect.String:
 			value.SetString(string(luaValue.(lua.LString)))
+		case reflect.Bool:
+			value.SetBool(bool(luaValue.(lua.LBool)))
 		case reflect.Struct:
 			if err := r.Unmarshal(luaValue.(*lua.LTable), value.Addr().Interface()); err != nil {
 				return err

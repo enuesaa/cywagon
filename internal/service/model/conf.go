@@ -12,6 +12,7 @@ type Conf struct {
 	Origin      ConfOrigin      `lua:"origin"`
 	HealthCheck ConfHealthCheck `lua:"healthCheck"`
 	Handler     liblua.Fn       `lua:"handler"`
+	Cache       bool            `lua:"cache"`
 }
 
 type ConfOrigin struct {

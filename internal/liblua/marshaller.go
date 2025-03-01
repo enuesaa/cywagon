@@ -74,6 +74,8 @@ func (r *Runner) Marshal(from interface{}) (lua.LValue, error) {
 			state.SetField(table, name, lua.LNumber(value.(int)))
 		case reflect.String:
 			state.SetField(table, name, lua.LString(value.(string)))
+		case reflect.Bool:
+			state.SetField(table, name, lua.LBool(value.(bool)))
 		default:
 			return nil, fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}
@@ -99,6 +101,8 @@ func (r *Runner) Unmarshal(table lua.LValue, dest interface{}) error {
 			value.SetInt(int64(luaValue.(lua.LNumber)))
 		case reflect.String:
 			value.SetString(string(luaValue.(lua.LString)))
+		case reflect.Bool:
+			value.SetBool(bool(luaValue.(lua.LBool)))
 		default:
 			return fmt.Errorf("unsupported type found: %s", field.Type.Name())
 		}

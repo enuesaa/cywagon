@@ -13,6 +13,7 @@ func (e *Engine) Serve(confs []model.Conf) error {
 			Handler: func(res *libserve.HandlerResponse, next libserve.Next, req libserve.HandlerRequest) error {
 				return conf.Handler(res, next, req)
 			},
+			Cache:     conf.Cache,
 		}
 		if err := e.Server.Sites.Push(site); err != nil {
 			return err
