@@ -33,10 +33,6 @@ func Run() int {
 	if *helpFlag {
 		status = subcommands.ExitSuccess
 	}
-	if flag.NArg() == 0 {
-		status = subcommands.ExitSuccess
-	}
-
 	return int(status)
 }
 
