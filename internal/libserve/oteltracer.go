@@ -9,7 +9,10 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.20.0"
+	"go.opentelemetry.io/otel/trace"
 )
+
+var tracer trace.Tracer
 
 func setupTracer(ctx context.Context) error {
 	client := otlptracehttp.NewClient(
@@ -30,6 +33,8 @@ func setupTracer(ctx context.Context) error {
 		sdktrace.WithResource(resources),
 	)
 	otel.SetTracerProvider(tp)
+
+	tracer = otel.Tracer("localhost:3000")
 
 	return nil
 }

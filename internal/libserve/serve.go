@@ -26,9 +26,11 @@ func (s *Server) Serve() error {
 	proxy.Transport = &Transport{
 		Container: s.Container,
 		Sites: s.Sites,
-		Middleware: &CacheMiddleware{
-			cache: make(map[string]HttpCache),
-			Next: &HandleMiddleware{},
+		Middleware: &OtelMiddleware{
+			Next: &CacheMiddleware{
+				cache: make(map[string]HttpCache),
+				Next: &HandleMiddleware{},
+			},
 		},
 	}
 	addr := fmt.Sprintf(":%d", s.Port)
