@@ -1,6 +1,8 @@
 package libserve
 
 import (
+	"bytes"
+	"io"
 	"net/http"
 
 	"github.com/enuesaa/cywagon/internal/infra"
@@ -45,7 +47,13 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 	res.StatusCode = rs.Status
 
-	t.Cacher.Save(req.URL.Path, res)
+	var resbody bytes.Buffer
+	io.Copy(&resbody, res.Body)
+	defer res.Body.Close()
+
+	t.Cacher.Save(req.URL.Path, res, resbody)
+
+	res.Body = io.NopCloser(&resbody)
 
 	t.Log.Info("[http] %d %s %s %s", res.StatusCode, req.Method, site.Host, req.URL.Path)
 

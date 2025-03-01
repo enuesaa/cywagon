@@ -9,11 +9,13 @@ import (
 func NewCacher() Cacher {
 	return Cacher{
 		items: make(map[string]*http.Response),
+		body: make(map[string]bytes.Buffer),
 	}
 }
 
 type Cacher struct {
 	items map[string]*http.Response
+	body map[string]bytes.Buffer
 }
 
 func (c *Cacher) Has(path string) bool {
@@ -21,22 +23,22 @@ func (c *Cacher) Has(path string) bool {
 	return ok
 }
 
-func (c *Cacher) Save(path string, res *http.Response) {
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return
-	}
-	defer res.Body.Close()
-
+func (c *Cacher) Save(path string, res *http.Response, resbody bytes.Buffer) {
 	c.items[path] = &http.Response{
 		Status:        res.Status,
 		StatusCode:    res.StatusCode,
 		Header:        res.Header,
-		Body:          io.NopCloser(bytes.NewReader(body)),
+		// Body:          io.NopCloser(bytes.NewReader(body)),
 		ContentLength: res.ContentLength,
 	}
+	c.body[path] = resbody
 }
 
 func (c *Cacher) Get(path string) *http.Response {
-	return c.items[path]
+	res := c.items[path]
+	body := c.body[path]
+
+	res.Body = io.NopCloser(&body)
+
+	return res
 }
