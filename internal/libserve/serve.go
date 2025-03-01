@@ -22,6 +22,7 @@ func (s *Server) Serve() error {
 	proxy.Transport = &Transport{
 		Container: s.Container,
 		Sites: s.Sites,
+		Cacher: NewCacher(),
 	}
 	addr := fmt.Sprintf(":%d", s.Port)
 

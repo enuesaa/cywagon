@@ -31,7 +31,7 @@ func (e *Engine) calcMaxWaitForHealthy(confs []model.Conf) int {
 
 func (e *Engine) poolHealthCheck(confs []model.Conf) {
 	for {
-		time.Sleep(1 * time.Second)
+		time.Sleep(30 * time.Second)
 		if err := e.runHealthCheck(confs); err != nil {
 			e.Log.Error(err)
 		}
@@ -45,10 +45,12 @@ func (e *Engine) runHealthCheck(confs []model.Conf) error {
 			if err := e.Fetcher.CheckHTTP(conf.HealthCheckUrl(), conf.HealthCheck.Matcher); err != nil {
 				return err
 			}
+			e.Log.Info("[healthCheck] ok %s ", conf.Host)
 		case "TCP":
 			if err := e.Fetcher.CheckTCP(conf.Origin.Url); err != nil {
 				return err
 			}
+			e.Log.Info("[healthCheck] ok %s", conf.Host)
 		}
 	}
 	return nil
