@@ -39,49 +39,6 @@ func (m *MockFsInterface) EXPECT() *MockFsInterfaceMockRecorder {
 	return m.recorder
 }
 
-// Create mocks base method.
-func (m *MockFsInterface) Create(path string, body []byte) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", path, body)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Create indicates an expected call of Create.
-func (mr *MockFsInterfaceMockRecorder) Create(path, body any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFsInterface)(nil).Create), path, body)
-}
-
-// CreateDir mocks base method.
-func (m *MockFsInterface) CreateDir(path string) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateDir", path)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// CreateDir indicates an expected call of CreateDir.
-func (mr *MockFsInterfaceMockRecorder) CreateDir(path any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateDir", reflect.TypeOf((*MockFsInterface)(nil).CreateDir), path)
-}
-
-// HomeDir mocks base method.
-func (m *MockFsInterface) HomeDir() (string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "HomeDir")
-	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// HomeDir indicates an expected call of HomeDir.
-func (mr *MockFsInterfaceMockRecorder) HomeDir() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HomeDir", reflect.TypeOf((*MockFsInterface)(nil).HomeDir))
-}
-
 // IsExist mocks base method.
 func (m *MockFsInterface) IsExist(path string) bool {
 	m.ctrl.T.Helper()
@@ -108,21 +65,6 @@ func (m *MockFsInterface) IsFile(path string) bool {
 func (mr *MockFsInterfaceMockRecorder) IsFile(path any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsFile", reflect.TypeOf((*MockFsInterface)(nil).IsFile), path)
-}
-
-// ListDirs mocks base method.
-func (m *MockFsInterface) ListDirs(path string) ([]string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListDirs", path)
-	ret0, _ := ret[0].([]string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ListDirs indicates an expected call of ListDirs.
-func (mr *MockFsInterfaceMockRecorder) ListDirs(path any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDirs", reflect.TypeOf((*MockFsInterface)(nil).ListDirs), path)
 }
 
 // ListFiles mocks base method.
@@ -153,33 +95,4 @@ func (m *MockFsInterface) Read(path string) ([]byte, error) {
 func (mr *MockFsInterfaceMockRecorder) Read(path any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockFsInterface)(nil).Read), path)
-}
-
-// Remove mocks base method.
-func (m *MockFsInterface) Remove(path string) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Remove", path)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Remove indicates an expected call of Remove.
-func (mr *MockFsInterfaceMockRecorder) Remove(path any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFsInterface)(nil).Remove), path)
-}
-
-// WorkDir mocks base method.
-func (m *MockFsInterface) WorkDir() (string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "WorkDir")
-	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// WorkDir indicates an expected call of WorkDir.
-func (mr *MockFsInterfaceMockRecorder) WorkDir() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WorkDir", reflect.TypeOf((*MockFsInterface)(nil).WorkDir))
 }

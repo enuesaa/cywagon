@@ -3,7 +3,6 @@ package liblua
 import (
 	"testing"
 
-	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	lua "github.com/yuin/gopher-lua"
@@ -11,7 +10,6 @@ import (
 
 func TestMarshal(t *testing.T) {
 	runner := New()
-	runner.Container = infra.NewMock(t)
 
 	type Entry struct {
 		A string `lua:"a"`
@@ -31,7 +29,6 @@ func TestMarshal(t *testing.T) {
 
 func TestUnmarshal(t *testing.T) {
 	runner := New()
-	runner.Container = infra.NewMock(t)
 
 	code := `
 	entry = {}

@@ -7,7 +7,6 @@ func (f *Fetcher) CheckHTTP(url string, matcher string) error {
 		return nil
 	}
 
-	// TODO
 	return nil
 }
 
