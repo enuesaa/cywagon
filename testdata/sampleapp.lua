@@ -1,8 +1,8 @@
 host = "example.com"
 
 origin.url = "http://localhost:4173"
-origin.workdir = "../kakkofn"
-origin.cmd = "pnpm vite preview"
+origin.workdir = "./testdata/sampleapp"
+origin.cmd = "pnpm install && pnpm build && pnpm preview"
 origin.waitForHealthy = 5
 
 healthCheck.protocol = "HTTP"
