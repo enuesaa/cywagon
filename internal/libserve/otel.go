@@ -61,7 +61,7 @@ func newTraceResoure(ctx context.Context) (*resource.Resource, error) {
 		ctx,
 		resource.WithHost(),
 		resource.WithAttributes(
-			semconv.ServiceName("aa"),
+			semconv.ServiceName("server"),
 		),
 	)
 }
