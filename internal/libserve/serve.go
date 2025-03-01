@@ -1,6 +1,7 @@
 package libserve
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httputil"
@@ -11,6 +12,9 @@ import (
 
 func (s *Server) Serve() error {
 	if err := s.Sites.Validate(); err != nil {
+		return err
+	}
+	if err := setupTracer(context.Background()); err != nil {
 		return err
 	}
 

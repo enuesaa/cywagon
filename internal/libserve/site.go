@@ -5,8 +5,21 @@ import (
 	"net/url"
 )
 
-func newSites() Sites {
-	return map[string]Site{}
+type Site struct {
+	Host            string // Example: `example.com`
+	OriginUrl       string // Example: `https://example.com`
+	Handler         Handler
+	parsedOriginUrl *url.URL
+	Cache           bool
+}
+type Handler func(*HandlerResponse, Next, HandlerRequest) error
+type Next func(HandlerRequest) HandlerResponse
+
+type HandlerRequest struct {
+	Path string
+}
+type HandlerResponse struct {
+	Status int
 }
 
 type Sites map[string]Site
