@@ -37,3 +37,10 @@ end
 ### メモ
 containerd の systemd unit file
 - https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
+
+### Future plan
+- コンテナベースにしない
+- 静的コンテンツを配信するのみ
+  - もともとこちらに興味があったため
+- 設定ファイルは一つに
+  - 静的コンテンツであれば、そもそもパラメータが少ないため
