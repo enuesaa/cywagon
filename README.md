@@ -50,3 +50,4 @@ containerd の systemd unit file
     - どちらかというと CloudFront Functions みたいにスクリプトで制御して欲しい
   - ファイルの更新日時を見てキャッシュするイメージ
   - 共通設定も書けるように。nginx の include みたいな感じ
+  - 静的コンテンツであればインメモリで格納ではダメなのかな
