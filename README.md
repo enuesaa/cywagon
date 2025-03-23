@@ -42,12 +42,15 @@ containerd の systemd unit file
 - コンテナベースにしない
 - 静的コンテンツを配信するのみ
   - もともとこちらに興味があったため
-- 設定ファイルをサイト別に配置する
-  - .htaccess みたいに
-  - ディレクトリ単位で設定を制御できる (=反映できる) .htaccess の仕組みは優れていると感じており、vhosts のとき扱いやすいため。
-  - .cywagon.lua かな
-  - ディレクトリ単位はきついかな
-    - どちらかというと CloudFront Functions みたいにスクリプトで制御して欲しい
-  - ファイルの更新日時を見てキャッシュするイメージ
-  - 共通設定も書けるように。nginx の include みたいな感じ
-  - 静的コンテンツであればインメモリで格納ではダメなのかな
+- インメモリ or 内部的に静的コンテンツを格納する
+- CloudFront + S3 みたいにパブリッシュ & キャッシュ削除できるイメージ
+- ビルド成果物に .cywagon.lua が含まれていれば、それを尊重する
+- 結局 SSG だと dist ディレクトリが必要になるので、apache 風味にサイト単位のディレクトリは作らない
+
+```bash
+cywagon create <sitename>
+
+# TODO: 認証認可どうするか
+cywagon login
+cywagon publish <sitename> 
+```
