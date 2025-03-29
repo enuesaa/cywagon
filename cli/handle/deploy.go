@@ -8,7 +8,7 @@ import (
 func (h *Handler) Deploy(sitename string, path string) error {
 	h.Log.Info("start a new deployment..")
 
-	if err := h.Engine.SendSock(); err != nil {
+	if err := h.Sock.Send(); err != nil {
 		return err
 	}
 	if err := h.Engine.Deploy(sitename, path); err != nil {
@@ -21,6 +21,8 @@ func (h *Handler) Deploy(sitename string, path string) error {
 		return err
 	}
 	fmt.Println(content)
+
+	// ここで socket に命令を送信する
 
 	return nil
 }
