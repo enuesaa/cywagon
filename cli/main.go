@@ -19,6 +19,7 @@ func Run() int {
 	subcommands.Register(command.NewCheckCommand(), "")
 	subcommands.Register(command.NewUpCommand(), "")
 	subcommands.Register(command.NewDeployCommand(), "")
+	subcommands.Register(command.NewPublishCommand(), "")
 
 	// parse
 	flag.Parse()
