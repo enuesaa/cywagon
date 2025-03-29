@@ -81,6 +81,20 @@ func (mr *MockEngineInterfaceMockRecorder) Read(sitename any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockEngineInterface)(nil).Read), sitename)
 }
 
+// SendSock mocks base method.
+func (m *MockEngineInterface) SendSock() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendSock")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendSock indicates an expected call of SendSock.
+func (mr *MockEngineInterfaceMockRecorder) SendSock() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendSock", reflect.TypeOf((*MockEngineInterface)(nil).SendSock))
+}
+
 // Serve mocks base method.
 func (m *MockEngineInterface) Serve(confs []model.Conf) error {
 	m.ctrl.T.Helper()
@@ -93,6 +107,20 @@ func (m *MockEngineInterface) Serve(confs []model.Conf) error {
 func (mr *MockEngineInterfaceMockRecorder) Serve(confs any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Serve", reflect.TypeOf((*MockEngineInterface)(nil).Serve), confs)
+}
+
+// StartListenSock mocks base method.
+func (m *MockEngineInterface) StartListenSock() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "StartListenSock")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// StartListenSock indicates an expected call of StartListenSock.
+func (mr *MockEngineInterfaceMockRecorder) StartListenSock() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StartListenSock", reflect.TypeOf((*MockEngineInterface)(nil).StartListenSock))
 }
 
 // ValidateConfs mocks base method.

@@ -16,6 +16,8 @@ type EngineInterface interface {
 	ValidateConfs(confs []model.Conf) error
 	Deploy(sitename string, path string) error
 	Read(sitename string) (string, error)
+	StartListenSock() error
+	SendSock() error
 }
 
 func New() *Engine {
