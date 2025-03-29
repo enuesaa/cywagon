@@ -40,6 +40,20 @@ func (m *MockEngineInterface) EXPECT() *MockEngineInterfaceMockRecorder {
 	return m.recorder
 }
 
+// Deploy mocks base method.
+func (m *MockEngineInterface) Deploy(sitename, path string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Deploy", sitename, path)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Deploy indicates an expected call of Deploy.
+func (mr *MockEngineInterfaceMockRecorder) Deploy(sitename, path any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Deploy", reflect.TypeOf((*MockEngineInterface)(nil).Deploy), sitename, path)
+}
+
 // PrintBanner mocks base method.
 func (m *MockEngineInterface) PrintBanner(confs []model.Conf) {
 	m.ctrl.T.Helper()
@@ -50,6 +64,21 @@ func (m *MockEngineInterface) PrintBanner(confs []model.Conf) {
 func (mr *MockEngineInterfaceMockRecorder) PrintBanner(confs any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PrintBanner", reflect.TypeOf((*MockEngineInterface)(nil).PrintBanner), confs)
+}
+
+// Read mocks base method.
+func (m *MockEngineInterface) Read(sitename string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Read", sitename)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Read indicates an expected call of Read.
+func (mr *MockEngineInterfaceMockRecorder) Read(sitename any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockEngineInterface)(nil).Read), sitename)
 }
 
 // Serve mocks base method.

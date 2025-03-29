@@ -14,6 +14,8 @@ type EngineInterface interface {
 	PrintBanner(confs []model.Conf)
 	Serve(confs []model.Conf) error
 	ValidateConfs(confs []model.Conf) error
+	Deploy(sitename string, path string) error
+	Read(sitename string) (string, error)
 }
 
 func New() *Engine {
@@ -21,6 +23,7 @@ func New() *Engine {
 		Container: infra.Default,
 		Server: libserve.New(),
 		ConfSrv: service.NewConfSrv(),
+		dists: make(Dists),
 	}
 	return &engine
 }
@@ -30,6 +33,7 @@ type Engine struct {
 
 	Server libserve.Server
 	ConfSrv service.ConfSrvInterface
+	dists Dists
 }
 
 func NewMock(t *testing.T, prepares... func(*MockEngineInterface)) EngineInterface {
