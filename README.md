@@ -46,11 +46,12 @@ containerd の systemd unit file
 - CloudFront + S3 みたいにパブリッシュ & キャッシュ削除できるイメージ
 - ビルド成果物に .cywagon.lua が含まれていれば、それを尊重する
 - 結局 SSG だと dist ディレクトリが必要になるので、apache 風味にサイト単位のディレクトリは作らない
+- いったん認証認可なし
 
-```bash
-cywagon create <sitename>
-
-# TODO: 認証認可どうするか
-cywagon login
-cywagon publish <sitename> 
+```console
+$ cywagon deploy <sitename> ./...
+{
+  deploymentId: <id>
+}
+$ cywagon publish <sitename>:<deploymentId>
 ```
