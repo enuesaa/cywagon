@@ -96,20 +96,7 @@ func (c *ConfSrv) Read(path string) (model.Conf, error) {
 func (c *ConfSrv) parse(code string) (model.Conf, error) {
 	config := model.Conf{
 		Host: "",
-		Origin: model.ConfOrigin{
-			Workdir:        ".",
-			Cmd:            "",
-			WaitForHealthy: 5,
-			Url:            "",
-		},
-		HealthCheck: model.ConfHealthCheck{
-			Protocol: "HTTP",
-			Method:   "GET",
-			Path:     "/",
-			Matcher:  "200",
-		},
 		Handler: nil,
-		Cache:   false,
 	}
 	runner := liblua.New()
 

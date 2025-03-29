@@ -70,9 +70,6 @@ func TestConfServiceValidate(t *testing.T) {
 		{
 			conf: model.Conf{
 				Host: "example.com",
-				Origin: model.ConfOrigin{
-					Cmd: "go run .",
-				},
 			},
 		},
 	}
