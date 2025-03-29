@@ -18,6 +18,7 @@ func Run() int {
 	subcommands.DefaultCommander.Explain = Explain
 	subcommands.Register(command.NewCheckCommand(), "")
 	subcommands.Register(command.NewUpCommand(), "")
+	subcommands.Register(command.NewDeployCommand(), "")
 
 	// parse
 	flag.Parse()

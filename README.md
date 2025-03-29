@@ -49,7 +49,7 @@ containerd の systemd unit file
 - いったん認証認可なし
 
 ```console
-$ cywagon deploy <sitename> ./...
+$ cywagon deploy <sitename> .
 {
   deploymentId: <id>
 }
