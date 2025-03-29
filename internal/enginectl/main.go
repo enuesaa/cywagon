@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/enuesaa/cywagon/internal/infra"
-	"github.com/enuesaa/cywagon/internal/libfetch"
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/service"
 	"github.com/enuesaa/cywagon/internal/service/model"

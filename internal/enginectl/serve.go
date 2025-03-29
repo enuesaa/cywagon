@@ -10,13 +10,13 @@ func (e *Engine) Serve(confs []model.Conf) error {
 		site := libserve.Site{
 			Host:      conf.Host,
 			Handler: func(res *libserve.HandlerResponse, next libserve.Next, req libserve.HandlerRequest) error {
+				// ここで in memory からデータを読み取る
+				
 				return conf.Handler(res, next, req)
 			},
 			Cache:     true,
 		}
-		if err := e.Server.Sites.Push(site); err != nil {
-			return err
-		}
+		e.Server.Sites.Push(site)
 	}
 
 	e.Server.Port = 3000

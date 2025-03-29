@@ -2,7 +2,6 @@ package libserve
 
 import (
 	"fmt"
-	"net/url"
 
 	"github.com/enuesaa/cywagon/internal/infra"
 )
@@ -24,9 +23,7 @@ type Server struct {
 
 type Site struct {
 	Host            string // Example: `example.com`
-	OriginUrl       string // Example: `https://example.com`
 	Handler         Handler
-	parsedOriginUrl *url.URL
 	Cache           bool
 }
 type Handler func(*HandlerResponse, Next, HandlerRequest) error
@@ -41,19 +38,11 @@ type HandlerResponse struct {
 
 type Sites map[string]Site
 
-func (m *Sites) Push(site Site) error {
-	parsed, err := url.Parse(site.OriginUrl)
-	if err != nil {
-		return err
-	}
-	site.parsedOriginUrl = parsed
-
+func (m *Sites) Push(site Site) {
 	if len(*m) == 0 {
 		(*m)["default"] = site
 	}
 	(*m)[site.Host] = site
-
-	return nil
 }
 
 func (m *Sites) getByHost(host string) Site {

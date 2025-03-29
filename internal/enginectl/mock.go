@@ -66,34 +66,6 @@ func (mr *MockEngineInterfaceMockRecorder) Serve(confs any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Serve", reflect.TypeOf((*MockEngineInterface)(nil).Serve), confs)
 }
 
-// StartHealthCheck mocks base method.
-func (m *MockEngineInterface) StartHealthCheck(confs []model.Conf) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "StartHealthCheck", confs)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// StartHealthCheck indicates an expected call of StartHealthCheck.
-func (mr *MockEngineInterfaceMockRecorder) StartHealthCheck(confs any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StartHealthCheck", reflect.TypeOf((*MockEngineInterface)(nil).StartHealthCheck), confs)
-}
-
-// StartUp mocks base method.
-func (m *MockEngineInterface) StartUp(confs []model.Conf) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "StartUp", confs)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// StartUp indicates an expected call of StartUp.
-func (mr *MockEngineInterfaceMockRecorder) StartUp(confs any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StartUp", reflect.TypeOf((*MockEngineInterface)(nil).StartUp), confs)
-}
-
 // ValidateConfs mocks base method.
 func (m *MockEngineInterface) ValidateConfs(confs []model.Conf) error {
 	m.ctrl.T.Helper()

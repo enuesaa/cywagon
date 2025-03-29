@@ -26,8 +26,6 @@ func TestUp(t *testing.T) {
 				m.Log.EXPECT().Info("Start health check..")
 			},
 			prepareEngine: func(e *enginectl.MockEngineInterface) {
-				e.EXPECT().StartUp(gomock.Any()).Return(nil)
-				e.EXPECT().StartHealthCheck(gomock.Any()).Return(nil)
 				e.EXPECT().PrintBanner(gomock.Any()).Return()
 				e.EXPECT().Serve(gomock.Any()).Return(nil)
 			},
