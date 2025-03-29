@@ -13,9 +13,7 @@ import (
 
 type EngineInterface interface {
 	PrintBanner(confs []model.Conf)
-	StartHealthCheck(confs []model.Conf) error
 	Serve(confs []model.Conf) error
-	StartUp(confs []model.Conf) error
 	ValidateConfs(confs []model.Conf) error
 }
 
@@ -24,7 +22,6 @@ func New() *Engine {
 		Container: infra.Default,
 		Server: libserve.New(),
 		ConfSrv: service.NewConfSrv(),
-		Fetcher: libfetch.New(),
 	}
 	return &engine
 }
@@ -34,7 +31,6 @@ type Engine struct {
 
 	Server libserve.Server
 	ConfSrv service.ConfSrvInterface
-	Fetcher libfetch.Fetcher
 }
 
 func NewMock(t *testing.T, prepares... func(*MockEngineInterface)) EngineInterface {
