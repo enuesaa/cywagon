@@ -16,7 +16,6 @@ var helpFlag    = flag.Bool("help", false, "Print command usage")
 func Run() int {
 	// cli
 	subcommands.DefaultCommander.Explain = Explain
-	subcommands.Register(command.NewCheckCommand(), "")
 	subcommands.Register(command.NewUpCommand(), "")
 	subcommands.Register(command.NewDeployCommand(), "")
 	subcommands.Register(command.NewPublishCommand(), "")

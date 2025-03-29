@@ -34,10 +34,6 @@ function handler(next, req)
 end
 ```
 
-### メモ
-containerd の systemd unit file
-- https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
-
 ### Future plan
 - コンテナベースにしない
 - 静的コンテンツを配信するのみ

@@ -8,6 +8,8 @@ import (
 func (h *Handler) Deploy(sitename string, path string) error {
 	h.Log.Info("start a new deployment..")
 
+	//  client としてデーモンに指示する形式かな
+
 	if err := h.Engine.Deploy(sitename, path); err != nil {
 		return err
 	}
