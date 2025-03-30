@@ -3,6 +3,7 @@ package libsock
 import (
 	"io"
 	"net"
+	"os"
 )
 
 func (e *Sock) Listen() error {
@@ -23,4 +24,8 @@ func (e *Sock) Listen() error {
 		}
 		e.Log.Info("Received: %s", string(buf))
 	}
+}
+
+func (e *Sock) CloseListener() error {
+	return os.Remove(e.Path)
 }
