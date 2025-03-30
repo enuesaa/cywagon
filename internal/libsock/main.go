@@ -25,3 +25,7 @@ func (e *Sock) Exists() bool {
 	}
 	return false
 }
+
+type Message struct {
+	Data string `json:"data"`
+}
