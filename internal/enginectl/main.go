@@ -18,6 +18,7 @@ type EngineInterface interface {
 	Deploy(sitename string, path string) error
 	Read(sitename string) (string, error)
 	StartListenSock() error
+	Close() error
 }
 
 func New() *Engine {
