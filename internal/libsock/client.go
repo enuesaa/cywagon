@@ -16,7 +16,7 @@ func (e *Sock) Send(text string) error {
 	decoder := json.NewDecoder(conn)
 
 	msg := Message{
-		Data: "hello from client",
+		Data: text,
 	}
 	if err := encoder.Encode(msg); err != nil {
 		return err

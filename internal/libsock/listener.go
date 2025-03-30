@@ -6,7 +6,9 @@ import (
 	"os"
 )
 
-func (e *Sock) Listen() error {
+type ListenHandler = func(text string) error
+
+func (e *Sock) Listen(handler ListenHandler) error {
 	listener, err := net.Listen("unix", e.Path)
 	if err != nil {
 		return err
@@ -19,13 +21,13 @@ func (e *Sock) Listen() error {
 			e.Log.Error(err)
 			continue
 		}
-		if err := e.handleConn(conn); err != nil {
+		if err := e.processConn(conn, handler); err != nil {
 			e.Log.Error(err)
 		}
 	}
 }
 
-func (e *Sock) handleConn(conn net.Conn) error {
+func (e *Sock) processConn(conn net.Conn, handler ListenHandler) error {
 	defer conn.Close()
 
 	encoder := json.NewEncoder(conn)
@@ -35,7 +37,9 @@ func (e *Sock) handleConn(conn net.Conn) error {
 	if err := decoder.Decode(&req); err != nil {
 		return err
 	}
-	e.Log.Info("listener: ", req.Data)
+	if err := handler(req.Data); err != nil {
+		return err
+	}
 
 	res := Message{
 		Data: "hello from listener",
