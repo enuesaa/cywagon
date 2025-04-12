@@ -30,15 +30,19 @@ func (c *UpCommand) Synopsis() string {
 }
 
 func (c *UpCommand) Usage() string {
-	return "cywagon up [confpath...]\n"
+	return "cywagon up <confpath>\n"
 }
 
 func (c *UpCommand) SetFlags(_ *flag.FlagSet) {}
 
-func (c *UpCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	paths := f.Args()
+func (c *UpCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
+	if err := c.handler.ValidateArgs(f.Args()); err != nil {
+		c.Log.Error(err)
+		return subcommands.ExitFailure
+	}
+	path := f.Arg(0)
 
-	if err := c.handler.Up(paths); err != nil {
+	if err := c.handler.Up([]string{path}); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
