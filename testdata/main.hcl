@@ -1,32 +1,24 @@
 server {
-    port = 8080
+    # port = 8080
 }
 
 site "sampleapp" {
     host = "sample.example.com"
     dist = "./sampleapp/dist"
 
-    # path {
-    #     pattern = "/aaa"
+    path {
+        pattern = "/aaa"
 
-    #     status = 302
-    #     body = ""
-    #     headers = {
-    #         "Location": "https://example.com",
-    #     }
+        status = 302
+        body = ""
+        headers = {
+            "Location": "https://example.com",
+        }
         
-    #     # validate {
-    #     #     if {
-    #     #     }
-    #     #     status = 303
-    #     # }
-    # }
-
-    # path {
-    #     pattern = "/**"
-    # }
+        # validate {
+        #     if {
+        #     }
+        #     status = 303
+        # }
+    }
 }
-
-# site "sampleapp" {
-#     host = "sample.example.com"
-# }

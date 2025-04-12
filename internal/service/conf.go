@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/libhcl"
 	"github.com/enuesaa/cywagon/internal/service/model"
@@ -16,7 +14,6 @@ func NewConfSrv() ConfSrvInterface {
 
 type ConfSrvInterface interface {
 	Read(path string) (model.Config, error)
-	Validate(config model.Config) error
 }
 
 type ConfSrv struct {
@@ -35,14 +32,13 @@ func (c *ConfSrv) Read(path string) (model.Config, error) {
 	if err := c.Hcl.Parse(fbytes, &config); err != nil {
 		return config, err
 	}
+	c.applyDefault(&config)
+
 	return config, nil
 }
 
-var ErrConfHostRequired = fmt.Errorf("host is required")
-
-func (c *ConfSrv) Validate(config model.Config) error {
+func (c *ConfSrv) applyDefault(config *model.Config) {
 	if config.Server.Port == 0 {
-		return ErrConfHostRequired
+		config.Server.Port = 3000
 	}
-	return nil
 }
