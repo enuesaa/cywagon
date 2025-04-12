@@ -24,7 +24,6 @@ type Server struct {
 type Site struct {
 	Host            string // Example: `example.com`
 	Handler         Handler
-	Cache           bool
 }
 type Handler func(*HandlerResponse, Next, HandlerRequest) error
 type Next func(HandlerRequest) HandlerResponse

@@ -8,7 +8,7 @@ import (
 func (e *Engine) Serve(config model.Config) error {
 	for _, site := range config.Sites {
 		site := libserve.Site{
-			Host:      site.Host,
+			Host: site.Host,
 			// Handler: func(res *libserve.HandlerResponse, next libserve.Next, req libserve.HandlerRequest) error {
 			// 	// ここで in memory からデータを読み取る
 				
