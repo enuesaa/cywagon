@@ -10,7 +10,7 @@ import (
 
 type EngineInterface interface {
 	PrintBanner(confs []model.Config)
-	Serve(confs []model.Config) error
+	Serve(config model.Config) error
 	ValidateConfs(confs []model.Config) error
 	Deploy(sitename string, path string) error
 	Read(sitename string) (string, error)

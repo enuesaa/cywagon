@@ -42,7 +42,7 @@ func (c *UpCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subc
 	}
 	path := f.Arg(0)
 
-	if err := c.handler.Up([]string{path}); err != nil {
+	if err := c.handler.Up(path); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}

@@ -13,14 +13,13 @@ type Parser struct {}
 
 func (p *Parser) Parse(body []byte, val any) error {
 	parser := hclparse.NewParser()
+
 	file, diags := parser.ParseHCL(body, "cywagon.hcl")
 	if diags.HasErrors() {
 		return diags
 	}
-
-	confDiags := gohcl.DecodeBody(file.Body, nil, val)
-	if confDiags.HasErrors() {
-		return confDiags
+	if diags := gohcl.DecodeBody(file.Body, nil, val); diags.HasErrors() {
+		return diags
 	}
 	return nil
 }
