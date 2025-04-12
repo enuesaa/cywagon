@@ -50,3 +50,10 @@ func (e *Sock) processConn(conn net.Conn, handler ListenHandler) error {
 func (e *Sock) CloseListener() error {
 	return os.Remove(e.Path)
 }
+
+func (e *Sock) Exists() bool {
+	if _, err := os.Stat(e.Path); err == nil {
+		return true
+	}
+	return false
+}
