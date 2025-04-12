@@ -2,6 +2,7 @@ package libserve
 
 import (
 	"fmt"
+	"io/fs"
 
 	"github.com/enuesaa/cywagon/internal/infra"
 )
@@ -22,8 +23,9 @@ type Server struct {
 }
 
 type Site struct {
-	Host            string // Example: `example.com`
-	Handler         Handler
+	Host    string // Example: `example.com`
+	Handler Handler
+	Dist    fs.FS
 }
 type Handler func(*HandlerResponse, Next, HandlerRequest) error
 type Next func(HandlerRequest) HandlerResponse
