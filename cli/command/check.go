@@ -37,19 +37,12 @@ func (c *CheckCommand) Usage() string {
 func (c *CheckCommand) SetFlags(_ *flag.FlagSet) {}
 
 func (c *CheckCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	if err := handle.Check(); err != nil {
-		panic(err)
-	}
-	return 0
-	
 	if err := c.validate(f.Args()); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
-	sitename := f.Arg(0)
-	deploymentId := f.Arg(1)
-
-	if err := c.handler.Publish(sitename, deploymentId); err != nil {
+	path := f.Arg(0)
+	if err := c.handler.Check(path); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
@@ -58,12 +51,9 @@ func (c *CheckCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interf
 
 func (c *CheckCommand) validate(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("required arguments missing: sitename, deploymentId")
+		return fmt.Errorf("required arguments missing: path")
 	}
-	if len(args) == 1 {
-		return fmt.Errorf("required arguments missing: deploymentId")
-	}
-	if len(args) > 2 {
+	if len(args) > 1 {
 		return fmt.Errorf("too many arguments found")
 	}
 	return nil

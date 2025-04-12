@@ -4,8 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/hashicorp/hcl/v2/gohcl"
-	"github.com/hashicorp/hcl/v2/hclparse"
+	"github.com/enuesaa/cywagon/internal/libhcl"
 )
 
 type Config struct {
@@ -23,24 +22,16 @@ type Site struct {
 	Dist string `hcl:"dist"`
 }
 
-func Check() error {
-	filename := "./testdata/main.hcl"
-	fbytes, err := os.ReadFile(filename)
+func (h *Handler) Check(path string) error {
+	fbytes, err := os.ReadFile(path)
 	if err != nil {
 		return err
 	}
 
-	parser := hclparse.NewParser()
-	file, diags := parser.ParseHCL(fbytes, filename)
-	if diags.HasErrors() {
-		return diags
-	}
-
 	var config Config
-	confDiags := gohcl.DecodeBody(file.Body, nil, &config)
-
-	if confDiags.HasErrors() {
-		return confDiags
+	parser := libhcl.New()
+	if err := parser.Parse(fbytes, &config); err != nil {
+		return err
 	}
 	log.Printf("Configuration is %#v", config)
 
