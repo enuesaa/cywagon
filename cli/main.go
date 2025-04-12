@@ -17,8 +17,8 @@ func Run() int {
 	// cli
 	subcommands.DefaultCommander.Explain = Explain
 	subcommands.Register(command.NewUpCommand(), "")
-	subcommands.Register(command.NewDeployCommand(), "")
-	subcommands.Register(command.NewPublishCommand(), "")
+	subcommands.Register(command.NewCheckCommand(), "")
+	subcommands.Register(command.NewReloadCommand(), "")
 
 	// parse
 	flag.Parse()

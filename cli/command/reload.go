@@ -10,33 +10,33 @@ import (
 	"github.com/google/subcommands"
 )
 
-func NewDeployCommand() subcommands.Command {
-	return &DeployCommand{
+func NewReloadCommand() subcommands.Command {
+	return &ReloadCommand{
 		Container: infra.Default,
 		handler: handle.New(),
 	}
 }
 
-type DeployCommand struct {
+type ReloadCommand struct {
 	infra.Container
 	handler handle.Handler
 }
 
-func (c *DeployCommand) Name() string {
-	return "deploy"
+func (c *ReloadCommand) Name() string {
+	return "reload"
 }
 
-func (c *DeployCommand) Synopsis() string {
-	return "Deploy"
+func (c *ReloadCommand) Synopsis() string {
+	return "Reload"
 }
 
-func (c *DeployCommand) Usage() string {
-	return "deploy <sitename> <path>\n"
+func (c *ReloadCommand) Usage() string {
+	return "reload <sitename> <path>\n"
 }
 
-func (c *DeployCommand) SetFlags(_ *flag.FlagSet) {}
+func (c *ReloadCommand) SetFlags(_ *flag.FlagSet) {}
 
-func (c *DeployCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *ReloadCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if err := c.validate(f.Args()); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
@@ -51,7 +51,7 @@ func (c *DeployCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...inter
 	return subcommands.ExitSuccess
 }
 
-func (c *DeployCommand) validate(args []string) error {
+func (c *ReloadCommand) validate(args []string) error {
 	if len(args) == 0 {
 		return fmt.Errorf("required arguments missing: sitename, path")
 	}

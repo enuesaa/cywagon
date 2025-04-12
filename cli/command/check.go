@@ -10,33 +10,33 @@ import (
 	"github.com/google/subcommands"
 )
 
-func NewPublishCommand() subcommands.Command {
-	return &PublishCommand{
+func NewCheckCommand() subcommands.Command {
+	return &CheckCommand{
 		Container: infra.Default,
 		handler: handle.New(),
 	}
 }
 
-type PublishCommand struct {
+type CheckCommand struct {
 	infra.Container
 	handler handle.Handler
 }
 
-func (c *PublishCommand) Name() string {
-	return "publish"
+func (c *CheckCommand) Name() string {
+	return "check"
 }
 
-func (c *PublishCommand) Synopsis() string {
-	return "Publish"
+func (c *CheckCommand) Synopsis() string {
+	return "Check"
 }
 
-func (c *PublishCommand) Usage() string {
-	return "publish <sitename> <deploymentId>\n"
+func (c *CheckCommand) Usage() string {
+	return "check <sitename> <deploymentId>\n"
 }
 
-func (c *PublishCommand) SetFlags(_ *flag.FlagSet) {}
+func (c *CheckCommand) SetFlags(_ *flag.FlagSet) {}
 
-func (c *PublishCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+func (c *CheckCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
 	if err := c.validate(f.Args()); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
@@ -51,7 +51,7 @@ func (c *PublishCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...inte
 	return subcommands.ExitSuccess
 }
 
-func (c *PublishCommand) validate(args []string) error {
+func (c *CheckCommand) validate(args []string) error {
 	if len(args) == 0 {
 		return fmt.Errorf("required arguments missing: sitename, deploymentId")
 	}
