@@ -38,16 +38,16 @@ end
 - コンテナベースにしない
 - 静的コンテンツを配信するのみ
   - もともとこちらに興味があったため
-- インメモリ or 内部的に静的コンテンツを格納する
+- インメモリに静的コンテンツを格納する
 - CloudFront + S3 みたいにパブリッシュ & キャッシュ削除できるイメージ
+- 理想としては HTTP でデプロイできるようにしたいが、認証認可を整備する余裕がない
+  - そのため特定のディレクトリへ静的コンテンツを置き reload する方式へ
+  - ただし apache みたいに即座に反映されるのではなく、明示的に reload する
+    - インメモリで格納しているため。
+    - こちらの方が「配置~デプロイ」まで時間的猶予が生まれ、安全であるため。
 - ビルド成果物に .cywagon.lua が含まれていれば、それを尊重する
-- 結局 SSG だと dist ディレクトリが必要になるので、apache 風味にサイト単位のディレクトリは作らない
-- いったん認証認可なし
 
 ```console
-$ cywagon deploy <sitename> .
-{
-  deploymentId: <id>
-}
-$ cywagon publish <sitename>:<deploymentId>
+$ cywagon reload <sitename>
+$ cywagon check <sitename>
 ```
