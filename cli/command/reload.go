@@ -44,7 +44,7 @@ func (c *ReloadCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...inter
 	sitename := f.Arg(0)
 	path := f.Arg(1)
 
-	if err := c.handler.Deploy(sitename, path); err != nil {
+	if err := c.handler.Reload(sitename, path); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
