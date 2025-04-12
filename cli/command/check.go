@@ -37,6 +37,11 @@ func (c *CheckCommand) Usage() string {
 func (c *CheckCommand) SetFlags(_ *flag.FlagSet) {}
 
 func (c *CheckCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
+	if err := handle.Check(); err != nil {
+		panic(err)
+	}
+	return 0
+	
 	if err := c.validate(f.Args()); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
