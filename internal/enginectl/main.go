@@ -12,7 +12,7 @@ type EngineInterface interface {
 	PrintBanner(confs []model.Config)
 	Serve(config model.Config) error
 	ValidateConfs(confs []model.Config) error
-	Deploy(sitename string, path string) error
+	LoadFS(sitename string, path string) error
 	Read(sitename string) (string, error)
 	StartListenSock() error
 	Close() error

@@ -9,7 +9,7 @@ import (
 
 type Dists map[string]fs.FS
 
-func (e *Engine) Deploy(sitename string, path string) error {
+func (e *Engine) LoadFS(sitename string, path string) error {
 	if _, err := os.Stat(path); err != nil {
 		return err
 	}
