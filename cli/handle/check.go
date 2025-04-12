@@ -2,8 +2,10 @@ package handle
 
 import (
 	"log"
+	"os"
 
-	"github.com/hashicorp/hcl/v2/hclsimple"
+	"github.com/hashicorp/hcl/v2/gohcl"
+	"github.com/hashicorp/hcl/v2/hclparse"
 )
 
 type Config struct {
@@ -22,9 +24,23 @@ type Site struct {
 }
 
 func Check() error {
-	var config Config
-	if err := hclsimple.DecodeFile("testdata/main.hcl", nil, &config); err != nil {
+	filename := "./testdata/main.hcl"
+	fbytes, err := os.ReadFile(filename)
+	if err != nil {
 		return err
+	}
+
+	parser := hclparse.NewParser()
+	file, diags := parser.ParseHCL(fbytes, filename)
+	if diags.HasErrors() {
+		return diags
+	}
+
+	var config Config
+	confDiags := gohcl.DecodeBody(file.Body, nil, &config)
+
+	if confDiags.HasErrors() {
+		return confDiags
 	}
 	log.Printf("Configuration is %#v", config)
 
