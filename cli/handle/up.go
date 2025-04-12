@@ -7,11 +7,11 @@ import (
 )
 
 func (h *Handler) Up(paths []string) error {
-	confs, err := h.ConfSrv.List(paths)
-	if err != nil {
-		return err
-	}
-	h.Engine.PrintBanner(confs)
+	// confs, err := h.ConfSrv.List(paths)
+	// if err != nil {
+	// 	return err
+	// }
+	// h.Engine.PrintBanner(confs)
 
 	if err := h.Engine.StartListenSock(); err != nil {
 		return err

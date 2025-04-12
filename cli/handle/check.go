@@ -1,12 +1,5 @@
 package handle
 
-import (
-	"log"
-	"os"
-
-	"github.com/enuesaa/cywagon/internal/libhcl"
-)
-
 type Config struct {
 	Server Server `hcl:"server,block"`
 	Sites  []Site `hcl:"site,block"`
@@ -23,17 +16,11 @@ type Site struct {
 }
 
 func (h *Handler) Check(path string) error {
-	fbytes, err := os.ReadFile(path)
+	config, err := h.ConfSrv.Read(path)
 	if err != nil {
 		return err
 	}
-
-	var config Config
-	parser := libhcl.New()
-	if err := parser.Parse(fbytes, &config); err != nil {
-		return err
-	}
-	log.Printf("Configuration is %#v", config)
+	h.Log.Info("conf %+v", config)
 
 	return nil
 }
