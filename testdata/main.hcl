@@ -12,7 +12,8 @@ site "sampleapp" {
     dist = "./sampleapp/dist"
 
     path {
-        pattern = "/aaa"
+        each = ["/aaa", "/bbb"]
+        pattern = each.value
 
         status = const.status.success
         body = ""

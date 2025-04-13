@@ -16,6 +16,17 @@ site "sampleapp" {
         }
     }
 
+    ifnot {
+        each {
+            ipaddr = ["", ""]
+        }
+        ipaddr = each.ipaddr
+
+        then {
+            status = 403
+        }
+    }
+
     if {
         path = "/oldpage"
 

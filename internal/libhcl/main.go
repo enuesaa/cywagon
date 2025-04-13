@@ -48,6 +48,12 @@ func (p *Parser) Parse(body []byte, val any) error {
 	}
 	fmt.Printf("%+v\n", cty.ObjectVal(constsmap))
 
+
+	type PartialSiteEachConfig struct {
+		Consts []model.Const  `hcl:"const,block"`
+		Remain hcl.Body `hcl:",remain"`
+	}
+
 	if diags := gohcl.DecodeBody(file.Body, ctx, val); diags.HasErrors() {
 		return diags
 	}
