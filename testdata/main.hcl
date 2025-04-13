@@ -3,8 +3,8 @@ server {
 }
 
 def "status" {
-    value = 200
-    # notfound = 404
+    success = 200
+    notfound = 404
 }
 
 site "sampleapp" {
@@ -14,7 +14,7 @@ site "sampleapp" {
     path {
         pattern = "/aaa"
 
-        status = def.status
+        status = def.status.success
         body = ""
         headers = {
             "Location": "https://example.com",

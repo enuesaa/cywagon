@@ -43,7 +43,7 @@ func (p *Parser) Parse(body []byte, _ any) error {
 
 	defMap := make(map[string]cty.Value)
 	for _, def := range partialConfig.Defs {
-		defMap[def.Name] = def.Value
+		defMap[def.Name] = cty.ObjectVal(def.Props)
 	}
 
 	ctx := &hcl.EvalContext{
