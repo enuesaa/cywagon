@@ -1,26 +1,43 @@
 server {
-    # port = 8080
-}
-
-const {
-    success = 200
-}
-const {
-    notfound = 404
+    port = 8080
 }
 
 site "sampleapp" {
     host = "sample.example.com"
     dist = "./sampleapp/dist"
 
-    path {
-        # each = ["/aaa", "/bbb"]
-        pattern = "/aaa"
+    headers = {
+        "Aaa": "aaa",
+    }
 
-        status = const.success
-        body = ""
-        headers = {
-            "Location": "https://example.com",
+    if {
+        headers_not = {"Authorization": "Basic xx"}        
+
+        respond {
+            status = 400
+            headers = {
+                "WWW-Authenticate": "Basic realm=\"Restricted\""
+            }
+        }
+    }
+
+    if {        
+        ipaddr_not_in = [""]
+
+        respond {
+            status = 403
+        }
+    }
+
+    if {
+        path = "/oldpage"
+
+        respond {
+            status = 302
+            body = ""
+            headers = {
+                "Location": "https://example.com",
+            }
         }
     }
 }
