@@ -2,6 +2,10 @@ server {
     port = 8080
 }
 
+const {
+    basicauth = "Basic xx"
+}
+
 site "sampleapp" {
     host = "sample.example.com"
     dist = "./sampleapp/dist"
@@ -11,7 +15,7 @@ site "sampleapp" {
     }
 
     if {
-        headers_not = {"Authorization": "Basic xx"}        
+        headers_not = {"Authorization": const.basicauth}
 
         respond {
             status = 400
