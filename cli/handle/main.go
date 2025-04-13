@@ -10,15 +10,15 @@ import (
 func New() Handler {
 	return Handler{
 		Container: infra.Default,
-		Engine: enginectl.New(),
-		ConfSrv: service.NewConfSrv(),
-		Sock: libsock.New(),
+		Engine:    enginectl.New(),
+		ConfSrv:   service.NewConfSrv(),
+		Sock:      libsock.New(),
 	}
 }
 
 type Handler struct {
 	infra.Container
-	Engine enginectl.EngineInterface
+	Engine  enginectl.EngineInterface
 	ConfSrv service.ConfSrvInterface
-	Sock libsock.Sock
+	Sock    libsock.Sock
 }

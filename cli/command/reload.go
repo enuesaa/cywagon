@@ -12,7 +12,7 @@ import (
 func NewReloadCommand() subcommands.Command {
 	return &ReloadCommand{
 		Container: infra.Default,
-		handler: handle.New(),
+		handler:   handle.New(),
 	}
 }
 

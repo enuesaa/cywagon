@@ -2,7 +2,7 @@ package libserve
 
 import "net/http"
 
-type HandleMiddleware struct {}
+type HandleMiddleware struct{}
 
 func (m *HandleMiddleware) Handle(site Site, req *http.Request) (*http.Response, error) {
 	var res *http.Response

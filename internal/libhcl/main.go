@@ -16,7 +16,7 @@ func New() Parser {
 	return Parser{}
 }
 
-type Parser struct {}
+type Parser struct{}
 
 // see https://github.com/hashicorp/hcl/issues/496
 func (p *Parser) Parse(body []byte, val any) error {
@@ -28,8 +28,8 @@ func (p *Parser) Parse(body []byte, val any) error {
 	}
 
 	type PartialConstsConfig struct {
-		Consts []model.Const  `hcl:"const,block"`
-		Remain hcl.Body `hcl:",remain"`
+		Consts []model.Const `hcl:"const,block"`
+		Remain hcl.Body      `hcl:",remain"`
 	}
 	var partialConfig PartialConstsConfig
 	if diags := gohcl.DecodeBody(file.Body, nil, &partialConfig); diags.HasErrors() {
@@ -49,12 +49,6 @@ func (p *Parser) Parse(body []byte, val any) error {
 		},
 	}
 	fmt.Printf("%+v\n", cty.ObjectVal(constsmap))
-
-
-	type PartialSiteEachConfig struct {
-		Consts []model.Const  `hcl:"const,block"`
-		Remain hcl.Body `hcl:",remain"`
-	}
 
 	if diags := gohcl.DecodeBody(file.Body, ctx, val); diags.HasErrors() {
 		return diags

@@ -8,7 +8,7 @@ import (
 
 type Transport struct {
 	infra.Container
-	Sites Sites	
+	Sites      Sites
 	Middleware Middleware
 }
 

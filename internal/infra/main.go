@@ -40,7 +40,7 @@ func (m *Mock) Container() Container {
 	}
 }
 
-func NewMock(t *testing.T, prepares... func(*Mock)) Container {
+func NewMock(t *testing.T, prepares ...func(*Mock)) Container {
 	ctrl := gomock.NewController(t)
 
 	mock := Mock{

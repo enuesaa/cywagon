@@ -20,7 +20,7 @@ func (e *Engine) LoadFS(sitename string, path string) error {
 }
 
 func (e *Engine) Read(sitename string) (string, error) {
-	dist, ok := e.dists[sitename];
+	dist, ok := e.dists[sitename]
 	if !ok {
 		return "", fmt.Errorf("site not found")
 	}

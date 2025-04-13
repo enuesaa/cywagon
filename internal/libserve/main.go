@@ -10,8 +10,8 @@ import (
 func New() Server {
 	return Server{
 		Container: infra.Default,
-		Port: 3000,
-		Sites: map[string]Site{},
+		Port:      3000,
+		Sites:     map[string]Site{},
 	}
 }
 

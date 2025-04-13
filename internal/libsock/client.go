@@ -11,7 +11,7 @@ func (e *Sock) Send(text string) error {
 		return err
 	}
 	defer conn.Close()
-	
+
 	encoder := json.NewEncoder(conn)
 	decoder := json.NewDecoder(conn)
 
@@ -21,7 +21,7 @@ func (e *Sock) Send(text string) error {
 	if err := encoder.Encode(msg); err != nil {
 		return err
 	}
-	
+
 	var res Message
 	if err := decoder.Decode(&res); err != nil {
 		return err

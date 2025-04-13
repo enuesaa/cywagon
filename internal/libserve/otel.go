@@ -13,7 +13,6 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-
 type OtelMiddleware struct {
 	Next Middleware
 }

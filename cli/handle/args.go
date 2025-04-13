@@ -2,7 +2,7 @@ package handle
 
 import "fmt"
 
-func (h *Handler) ValidateArgs(args []string) (error) {
+func (h *Handler) ValidateArgs(args []string) error {
 	if len(args) == 0 {
 		return fmt.Errorf("required arguments missing: path")
 	}

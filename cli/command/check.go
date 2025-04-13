@@ -12,7 +12,7 @@ import (
 func NewCheckCommand() subcommands.Command {
 	return &CheckCommand{
 		Container: infra.Default,
-		handler: handle.New(),
+		handler:   handle.New(),
 	}
 }
 

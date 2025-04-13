@@ -21,10 +21,10 @@ type EngineInterface interface {
 func New() *Engine {
 	engine := Engine{
 		Container: infra.Default,
-		Server: libserve.New(),
-		ConfSrv: service.NewConfSrv(),
-		Sock: libsock.New(),
-		dists: make(Dists),
+		Server:    libserve.New(),
+		ConfSrv:   service.NewConfSrv(),
+		Sock:      libsock.New(),
+		dists:     make(Dists),
 	}
 	return &engine
 }
@@ -32,8 +32,8 @@ func New() *Engine {
 type Engine struct {
 	infra.Container
 
-	Server libserve.Server
+	Server  libserve.Server
 	ConfSrv service.ConfSrvInterface
-	Sock libsock.Sock
-	dists Dists
+	Sock    libsock.Sock
+	dists   Dists
 }

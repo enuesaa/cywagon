@@ -11,7 +11,7 @@ import (
 )
 
 var versionFlag = flag.Bool("version", false, "Print version")
-var helpFlag    = flag.Bool("help", false, "Print command usage")
+var helpFlag = flag.Bool("help", false, "Print command usage")
 
 func Run() int {
 	// cli

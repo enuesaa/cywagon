@@ -9,31 +9,42 @@ type Config struct {
 }
 
 type Server struct {
-	Port uint `hcl:"port,optional"`
-}
-
-type Site struct {
-	Name string `hcl:"name,label"`
-	Host string `hcl:"host"`
-	Dist string `hcl:"dist"`
-	Path []Path `hcl:"path,block"`
-}
-
-type Path struct {
-	Pattern string `hcl:"pattern"`
-	Status  uint   `hcl:"status"`
-	Body    string `hcl:"body,optional"`
-	Headers map[string]string `hcl:"headers,optional"`
+	Port int `hcl:"port,optional"`
 }
 
 type Const struct {
 	Attrs map[string]cty.Value `hcl:",remain"`
 }
 
-type Each struct {
-	Attrs map[string]cty.Value `hcl:",remain"`
+type Site struct {
+	Name    string            `hcl:"name,label"`
+	Host    string            `hcl:"host"`
+	Dist    string            `hcl:"dist"`
+	Headers map[string]string `hcl:"headers,optional"`
+	If      []If              `hcl:"if,block"`
 }
 
 type If struct {
-	Path string `hcl:"path"`  // string or object 
+	Path      string   `hcl:"path,optional"`
+	PathIn    []string `hcl:"path_in,optional"`
+	PathNot   string   `hcl:"path_not,optional"`
+	PathNotIn []string `hcl:"path_not_in,optional"`
+
+	Headers      map[string]string   `hcl:"headers,optional"`
+	HeadersIn    []map[string]string `hcl:"headers_in,optional"`
+	HeadersNot   map[string]string   `hcl:"headers_not,optional"`
+	HeadersNotIn []map[string]string `hcl:"headers_not_in,optional"`
+
+	Ipaddr      string   `hcl:"ipaddr,optional"`
+	IpaddrNot   string   `hcl:"ipaddr_not,optional"`
+	IpaddrIn    []string `hcl:"ipaddr_in,optional"`
+	IpaddrNotIn []string `hcl:"ipaddr_not_in,optional"`
+
+	Responds []Respond `hcl:"respond,block"`
+}
+
+type Respond struct {
+	Status  int               `hcl:"status,optional"`
+	Headers map[string]string `hcl:"headers,optional"`
+	Body    string            `hcl:"body,optional"`
 }
