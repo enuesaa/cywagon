@@ -3,9 +3,9 @@ package model
 import "github.com/zclconf/go-cty/cty"
 
 type Config struct {
-	Server Server `hcl:"server,block"`
-	Sites  []Site `hcl:"site,block"`
-	Defs   []Def  `hcl:"def,block"`
+	Server Server  `hcl:"server,block"`
+	Sites  []Site  `hcl:"site,block"`
+	Consts []Const `hcl:"const,block"`
 }
 
 type Server struct {
@@ -26,7 +26,7 @@ type Path struct {
 	Headers map[string]string `hcl:"headers,optional"`
 }
 
-type Def struct {
-	Name  string    `hcl:"name,label"`
-	Props map[string]cty.Value `hcl:",remain"`
+type Const struct {
+	Name  string               `hcl:"name,label"`
+	Attrs map[string]cty.Value `hcl:",remain"`
 }

@@ -2,7 +2,7 @@ server {
     # port = 8080
 }
 
-def "status" {
+const "status" {
     success = 200
     notfound = 404
 }
@@ -14,16 +14,10 @@ site "sampleapp" {
     path {
         pattern = "/aaa"
 
-        status = def.status.success
+        status = const.status.success
         body = ""
         headers = {
             "Location": "https://example.com",
         }
-        
-        # validate {
-        #     if {
-        #     }
-        #     status = 303
-        # }
     }
 }
