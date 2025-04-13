@@ -2,8 +2,10 @@ server {
     # port = 8080
 }
 
-const "status" {
+const {
     success = 200
+}
+const {
     notfound = 404
 }
 
@@ -12,10 +14,10 @@ site "sampleapp" {
     dist = "./sampleapp/dist"
 
     path {
-        each = ["/aaa", "/bbb"]
-        pattern = each.value
+        # each = ["/aaa", "/bbb"]
+        pattern = "/aaa"
 
-        status = const.status.success
+        status = const.success
         body = ""
         headers = {
             "Location": "https://example.com",

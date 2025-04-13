@@ -38,7 +38,9 @@ func (p *Parser) Parse(body []byte, val any) error {
 
 	constsmap := make(map[string]cty.Value)
 	for _, co := range partialConfig.Consts {
-		constsmap[co.Name] = cty.ObjectVal(co.Attrs)
+		for key, attr := range co.Attrs {
+			constsmap[key] = attr
+		}
 	}
 
 	ctx := &hcl.EvalContext{
