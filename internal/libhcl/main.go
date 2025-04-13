@@ -1,8 +1,10 @@
 package libhcl
 
 import (
+	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/gohcl"
 	"github.com/hashicorp/hcl/v2/hclparse"
+	"github.com/zclconf/go-cty/cty"
 )
 
 func New() Parser {
@@ -18,7 +20,12 @@ func (p *Parser) Parse(body []byte, val any) error {
 	if diags.HasErrors() {
 		return diags
 	}
-	if diags := gohcl.DecodeBody(file.Body, nil, val); diags.HasErrors() {
+	ctx := &hcl.EvalContext{
+		Variables: map[string]cty.Value{
+			"aaa": cty.StringVal("hello"),
+		},
+	}
+	if diags := gohcl.DecodeBody(file.Body, ctx, val); diags.HasErrors() {
 		return diags
 	}
 	return nil

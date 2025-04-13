@@ -1,9 +1,13 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/libhcl"
 	"github.com/enuesaa/cywagon/internal/service/model"
+	"github.com/hashicorp/hcl/v2"
+	"github.com/zclconf/go-cty/cty"
 )
 
 func NewConfSrv() ConfSrvInterface {
@@ -33,6 +37,19 @@ func (c *ConfSrv) Read(path string) (model.Config, error) {
 		return config, err
 	}
 	c.applyDefault(&config)
+
+	defMap := make(map[string]cty.Value)
+	for _, def := range config.Defs {
+		defMap[def.Name] = cty.ObjectVal(def.Props)
+	}
+
+	a := &hcl.EvalContext{
+		Variables: map[string]cty.Value{
+			"def": cty.ObjectVal(defMap),
+		},
+	}
+	fmt.Printf("%+v\n", a)
+	
 
 	return config, nil
 }

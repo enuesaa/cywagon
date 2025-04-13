@@ -7,6 +7,16 @@ site "sampleapp" {
     dist = "./sampleapp/dist"
 
     if {
+        headers = {
+            "Authorization": "Basic xx",
+        }
+
+        then {
+            body = target.aa.body
+        }
+    }
+
+    if {
         path = "/aaa"
 
         then {

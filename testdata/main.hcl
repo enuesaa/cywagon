@@ -2,14 +2,19 @@ server {
     # port = 8080
 }
 
+# def "status" {
+#     success = 200
+#     notfound = 404
+# }
+
 site "sampleapp" {
     host = "sample.example.com"
     dist = "./sampleapp/dist"
 
     path {
-        pattern = "/aaa"
+        pattern = "/${aaa}"
 
-        status = 302
+        status = 200
         body = ""
         headers = {
             "Location": "https://example.com",
