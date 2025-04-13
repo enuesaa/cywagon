@@ -20,7 +20,6 @@ type Site struct {
 }
 
 type Path struct {
-	// Each    Each   `hcl:"each,block"`
 	Pattern string `hcl:"pattern"`
 	Status  uint   `hcl:"status"`
 	Body    string `hcl:"body,optional"`
@@ -33,4 +32,8 @@ type Const struct {
 
 type Each struct {
 	Attrs map[string]cty.Value `hcl:",remain"`
+}
+
+type If struct {
+	Path string `hcl:"path"`  // string or object 
 }

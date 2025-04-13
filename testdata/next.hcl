@@ -5,8 +5,8 @@ server {
 site "sampleapp" {
     host = "sample.example.com"
 
-    ifnot {
-        headers = {"Authorization": "Basic xx"}
+    if {
+        headers = {"Authorization": "Basic xx"}        
 
         then {
             status = 400
@@ -16,11 +16,8 @@ site "sampleapp" {
         }
     }
 
-    ifnot {
-        each {
-            ipaddr = ["", ""]
-        }
-        ipaddr = each.ipaddr
+    if {
+        ipaddr = not(in(["", ""]))
 
         then {
             status = 403
