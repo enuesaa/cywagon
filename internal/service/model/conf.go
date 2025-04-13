@@ -27,6 +27,7 @@ type Path struct {
 }
 
 type Def struct {
-	Name    string             `hcl:"name,label"`
-	Props map[string]cty.Value `hcl:",remain"`
+	Name  string    `hcl:"name,label"`
+	Value cty.Value `hcl:"value"`
+	// Props map[string]cty.Value `hcl:",remain"`
 }
