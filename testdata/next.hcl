@@ -4,20 +4,20 @@ server {
 
 site "sampleapp" {
     host = "sample.example.com"
-    dist = "./sampleapp/dist"
 
-    if {
-        headers = {
-            "Authorization": "Basic xx",
-        }
+    ifnot {
+        headers = {"Authorization": "Basic xx"}
 
         then {
-            body = target.aa.body
+            status = 400
+            headers = {
+                "WWW-Authenticate": "Basic realm=\"Restricted\""
+            }
         }
     }
 
     if {
-        path = "/aaa"
+        path = "/oldpage"
 
         then {
             status = 302
@@ -28,33 +28,9 @@ site "sampleapp" {
         }
     }
 
-    if {
-        path = "/bbb"
-
-        not {
-            headers = {
-                "Accept": "application/json",
-            }
-        }
-
-        then {
-            status = 200 
-        }
-    }
-
-    # path {
-    #     pattern = "/aaa"
-
-    #     status = 302
-    #     body = ""
-    #     headers = {
-    #         "Location": "https://example.com",
-    #     }
-        
-    #     # validate {
-    #     #     if {
-    #     #     }
-    #     #     status = 303
-    #     # }
+    dist = "./sampleapp/dist"
+    # status = 302
+    # headers = {
+    #     "Location": "https://example.com",
     # }
 }
