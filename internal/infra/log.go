@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/k0kubun/pp/v3"
 )
 
 // To generate mock file, run following command:
@@ -16,6 +18,9 @@ func init() {
 type LogInterface interface {
 	Error(err error)
 	Info(format string, a ...any)
+
+	// for debug. do not use in production
+	Pprint(a ...any)
 }
 
 type Log struct{}
@@ -32,4 +37,8 @@ func (i *Log) Info(format string, a ...any) {
 func (i *Log) Error(err error) {
 	text := fmt.Sprintf("Error: %s", err.Error())
 	fmt.Fprintf(os.Stderr, "%s\n", text)
+}
+
+func (i *Log) Pprint(a ...any) {
+	pp.Print(a)
 }

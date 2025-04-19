@@ -5,7 +5,7 @@ func (h *Handler) Check(path string) error {
 	if err != nil {
 		return err
 	}
-	h.Log.Info("conf %+v", config)
+	h.Log.Pprint(config)
 
 	return nil
 }

@@ -67,3 +67,19 @@ func (mr *MockLogInterfaceMockRecorder) Info(format any, a ...any) *gomock.Call 
 	varargs := append([]any{format}, a...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Info", reflect.TypeOf((*MockLogInterface)(nil).Info), varargs...)
 }
+
+// Pprint mocks base method.
+func (m *MockLogInterface) Pprint(a ...any) {
+	m.ctrl.T.Helper()
+	varargs := []any{}
+	for _, a_2 := range a {
+		varargs = append(varargs, a_2)
+	}
+	m.ctrl.Call(m, "Pprint", varargs...)
+}
+
+// Pprint indicates an expected call of Pprint.
+func (mr *MockLogInterfaceMockRecorder) Pprint(a ...any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Pprint", reflect.TypeOf((*MockLogInterface)(nil).Pprint), a...)
+}
