@@ -1,15 +1,11 @@
 package libserve
 
-import (
-	"io"
-	"net/http"
-)
+import "net/http"
 
 type Response struct {
 	headers map[string]string
 	status int
-	body io.Reader
-	path string
+	body []byte
 }
 
 func (r *Response) Flush(w http.ResponseWriter) error {
@@ -18,11 +14,7 @@ func (r *Response) Flush(w http.ResponseWriter) error {
 	}
 
 	if r.body != nil {
-		b, err := io.ReadAll(r.body)
-		if err != nil {
-			return err
-		}
-		if _, err := w.Write(b); err != nil {
+		if _, err := w.Write(r.body); err != nil {
 			return err
 		}
 	}

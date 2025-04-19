@@ -2,7 +2,9 @@ package libserve
 
 import (
 	"io"
+	"mime"
 	"net/http"
+	"path/filepath"
 )
 
 func NewContext(req *http.Request) Context {
@@ -11,8 +13,6 @@ func NewContext(req *http.Request) Context {
 		Path: req.URL.Path,
 		req: req,
 		resHeaders: make(map[string]string),
-		resBody: nil,
-		resPath: "",
 	}
 }
 
@@ -21,17 +21,24 @@ type Context struct {
 	Path string
 	req *http.Request
 	resHeaders map[string]string
-	resBody    io.Reader
-	resPath    string
+	resBody    []byte
 }
 
 func (c *Context) SetResponseHeader(name, value string) {
 	c.resHeaders[name] = value
 }
 
-func (c *Context) SetResponseBody(path string, body io.Reader) {
-	c.resPath = path
-	c.resBody = body
+func (c *Context) SetResponseBody(path string, body io.Reader) error {
+	ext := filepath.Ext(path)
+	c.resHeaders["Content-Type"] = mime.TypeByExtension(ext)
+
+	b, err := io.ReadAll(body)
+	if err != nil {
+		return err
+	}
+	c.resBody = b
+
+	return nil
 }
 
 func (c *Context) Resolve(status int) *Response {
@@ -39,6 +46,5 @@ func (c *Context) Resolve(status int) *Response {
 		headers: c.resHeaders,
 		status: status,
 		body: c.resBody,
-		path: c.resPath,
 	}
 }

@@ -30,8 +30,7 @@ func (e *Engine) Serve(config model.Config) error {
 	}
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
-		_, ok := sitemap[c.Host]
-		if !ok {
+		if _, ok := sitemap[c.Host]; !ok {
 			return c.Resolve(500)
 		}
 		return nil
@@ -64,8 +63,9 @@ func (e *Engine) Serve(config model.Config) error {
 		if err != nil {
 			return c.Resolve(404)
 		}
-		c.SetResponseBody(npath, f)
-
+		if err := c.SetResponseBody(npath, f); err != nil {
+			return c.Resolve(404)
+		}
 		return c.Resolve(200)
 	})
 
