@@ -12,7 +12,6 @@ type EngineInterface interface {
 	PrintBanner(confs []model.Config)
 	Serve(config model.Config) error
 	ValidateConfs(confs []model.Config) error
-	LoadFS(sitename string, path string) error
 	StartListenSock() error
 	Close() error
 }
@@ -23,7 +22,6 @@ func New() *Engine {
 		Server:    libserve.New(),
 		ConfSrv:   service.NewConfSrv(),
 		Sock:      libsock.New(),
-		dists:     make(Dists),
 	}
 	return &engine
 }
@@ -34,5 +32,4 @@ type Engine struct {
 	Server  libserve.Server
 	ConfSrv service.ConfSrvInterface
 	Sock    libsock.Sock
-	dists   Dists
 }

@@ -5,14 +5,10 @@ import (
 	"os"
 )
 
-type Dists map[string]fs.FS
-
-func (e *Engine) LoadFS(sitename string, path string) error {
+func (e *Engine) LoadFS(sitename string, path string) (fs.FS, error) {
 	if _, err := os.Stat(path); err != nil {
-		return err
+		return nil, err
 	}
 
-	e.dists[sitename] = os.DirFS(path)
-
-	return nil
+	return os.DirFS(path), nil
 }

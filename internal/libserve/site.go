@@ -1,8 +1,8 @@
 package libserve
 
-import "io/fs"
+import "net/http"
 
 type Site struct {
-	Host    string // Example: `example.com`
-	Dist    fs.FS
+	Host string // Example: `example.com`
+	Handle func(w http.ResponseWriter, req *http.Request)
 }

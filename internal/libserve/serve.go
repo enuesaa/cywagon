@@ -18,5 +18,5 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	host := req.Host
 
 	site := s.getByHost(host)
-	http.ServeFileFS(w, req, site.Dist, ".")
+	site.Handle(w, req)
 }

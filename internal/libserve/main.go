@@ -21,7 +21,7 @@ type Server struct {
 	sites map[string]Site
 }
 
-func (s *Server) Push(site Site) {
+func (s *Server) Add(site Site) {
 	if len(s.sites) == 0 {
 		s.sites["default"] = site
 	}

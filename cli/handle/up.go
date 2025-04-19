@@ -7,11 +7,11 @@ func (h *Handler) Up(path string) error {
 	}
 	h.Log.Pprint(config)
 
-	// if err := h.Engine.Serve(config); err != nil {
-	// 	return err
-	// }
-	// if err := h.Engine.Close(); err != nil {
-	// 	return err
-	// }
+	if err := h.Engine.Serve(config); err != nil {
+		return err
+	}
+	if err := h.Engine.Close(); err != nil {
+		return err
+	}
 	return nil
 }

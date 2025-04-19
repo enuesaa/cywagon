@@ -8,7 +8,7 @@ const {
 
 site "sampleapp" {
     host = "sample.example.com"
-    dist = "./sampleapp/dist"
+    dist = "./testdata/sampleapp/dist"
 
     headers = {
         "Aaa": "aaa",
