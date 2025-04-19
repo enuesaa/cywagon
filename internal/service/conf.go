@@ -9,6 +9,7 @@ import (
 func NewConfSrv() ConfSrvInterface {
 	return &ConfSrv{
 		Container: infra.Default,
+		Hcl: libhcl.New(),
 	}
 }
 
@@ -32,13 +33,5 @@ func (c *ConfSrv) Read(path string) (model.Config, error) {
 	if err := c.Hcl.Parse(fbytes, &config); err != nil {
 		return config, err
 	}
-	c.applyDefault(&config)
-
 	return config, nil
-}
-
-func (c *ConfSrv) applyDefault(config *model.Config) {
-	if config.Server.Port == 0 {
-		config.Server.Port = 3000
-	}
 }

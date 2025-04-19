@@ -25,14 +25,6 @@ site "sampleapp" {
         }
     }
 
-    if {        
-        ipaddr_not_in = [""]
-
-        respond {
-            status = 403
-        }
-    }
-
     if {
         path = "/oldpage"
 
