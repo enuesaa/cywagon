@@ -1,10 +1,6 @@
 package libserve
 
-import (
-	"net/http"
-
-	"github.com/enuesaa/cywagon/internal/infra"
-)
+import "github.com/enuesaa/cywagon/internal/infra"
 
 func New() Server {
 	return Server{
@@ -19,10 +15,4 @@ type Server struct {
 
 	Port  int
 	handlers []Handler
-}
-
-type Handler func(w http.ResponseWriter, r *http.Request) error
-
-func (s *Server) Use(handler Handler) {
-	s.handlers = append(s.handlers, handler)
 }

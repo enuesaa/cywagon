@@ -5,8 +5,6 @@ func (h *Handler) Up(path string) error {
 	if err != nil {
 		return err
 	}
-	h.Log.Pprint(config)
-
 	if err := h.Engine.Serve(config); err != nil {
 		return err
 	}

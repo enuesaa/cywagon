@@ -1,9 +1,7 @@
 package enginectl
 
 import (
-	"io"
 	"io/fs"
-	"mime"
 	"net/http"
 	"path/filepath"
 	"strings"
@@ -32,32 +30,30 @@ func (e *Engine) Serve(config model.Config) error {
 		}
 	}
 
-	e.Server.Use(func(w http.ResponseWriter, req *http.Request) error {
+	e.Server.Use(func(res *libserve.Response, req *http.Request) {
 		_, ok := sitemap[req.Host]
 		if !ok {
-			w.WriteHeader(500)
-			return libserve.ErrFlushResponse
+			res.Write(500, "", nil)
+			return
 		}
-		return nil
 	})
 
-	e.Server.Use(func(w http.ResponseWriter, req *http.Request) error {
+	e.Server.Use(func(res *libserve.Response, req *http.Request) {
 		site := sitemap[req.Host]
 		path := req.URL.Path
 
 		for _, ifblock := range site.Config.Ifs {
 			if ifblock.Path != nil && *ifblock.Path == path {
 				for key, value := range ifblock.Respond.Headers {
-					w.Header().Set(key, value)
-					w.WriteHeader(200)
-					return libserve.ErrFlushResponse
+					res.SetHeader(key, value)
+					res.Write(500, "", nil)
+					return
 				}
 			}
 		}
-		return nil
 	})
 		
-	e.Server.Use(func(w http.ResponseWriter, req *http.Request) error {
+	e.Server.Use(func(res *libserve.Response, req *http.Request) {
 		site := sitemap[req.Host]
 		path := req.URL.Path
 
@@ -68,23 +64,10 @@ func (e *Engine) Serve(config model.Config) error {
 
 		f, err := site.Dist.Open(path)
 		if err != nil {
-			w.WriteHeader(404)
-			return libserve.ErrFlushResponse
+			res.Write(404, "", nil)
+			return
 		}
-
-		fbytes, err := io.ReadAll(f)
-		if err != nil {
-			w.WriteHeader(404)
-			return libserve.ErrFlushResponse
-		}
-
-		ext := filepath.Ext(path)
-		w.Header().Set("Content-Type", mime.TypeByExtension(ext))
-
-		w.WriteHeader(200)
-		w.Write(fbytes)
-
-		return libserve.ErrFlushResponse
+		res.Write(200, path, f)
 	})
 
 	return e.Server.Serve()
