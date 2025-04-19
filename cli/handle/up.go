@@ -5,13 +5,13 @@ func (h *Handler) Up(path string) error {
 	if err != nil {
 		return err
 	}
-	h.Log.Info("conf %+v", config)
+	h.Log.Pprint(config)
 
-	if err := h.Engine.Serve(config); err != nil {
-		return err
-	}
-	if err := h.Engine.Close(); err != nil {
-		return err
-	}
+	// if err := h.Engine.Serve(config); err != nil {
+	// 	return err
+	// }
+	// if err := h.Engine.Close(); err != nil {
+	// 	return err
+	// }
 	return nil
 }
