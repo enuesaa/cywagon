@@ -1,7 +1,6 @@
 package enginectl
 
 import (
-	"fmt"
 	"io"
 	"io/fs"
 	"mime"
@@ -9,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
@@ -33,13 +33,11 @@ func (e *Engine) Serve(config model.Config) error {
 	}
 
 	e.Server.Use(func(w http.ResponseWriter, req *http.Request) error {
-		host := req.Host
-		_, ok := sitemap[host]
+		_, ok := sitemap[req.Host]
 		if !ok {
 			w.WriteHeader(500)
-			return fmt.Errorf("end")
+			return libserve.ErrFlushResponse
 		}
-		fmt.Printf("found: %s\n", host)
 		return nil
 	})
 
@@ -52,7 +50,7 @@ func (e *Engine) Serve(config model.Config) error {
 				for key, value := range ifblock.Respond.Headers {
 					w.Header().Set(key, value)
 					w.WriteHeader(200)
-					return fmt.Errorf("end")
+					return libserve.ErrFlushResponse
 				}
 			}
 		}
@@ -60,8 +58,8 @@ func (e *Engine) Serve(config model.Config) error {
 	})
 		
 	e.Server.Use(func(w http.ResponseWriter, req *http.Request) error {
-			site := sitemap[req.Host]
-			path := req.URL.Path
+		site := sitemap[req.Host]
+		path := req.URL.Path
 
 		if strings.HasSuffix(path, "/") {
 			path = filepath.Join(path, "index.html")
@@ -71,13 +69,13 @@ func (e *Engine) Serve(config model.Config) error {
 		f, err := site.Dist.Open(path)
 		if err != nil {
 			w.WriteHeader(404)
-			return fmt.Errorf("end")
+			return libserve.ErrFlushResponse
 		}
 
 		fbytes, err := io.ReadAll(f)
 		if err != nil {
 			w.WriteHeader(404)
-			return fmt.Errorf("end")
+			return libserve.ErrFlushResponse
 		}
 
 		ext := filepath.Ext(path)
@@ -86,7 +84,7 @@ func (e *Engine) Serve(config model.Config) error {
 		w.WriteHeader(200)
 		w.Write(fbytes)
 
-		return nil
+		return libserve.ErrFlushResponse
 	})
 
 	return e.Server.Serve()

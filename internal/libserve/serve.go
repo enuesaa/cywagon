@@ -1,9 +1,12 @@
 package libserve
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 )
+
+var ErrFlushResponse = fmt.Errorf("error")
 
 func (s *Server) Serve() error {
 	addr := fmt.Sprintf(":%d", s.Port)
@@ -14,8 +17,11 @@ func (s *Server) Serve() error {
 func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	for _, handler := range s.handlers {
 		if err := handler(w, req); err != nil {
-			// todo
-			continue
+			if errors.Is(err, ErrFlushResponse) {
+				break
+			}
+			fmt.Printf("err: %s", err.Error())
+			break
 		}
 	}
 }
