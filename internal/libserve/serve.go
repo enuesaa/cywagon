@@ -13,3 +13,6 @@ func (s *Server) Serve() error {
 	}
 	return http.ListenAndServe(addr, &handler)
 }
+
+func (s *Server) Use() {
+}
