@@ -8,11 +8,14 @@ import (
 func (s *Server) Serve() error {
 	addr := fmt.Sprintf(":%d", s.Port)
 
-	handler := Handler{
-		sites: s.sites,
-	}
-	return http.ListenAndServe(addr, &handler)
+	return http.ListenAndServe(addr, s)
 }
 
-func (s *Server) Use() {
+func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	for _, handler := range s.handlers {
+		if err := handler(w, req); err != nil {
+			// todo
+			continue
+		}
+	}
 }

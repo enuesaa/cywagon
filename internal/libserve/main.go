@@ -1,12 +1,16 @@
 package libserve
 
-import "github.com/enuesaa/cywagon/internal/infra"
+import (
+	"net/http"
+
+	"github.com/enuesaa/cywagon/internal/infra"
+)
 
 func New() Server {
 	return Server{
 		Container: infra.Default,
 		Port:      3000,
-		sites:     map[string]Site{},
+		handlers:  make([]Handler, 0),
 	}
 }
 
@@ -14,12 +18,11 @@ type Server struct {
 	infra.Container
 
 	Port  int
-	sites map[string]Site
+	handlers []Handler
 }
 
-func (s *Server) Add(site Site) {
-	if len(s.sites) == 0 {
-		s.sites["default"] = site
-	}
-	s.sites[site.Host] = site
+type Handler func(w http.ResponseWriter, r *http.Request) error
+
+func (s *Server) Use(handler Handler) {
+	s.handlers = append(s.handlers, handler)
 }
