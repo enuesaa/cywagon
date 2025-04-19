@@ -9,7 +9,7 @@ func (s *Server) Serve() error {
 	if err := s.Validate(); err != nil {
 		return err
 	}
-	addr := fmt.Sprintf(":%d", s.port)
+	addr := fmt.Sprintf(":%d", s.Port)
 
 	return http.ListenAndServe(addr, s)
 }

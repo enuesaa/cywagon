@@ -9,7 +9,7 @@ import (
 func New() Server {
 	return Server{
 		Container: infra.Default,
-		port:      3000,
+		Port:      3000,
 		sites:     map[string]Site{},
 	}
 }
@@ -17,12 +17,8 @@ func New() Server {
 type Server struct {
 	infra.Container
 
-	port  int
+	Port  int
 	sites map[string]Site
-}
-
-func (s *Server) SetPort(port int) {
-	s.port = port
 }
 
 func (s *Server) Push(site Site) {

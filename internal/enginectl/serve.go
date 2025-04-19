@@ -6,6 +6,8 @@ import (
 )
 
 func (e *Engine) Serve(config model.Config) error {
+	e.Server.Port = config.Server.Port
+
 	for _, site := range config.Sites {
 		e.LoadFS(site.Host, site.Dist)
 
@@ -15,7 +17,6 @@ func (e *Engine) Serve(config model.Config) error {
 		}
 		e.Server.Push(ssite)
 	}
-	e.Server.SetPort(config.Server.Port)
 
 	return e.Server.Serve()
 }
