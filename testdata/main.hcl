@@ -36,4 +36,14 @@ site "sampleapp" {
             }
         }
     }
+
+    if {
+        path = "/aaa"
+
+        respond {
+            headers = {
+                "Xxx": "xxx",
+            }
+        }
+    }
 }

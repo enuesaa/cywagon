@@ -21,7 +21,7 @@ type Site struct {
 	Host    string            `hcl:"host"`
 	Dist    string            `hcl:"dist"`
 	Headers map[string]string `hcl:"headers,optional"`
-	If      []If              `hcl:"if,block"`
+	Ifs     []If              `hcl:"if,block"`
 }
 
 type If struct {
@@ -40,7 +40,7 @@ type If struct {
 	IpaddrIn    []string `hcl:"ipaddr_in,optional"`
 	IpaddrNotIn []string `hcl:"ipaddr_not_in,optional"`
 
-	Responds []Respond `hcl:"respond,block"`
+	Respond Respond `hcl:"respond,block"`
 }
 
 type Respond struct {

@@ -27,6 +27,16 @@ func (e *Engine) Serve(config model.Config) error {
 				path := req.URL.Path
 				fmt.Println(path)
 
+				for _, ifblock := range site.Ifs {
+					if ifblock.Path != nil && *ifblock.Path == path {
+						for key, value := range ifblock.Respond.Headers {
+							w.Header().Set(key, value)
+							w.WriteHeader(200)
+							return
+						}
+					}
+				}
+
 				if strings.HasSuffix(path, "/") {
 					path = filepath.Join(path, "index.html")
 				}
