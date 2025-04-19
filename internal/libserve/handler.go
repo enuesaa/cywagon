@@ -1,8 +1,6 @@
 package libserve
 
-import "net/http"
-
-type Handler func(res *Response, req *http.Request)
+type Handler func(c *Context) *Response
 
 func (s *Server) Use(handler Handler) {
 	s.handlers = append(s.handlers, handler)

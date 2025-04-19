@@ -2,7 +2,6 @@ package enginectl
 
 import (
 	"io/fs"
-	"net/http"
 	"path/filepath"
 	"strings"
 
@@ -30,44 +29,44 @@ func (e *Engine) Serve(config model.Config) error {
 		}
 	}
 
-	e.Server.Use(func(res *libserve.Response, req *http.Request) {
-		_, ok := sitemap[req.Host]
+	e.Server.Use(func(c *libserve.Context) *libserve.Response {
+		_, ok := sitemap[c.Host]
 		if !ok {
-			res.Write(500, "", nil)
-			return
+			return c.Resolve(500)
 		}
+		return nil
 	})
 
-	e.Server.Use(func(res *libserve.Response, req *http.Request) {
-		site := sitemap[req.Host]
-		path := req.URL.Path
+	e.Server.Use(func(c *libserve.Context) *libserve.Response {
+		site := sitemap[c.Host]
 
 		for _, ifblock := range site.Config.Ifs {
-			if ifblock.Path != nil && *ifblock.Path == path {
+			if ifblock.Path != nil && *ifblock.Path == c.Path {
 				for key, value := range ifblock.Respond.Headers {
-					res.SetHeader(key, value)
-					res.Write(500, "", nil)
-					return
+					c.SetResponseHeader(key, value)
+					return c.Resolve(500)
 				}
 			}
 		}
+		return nil
 	})
 		
-	e.Server.Use(func(res *libserve.Response, req *http.Request) {
-		site := sitemap[req.Host]
-		path := req.URL.Path
+	e.Server.Use(func(c *libserve.Context) *libserve.Response {
+		site := sitemap[c.Host]
+		npath := c.Path
 
-		if strings.HasSuffix(path, "/") {
-			path = filepath.Join(path, "index.html")
+		if strings.HasSuffix(npath, "/") {
+			npath = filepath.Join(npath, "index.html")
 		}
-		path = strings.TrimPrefix(path, "/")
+		npath = strings.TrimPrefix(npath, "/")
 
-		f, err := site.Dist.Open(path)
+		f, err := site.Dist.Open(npath)
 		if err != nil {
-			res.Write(404, "", nil)
-			return
+			return c.Resolve(404)
 		}
-		res.Write(200, path, f)
+		c.SetResponseBody(npath, f)
+
+		return c.Resolve(200)
 	})
 
 	return e.Server.Serve()

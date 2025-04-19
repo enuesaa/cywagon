@@ -12,16 +12,15 @@ func (s *Server) Serve() error {
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	res := NewResponse()
+	ctx := NewContext(req)
 
 	for _, handler := range s.handlers {
-		handler(&res, req)
-		if res.Close() {
+		res := handler(&ctx)
+		if res != nil {
+			if err := res.Flush(w); err != nil {
+				s.Log.Info("Error: %w", err)
+			}
 			break
 		}
-	}
-
-	if err := res.Flush(w); err != nil {
-		s.Log.Info("Error: %w", err)
 	}
 }
