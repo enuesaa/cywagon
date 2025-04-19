@@ -2,8 +2,7 @@ package enginectl
 
 import (
 	"io/fs"
-	"path/filepath"
-	"strings"
+	"slices"
 
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/service/model"
@@ -39,12 +38,29 @@ func (e *Engine) Serve(config model.Config) error {
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
 
-		for _, ifblock := range site.Config.Ifs {
-			if ifblock.Path != nil && *ifblock.Path == c.Path {
-				for key, value := range ifblock.Respond.Headers {
-					c.SetResponseHeader(key, value)
-					return c.Resolve(500)
-				}
+		check := func(val string, eq *string, in []string, nq *string, notin []string) bool {
+			if nq != nil && *nq == val {
+				return false
+			}
+			if len(notin) > 0 && slices.Contains(notin, val) {
+				return false
+			}
+			if eq != nil && *eq == val {
+				return true
+			}
+			if  len(in) > 0 && slices.Contains(in, val) {
+				return true
+			}
+			return false
+		}
+
+		for _, ifb := range site.Config.Ifs {
+			if !check(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
+				continue
+			}
+			for key, value := range ifb.Respond.Headers {
+				c.SetResponseHeader(key, value)
+				return c.Resolve(500)
 			}
 		}
 		return nil
@@ -52,18 +68,13 @@ func (e *Engine) Serve(config model.Config) error {
 		
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
-		npath := c.Path
+		lpath := c.GetLookupPath()
 
-		if strings.HasSuffix(npath, "/") {
-			npath = filepath.Join(npath, "index.html")
-		}
-		npath = strings.TrimPrefix(npath, "/")
-
-		f, err := site.Dist.Open(npath)
+		f, err := site.Dist.Open(lpath)
 		if err != nil {
 			return c.Resolve(404)
 		}
-		if err := c.SetResponseBody(npath, f); err != nil {
+		if err := c.SetResponseBody(lpath, f); err != nil {
 			return c.Resolve(404)
 		}
 		return c.Resolve(200)

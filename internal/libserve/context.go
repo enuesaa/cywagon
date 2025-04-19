@@ -5,6 +5,7 @@ import (
 	"mime"
 	"net/http"
 	"path/filepath"
+	"strings"
 )
 
 func NewContext(req *http.Request) Context {
@@ -22,6 +23,14 @@ type Context struct {
 	req *http.Request
 	resHeaders map[string]string
 	resBody    []byte
+}
+
+func (c *Context) GetLookupPath() string {
+	path := c.Path
+	if strings.HasSuffix(path, "/") {
+		path = filepath.Join(path, "index.html")
+	}
+	return strings.TrimPrefix(path, "/")
 }
 
 func (c *Context) SetResponseHeader(name, value string) {
