@@ -9,11 +9,11 @@ type Response struct {
 }
 
 func (r *Response) flush(w http.ResponseWriter) error {
-	w.WriteHeader(r.status)
-
 	for name, value := range r.headers {
 		w.Header().Set(name, value)
 	}
+	w.WriteHeader(r.status)
+
 	if r.body != nil {
 		if _, err := w.Write(r.body); err != nil {
 			return err

@@ -41,7 +41,10 @@ func (c *Context) ResHeader(name string, value string) {
 
 func (c *Context) ResBody(path string, body io.Reader) error {
 	ext := filepath.Ext(path)
-	c.res.headers["Content-Type"] = mime.TypeByExtension(ext)
+	contentType := mime.TypeByExtension(ext)
+	if contentType != "" {
+		c.res.headers["Content-Type"] = contentType
+	}
 
 	b, err := io.ReadAll(body)
 	if err != nil {

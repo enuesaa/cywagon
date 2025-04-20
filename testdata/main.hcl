@@ -1,5 +1,5 @@
 server {
-    port = 8080
+    port = 3000
 }
 
 const {
@@ -7,7 +7,7 @@ const {
 }
 
 site "sampleapp" {
-    host = "sample.example.com"
+    host = "localhost:3000"
     dist = "./testdata/sampleapp/dist"
 
     headers = {
