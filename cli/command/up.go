@@ -3,6 +3,7 @@ package command
 import (
 	"context"
 	"flag"
+	"fmt"
 
 	"github.com/enuesaa/cywagon/cli/handle"
 	"github.com/enuesaa/cywagon/internal/infra"
@@ -36,7 +37,7 @@ func (c *UpCommand) Usage() string {
 func (c *UpCommand) SetFlags(_ *flag.FlagSet) {}
 
 func (c *UpCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
-	if err := c.handler.ValidateArgs(f.Args()); err != nil {
+	if err := c.ValidateArgs(f.Args()); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}
@@ -47,4 +48,14 @@ func (c *UpCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subc
 		return subcommands.ExitFailure
 	}
 	return subcommands.ExitSuccess
+}
+
+func (c *UpCommand) ValidateArgs(args []string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("required arguments missing: path")
+	}
+	if len(args) > 1 {
+		return fmt.Errorf("too many arguments found")
+	}
+	return nil
 }
