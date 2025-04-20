@@ -17,6 +17,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	for _, handler := range s.handlers {
 		res := handler(&ctx)
 		if res != nil {
+			// log
+			s.Log.Info("%d %s %s", res.status, ctx.req.Method, ctx.req.URL.Path)
+
+			// flush
 			if err := res.flush(w); err != nil {
 				s.Log.Info("Error: %w", err)
 			}
