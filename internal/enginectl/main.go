@@ -9,7 +9,7 @@ import (
 )
 
 type EngineInterface interface {
-	Serve(config model.Config) error
+	Serve(config model.Config, workdir string) error
 	StartListenSock() error
 	Close() error
 }

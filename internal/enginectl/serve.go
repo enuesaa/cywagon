@@ -13,12 +13,12 @@ type Site struct {
 	Config model.Site
 }
 
-func (e *Engine) Serve(config model.Config) error {
+func (e *Engine) Serve(config model.Config, workdir string) error {
 	e.Server.Port = config.Server.Port
 
 	sitemap := make(map[string]Site, 0)
 	for _, site := range config.Sites {
-		dist, err := e.LoadFS(site.Host, site.Dist)
+		dist, err := e.LoadFS(workdir, site.Dist)
 		if err != nil {
 			return err
 		}

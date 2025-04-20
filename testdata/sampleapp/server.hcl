@@ -9,7 +9,7 @@ const {
 
 site "sampleapp" {
     host = "localhost:3000"
-    dist = "./testdata/sampleapp/dist"
+    dist = "./dist"
 
     headers = {
         "Aaa": "aaa",
