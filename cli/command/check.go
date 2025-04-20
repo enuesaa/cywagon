@@ -31,7 +31,7 @@ func (c *CheckCommand) Synopsis() string {
 }
 
 func (c *CheckCommand) Usage() string {
-	return "check <confpath>\n"
+	return "check <workdir>\n"
 }
 
 func (c *CheckCommand) SetFlags(_ *flag.FlagSet) {}

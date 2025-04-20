@@ -31,7 +31,7 @@ func (c *ReloadCommand) Synopsis() string {
 }
 
 func (c *ReloadCommand) Usage() string {
-	return "reload <confpath>\n"
+	return "reload <workdir>\n"
 }
 
 func (c *ReloadCommand) SetFlags(_ *flag.FlagSet) {}
@@ -43,7 +43,7 @@ func (c *ReloadCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) 
 	}
 	path := f.Arg(0)
 
-	if err := c.handler.Reload("", path); err != nil {
+	if err := c.handler.Reload(path); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}

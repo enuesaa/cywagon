@@ -31,7 +31,7 @@ func (c *UpCommand) Synopsis() string {
 }
 
 func (c *UpCommand) Usage() string {
-	return "cywagon up <confpath>\n"
+	return "cywagon up <workdir>\n"
 }
 
 func (c *UpCommand) SetFlags(_ *flag.FlagSet) {}

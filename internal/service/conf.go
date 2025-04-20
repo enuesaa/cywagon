@@ -1,6 +1,8 @@
 package service
 
 import (
+	"path/filepath"
+
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/libhcl"
 	"github.com/enuesaa/cywagon/internal/service/model"
@@ -14,7 +16,7 @@ func NewConfSrv() ConfSrvInterface {
 }
 
 type ConfSrvInterface interface {
-	Read(path string) (model.Config, error)
+	ReadInWorkdir(workdir string) (model.Config, error)
 }
 
 type ConfSrv struct {
@@ -23,9 +25,10 @@ type ConfSrv struct {
 	Hcl libhcl.Parser
 }
 
-func (c *ConfSrv) Read(path string) (model.Config, error) {
+func (c *ConfSrv) ReadInWorkdir(workdir string) (model.Config, error) {
 	var config model.Config
 
+	path := filepath.Join(workdir, "server.hcl")
 	fbytes, err := c.Fs.Read(path)
 	if err != nil {
 		return config, err

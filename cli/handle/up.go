@@ -1,7 +1,7 @@
 package handle
 
-func (h *Handler) Up(path string) error {
-	config, err := h.ConfSrv.Read(path)
+func (h *Handler) Up(workdir string) error {
+	config, err := h.ConfSrv.ReadInWorkdir(workdir)
 	if err != nil {
 		return err
 	}
