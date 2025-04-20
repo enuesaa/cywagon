@@ -3,7 +3,8 @@ server {
 }
 
 const {
-    basicauth = "Basic xx"
+    // test:test
+    basicauth = "Basic dGVzdDp0ZXN0"
 }
 
 site "sampleapp" {
@@ -19,7 +20,7 @@ site "sampleapp" {
         headers_not = {"Authorization": const.basicauth}
 
         respond {
-            status = 400
+            status = 401
             headers = {
                 "WWW-Authenticate": "Basic realm=\"Restricted\""
             }
@@ -33,7 +34,7 @@ site "sampleapp" {
             status = 302
             body = ""
             headers = {
-                "Location": "https://example.com",
+                "Location": "/",
             }
         }
     }

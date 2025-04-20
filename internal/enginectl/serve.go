@@ -69,7 +69,7 @@ func (e *Engine) Serve(config model.Config) error {
 		}
 		return nil
 	})
-		
+
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
 		path := strings.TrimPrefix(c.Path, "/")
