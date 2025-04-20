@@ -33,7 +33,7 @@ func (p *Parser) Parse(body []byte, val any) error {
 	var partialConfig PartialConstsConfig
 
 	if diags := gohcl.DecodeBody(file.Body, nil, &partialConfig); diags.HasErrors() {
-		return diags
+		return NewErrParseFailed(diags[0])
 	}
 
 	constsmap := make(map[string]cty.Value)
@@ -47,7 +47,7 @@ func (p *Parser) Parse(body []byte, val any) error {
 		},
 	}
 	if diags := gohcl.DecodeBody(file.Body, tctx, val); diags.HasErrors() {
-		return diags
+		return NewErrParseFailed(diags[0])
 	}
 	return nil
 }

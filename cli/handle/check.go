@@ -5,7 +5,16 @@ func (h *Handler) Check(path string) error {
 	if err != nil {
 		return err
 	}
-	h.Log.Pprint(config)
+	h.Log.Info("Configuration OK!")
+
+	h.Log.Info("******************************")
+	h.Log.Info("* The server will listen on port %d", config.Server.Port)
+	h.Log.Info("* ")
+	h.Log.Info("* Sites:")
+	for _, site := range config.Sites {
+		h.Log.Info("* - %s", site.Host)
+	}
+	h.Log.Info("******************************")
 
 	return nil
 }
