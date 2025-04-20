@@ -9,9 +9,15 @@ import (
 )
 
 func NewContext(req *http.Request) Context {
+	headers := make(map[string]string)
+	for key, value := range req.Header {
+		headers[key] = value[0]
+	}
+
 	return Context{
 		Host: req.Host,
 		Path: req.URL.Path,
+		Headers: headers,
 		req: req,
 		resHeaders: make(map[string]string),
 	}
@@ -20,6 +26,7 @@ func NewContext(req *http.Request) Context {
 type Context struct {
 	Host string
 	Path string
+	Headers map[string]string
 	req *http.Request
 	resHeaders map[string]string
 	resBody    []byte

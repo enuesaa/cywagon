@@ -3,11 +3,11 @@ package enginectl
 import "slices"
 
 func (e *Engine) matchCondStr(val string, eq *string, in []string, nq *string, notin []string) bool {
-	if nq != nil && *nq == val {
-		return false
+	if nq != nil && *nq != val {
+		return true
 	}
-	if len(notin) > 0 && slices.Contains(notin, val) {
-		return false
+	if len(notin) > 0 && !slices.Contains(notin, val) {
+		return true
 	}
 	if eq != nil && *eq == val {
 		return true

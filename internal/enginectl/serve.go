@@ -41,9 +41,9 @@ func (e *Engine) Serve(config model.Config) error {
 			if !e.matchCondStr(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
 				continue
 			}
-			// if !e.matchCondStrMap(c.) {
-			// 	continue
-			// }
+			if !e.matchCondStrMap(c.Headers, ifb.Headers, ifb.HeadersIn, ifb.HeadersNot, ifb.HeadersNotIn) {
+				continue
+			}
 			for key, value := range ifb.Respond.Headers {
 				c.SetResponseHeader(key, value)
 				return c.Resolve(500)
