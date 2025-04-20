@@ -15,6 +15,15 @@ site "sampleapp" {
         "Aaa": "aaa",
     }
 
+    # if {
+    #     path_in = ["/[^.]", "/*/[^.]"]
+    #     rewrite {
+    #         path = "{path}/index.html"
+    #         append = "index.html"
+    #         //dist 
+    #     }
+    # }
+
     if {
         path = "/restrict/*"
         headers_not = {"Authorization": const.basicauth}
