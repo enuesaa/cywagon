@@ -1,15 +1,14 @@
 package enginectl
 
-import "regexp"
+import "github.com/gobwas/glob"
 
 func (e *Engine) matchCondPath(val string, eq *string, in []string, nq *string, notin []string) bool {
 	isEq := func(pattern string, v string) bool {
-		re, err := regexp.Compile(pattern)
+		g, err := glob.Compile(pattern)
 		if err != nil {
 			return false
 		}
-
-		return re.Match([]byte(v))
+		return g.Match(v)
 	}	
 
 	if nq != nil && !isEq(*nq, val) {

@@ -16,7 +16,7 @@ site "sampleapp" {
     }
 
     if {
-        path = "\\/[\\w-_]*"
+        path_not = "/{**/*.*,*.*}"
 
         rewrite {
             path = "/index.html"
