@@ -32,7 +32,6 @@ site "sampleapp" {
 
         respond {
             status = 302
-            body = ""
             headers = {
                 "Location": "/",
             }
