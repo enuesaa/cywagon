@@ -16,7 +16,7 @@ site "sampleapp" {
     }
 
     if {
-        path = "/restrict"
+        path = "/restrict/*"
         headers_not = {"Authorization": const.basicauth}
 
         respond {
@@ -39,7 +39,7 @@ site "sampleapp" {
     }
 
     if {
-        path = "/aaa"
+        path_in = ["/aaa", "/aaa/*"]
 
         respond {
             status = 299

@@ -2,6 +2,7 @@ package enginectl
 
 import (
 	"io/fs"
+	"path/filepath"
 	"strings"
 
 	"github.com/enuesaa/cywagon/internal/libserve"
@@ -43,11 +44,19 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 		return nil
 	})
 
+	// TODO: rewrite に寄せたい
+	e.Server.Use(func(c *libserve.Context) *libserve.Response {
+		if strings.HasSuffix(c.Path, "/") {
+			c.Path = filepath.Join(c.Path, "index.html")
+		}
+		return nil
+	})
+
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
 		for _, ifb := range site.Config.Ifs {
 			if e.shouldCheckCondStr(ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
-				if !e.matchCondStr(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
+				if !e.matchCondPath(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
 					continue
 				}
 			}
