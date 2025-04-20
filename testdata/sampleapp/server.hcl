@@ -16,18 +16,10 @@ site "sampleapp" {
     }
 
     if {
-        path_in = ["/[^.]", "/*/[^.]"]
+        path = "\\/[\\w-_]*"
 
         rewrite {
-            path = "/index.html" // TODO: accept regex group
-        }
-    }
-
-    if {
-        path = "/aaa"
-
-        rewrite {
-            path = "/index.html" // TODO: accept regex group
+            path = "/index.html"
         }
     }
 
