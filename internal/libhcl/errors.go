@@ -21,5 +21,5 @@ type ErrParseFailed struct {
 }
 
 func (e *ErrParseFailed) Error() string {
-	return fmt.Sprintf("%s:%d -- %s", e.filename, e.line, e.message)
+	return fmt.Sprintf("%s -- %s:%d", e.message, e.filename, e.line)
 }

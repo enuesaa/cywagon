@@ -15,7 +15,7 @@ site "sampleapp" {
     }
 
     if {
-        headers_naot = {"Authorization": const.basicauth}
+        headers_not = {"Authorization": const.basicauth}
 
         respond {
             status = 400

@@ -22,7 +22,7 @@ func (p *Parser) Parse(body []byte, val any) error {
 
 	file, diags := parser.ParseHCL(body, "cywagon.hcl")
 	if diags.HasErrors() {
-		return diags
+		return NewErrParseFailed(diags[0])
 	}
 
 	// see https://github.com/hashicorp/hcl/issues/496
