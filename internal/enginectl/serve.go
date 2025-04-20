@@ -46,16 +46,26 @@ func (e *Engine) Serve(config model.Config) error {
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
 		for _, ifb := range site.Config.Ifs {
-			if !e.matchCondStr(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
-				continue
+			if e.shouldCheckCondStr(ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
+				if !e.matchCondStr(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
+					continue
+				}
 			}
-			if !e.matchCondStrMap(c.Headers, ifb.Headers, ifb.HeadersIn, ifb.HeadersNot, ifb.HeadersNotIn) {
-				continue
+			if e.shouldCheckCondStrMap(ifb.Headers, ifb.HeadersIn, ifb.HeadersNot, ifb.HeadersNotIn) {
+				if !e.matchCondStrMap(c.Headers, ifb.Headers, ifb.HeadersIn, ifb.HeadersNot, ifb.HeadersNotIn) {
+					continue
+				}
 			}
 			for key, value := range ifb.Respond.Headers {
 				c.ResHeader(key, value)
-				return c.Resolve(500)
 			}
+			if ifb.Respond.Body != nil {
+				c.ResBody(c.Path, strings.NewReader(*ifb.Respond.Body))
+			}
+			if ifb.Respond.Status != nil {
+				return c.Resolve(*ifb.Respond.Status)
+			}
+			return c.Resolve(200)
 		}
 		return nil
 	})

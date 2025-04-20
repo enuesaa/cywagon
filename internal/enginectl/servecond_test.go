@@ -85,6 +85,10 @@ func TestMatchCondStr(t *testing.T) {
 			nq: nil,
 			notin: []string{"a", "b"},
 		},
+		{
+			expect: false,
+			val: "a",
+		},
 	}
 
 	for _, tc := range cases {
@@ -198,6 +202,12 @@ func TestMatchCondStrMap(t *testing.T) {
 			notin: []map[string]string{
 				{"a": "aaa"},
 				{"b": "bbb"},
+			},
+		},
+		{
+			expect: false,
+			val: map[string]string{
+				"a": "aaa",
 			},
 		},
 	}
