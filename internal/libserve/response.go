@@ -8,7 +8,7 @@ type Response struct {
 	body []byte
 }
 
-func (r *Response) Flush(w http.ResponseWriter) error {
+func (r *Response) flush(w http.ResponseWriter) error {
 	for name, value := range r.headers {
 		w.Header().Set(name, value)
 	}

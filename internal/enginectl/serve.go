@@ -2,6 +2,8 @@ package enginectl
 
 import (
 	"io/fs"
+	"path/filepath"
+	"strings"
 
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/service/model"
@@ -35,8 +37,14 @@ func (e *Engine) Serve(config model.Config) error {
 	})
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
-		site := sitemap[c.Host]
+		if strings.HasSuffix(c.Path, "/") {
+			c.Path = filepath.Join(c.Path, "index.html")
+		}
+		return nil
+	})
 
+	e.Server.Use(func(c *libserve.Context) *libserve.Response {
+		site := sitemap[c.Host]
 		for _, ifb := range site.Config.Ifs {
 			if !e.matchCondStr(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
 				continue
@@ -45,7 +53,7 @@ func (e *Engine) Serve(config model.Config) error {
 				continue
 			}
 			for key, value := range ifb.Respond.Headers {
-				c.SetResponseHeader(key, value)
+				c.ResHeader(key, value)
 				return c.Resolve(500)
 			}
 		}
@@ -54,13 +62,13 @@ func (e *Engine) Serve(config model.Config) error {
 		
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
-		lpath := c.GetLookupPath()
+		path := strings.TrimPrefix(c.Path, "/")
 
-		f, err := site.Dist.Open(lpath)
+		f, err := site.Dist.Open(path)
 		if err != nil {
 			return c.Resolve(404)
 		}
-		if err := c.SetResponseBody(lpath, f); err != nil {
+		if err := c.ResBody(path, f); err != nil {
 			return c.Resolve(404)
 		}
 		return c.Resolve(200)

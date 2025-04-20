@@ -5,8 +5,8 @@ import (
 	"mime"
 	"net/http"
 	"path/filepath"
-	"strings"
 )
+
 
 func NewContext(req *http.Request) Context {
 	headers := make(map[string]string)
@@ -18,8 +18,12 @@ func NewContext(req *http.Request) Context {
 		Host: req.Host,
 		Path: req.URL.Path,
 		Headers: headers,
+		res: Response{
+			headers: make(map[string]string),
+			status:  0,
+			body:    nil,
+		},
 		req: req,
-		resHeaders: make(map[string]string),
 	}
 }
 
@@ -27,40 +31,29 @@ type Context struct {
 	Host string
 	Path string
 	Headers map[string]string
+	res Response
 	req *http.Request
-	resHeaders map[string]string
-	resBody    []byte
 }
 
-func (c *Context) GetLookupPath() string {
-	path := c.Path
-	if strings.HasSuffix(path, "/") {
-		path = filepath.Join(path, "index.html")
-	}
-	return strings.TrimPrefix(path, "/")
+func (c *Context) ResHeader(name string, value string) {
+	c.res.headers[name] = value
 }
 
-func (c *Context) SetResponseHeader(name, value string) {
-	c.resHeaders[name] = value
-}
-
-func (c *Context) SetResponseBody(path string, body io.Reader) error {
+func (c *Context) ResBody(path string, body io.Reader) error {
 	ext := filepath.Ext(path)
-	c.resHeaders["Content-Type"] = mime.TypeByExtension(ext)
+	c.res.headers["Content-Type"] = mime.TypeByExtension(ext)
 
 	b, err := io.ReadAll(body)
 	if err != nil {
 		return err
 	}
-	c.resBody = b
+	c.res.body = b
 
 	return nil
 }
 
 func (c *Context) Resolve(status int) *Response {
-	return &Response{
-		headers: c.resHeaders,
-		status: status,
-		body: c.resBody,
-	}
+	c.res.status = status
+
+	return &c.res
 }
