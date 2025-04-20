@@ -15,14 +15,21 @@ site "sampleapp" {
         "Aaa": "aaa",
     }
 
-    # if {
-    #     path_in = ["/[^.]", "/*/[^.]"]
-    #     rewrite {
-    #         path = "{path}/index.html"
-    #         append = "index.html"
-    #         //dist 
-    #     }
-    # }
+    if {
+        path_in = ["/[^.]", "/*/[^.]"]
+
+        rewrite {
+            path = "/index.html" // TODO: accept regex group
+        }
+    }
+
+    if {
+        path = "/aaa"
+
+        rewrite {
+            path = "/index.html" // TODO: accept regex group
+        }
+    }
 
     if {
         path = "/restrict/*"

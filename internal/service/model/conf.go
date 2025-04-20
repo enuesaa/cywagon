@@ -40,11 +40,16 @@ type If struct {
 	IpaddrIn    []string `hcl:"ipaddr_in,optional"`
 	IpaddrNotIn []string `hcl:"ipaddr_not_in,optional"`
 
-	Respond Respond `hcl:"respond,block"`
+	Respond *Respond `hcl:"respond,block"`
+	Rewrite *Rewrite `hcl:"rewrite,block"`
 }
 
 type Respond struct {
 	Status  *int              `hcl:"status,optional"`
 	Headers map[string]string `hcl:"headers,optional"`
 	Body    *string           `hcl:"body,optional"`
+}
+
+type Rewrite struct {
+	Path *string   `hcl:"path,optional"`
 }

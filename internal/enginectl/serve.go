@@ -65,6 +65,12 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 					continue
 				}
 			}
+			if ifb.Rewrite != nil {
+				if ifb.Rewrite.Path != nil {
+					c.Path = *ifb.Rewrite.Path
+				}
+				return nil
+			}
 			for key, value := range ifb.Respond.Headers {
 				c.ResHeader(key, value)
 			}
