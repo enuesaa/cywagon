@@ -92,3 +92,118 @@ func TestMatchCondStr(t *testing.T) {
 		assert.Equal(t, tc.expect, actual)
 	}
 }
+
+func TestMatchCondStrMap(t *testing.T) {
+	engine := New()
+
+	cases := []struct{
+		expect bool
+		val map[string]string
+		eq map[string]string
+		in []map[string]string
+		nq map[string]string
+		notin []map[string]string
+	}{
+		{
+			expect: true,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			eq: map[string]string{
+				"a": "aaa",
+			},
+		},
+		{
+			expect: false,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			eq: map[string]string{
+				"b": "bbb",
+			},
+		},
+		{
+			expect: false,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			eq: map[string]string{
+				"a": "aaa",
+				"b": "bbb",
+			},
+		},
+		{
+			expect: true,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			in: []map[string]string{
+				{"a": "aaa"},
+				{"b": "bbb"},
+			},
+		},
+		{
+			expect: false,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			in: []map[string]string{
+				{"b": "bbb"},
+				{"c": "ccc"},
+			},
+		},
+		{
+			expect: true,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			nq: map[string]string{
+				"b": "bbb",
+			},
+		},
+		{
+			expect: true,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			nq: map[string]string{
+				"a": "aaa",
+				"b": "bbb",
+			},
+		},
+		{
+			expect: true,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			nq: map[string]string{
+				"b": "bbb",
+			},
+		},
+		{
+			expect: true,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			notin: []map[string]string{
+				{"b": "bbb"},
+				{"c": "ccc"},
+			},
+		},
+		{
+			expect: false,
+			val: map[string]string{
+				"a": "aaa",
+			},
+			notin: []map[string]string{
+				{"a": "aaa"},
+				{"b": "bbb"},
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		actual := engine.matchCondStrMap(tc.val, tc.eq, tc.in, tc.nq, tc.notin)
+		assert.Equal(t, tc.expect, actual)
+	}
+}

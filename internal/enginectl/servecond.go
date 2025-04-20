@@ -31,28 +31,17 @@ func (e *Engine) matchCondStrMap(val map[string]string, eq map[string]string, in
 		}
 		return true
 	}
-	isNq := func(target map[string]string) bool {
-		for nqk, nqv := range target {
-			valv, ok := val[nqk]
-			if !ok {
-				return true
-			}
-			if valv != nqv {
-				return true
-			}
-		}
-		return false
-	}
 
-	if len(nq) > 0 && isNq(nq) {
+	if len(nq) > 0 && !isEq(nq) {
 		return true
 	}
 	if len(notin) > 0 {
 		for _, nq := range notin {
-			if len(nq) > 0 && isNq(nq) {
-				return true
+			if len(nq) > 0 && isEq(nq) {
+				return false
 			}
 		}
+		return true
 	}
 	if eq != nil && isEq(eq) {
 		return true
