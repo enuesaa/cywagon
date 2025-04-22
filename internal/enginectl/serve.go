@@ -28,6 +28,17 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 			return err
 		}
 		distmap[site.Dist] = dist
+
+		for _, ifb := range site.Ifs {
+			if ifb.Respond != nil && ifb.Respond.Dist != nil {
+				distpath := *ifb.Respond.Dist
+				dist, err := e.LoadFS(workdir, distpath)
+				if err != nil {
+					return err
+				}
+				distmap[distpath] = dist
+			}
+		}
 	}
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
@@ -62,18 +73,39 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 				if ifb.Rewrite.Path != nil {
 					c.Path = *ifb.Rewrite.Path
 				}
-				return nil
 			}
-			for key, value := range ifb.Respond.Headers {
-				c.ResHeader(key, value)
+			if ifb.Respond != nil {
+				for key, value := range ifb.Respond.Headers {
+					c.ResHeader(key, value)
+				}
+				if ifb.Respond.Body != nil {
+					c.ResBody(c.Path, strings.NewReader(*ifb.Respond.Body))
+				}
+				if ifb.Respond.Dist != nil {
+					distpath := *ifb.Respond.Dist
+					dist := distmap[distpath]
+					path := strings.TrimPrefix(c.Path, "/")
+		
+					f, err := dist.Open(path)
+					if err != nil {
+						if ifb.Respond.Status != nil {
+							return c.Resolve(*ifb.Respond.Status)
+						}
+						return c.Resolve(404)
+					}
+					if err := c.ResBody(path, f); err != nil {
+						if ifb.Respond.Status != nil {
+							return c.Resolve(*ifb.Respond.Status)
+						}
+						return c.Resolve(404)
+					}
+				}
+				if ifb.Respond.Status != nil {
+					return c.Resolve(*ifb.Respond.Status)
+				}
+				return c.Resolve(200)
 			}
-			if ifb.Respond.Body != nil {
-				c.ResBody(c.Path, strings.NewReader(*ifb.Respond.Body))
-			}
-			if ifb.Respond.Status != nil {
-				return c.Resolve(*ifb.Respond.Status)
-			}
-			return c.Resolve(200)
+			return c.Resolve(500)
 		}
 		return nil
 	})

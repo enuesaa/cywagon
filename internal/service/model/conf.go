@@ -48,6 +48,7 @@ type Respond struct {
 	Status  *int              `hcl:"status,optional"`
 	Headers map[string]string `hcl:"headers,optional"`
 	Body    *string           `hcl:"body,optional"`
+	Dist    *string           `hcl:"dist,optional"`
 }
 
 type Rewrite struct {

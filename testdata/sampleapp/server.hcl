@@ -53,4 +53,15 @@ site "sampleapp" {
             status = 299
         }
     }
+
+    if {
+        path = "/storage/a.txt"
+
+        rewrite {
+            path = "/a.txt"
+        }
+        respond {
+            dist = "../storage"
+        }
+    }
 }
