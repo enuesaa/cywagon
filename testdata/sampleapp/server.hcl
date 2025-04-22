@@ -7,6 +7,19 @@ const {
     basicauth = "Basic dGVzdDp0ZXN0"
 }
 
+# logic "basicauth" {
+#     if {
+#         path = "/restrict/*"
+#         headers_not = {"Authorization": const.basicauth}
+#         respond {
+#             status = 401
+#             headers = {
+#                 "WWW-Authenticate": "Basic realm=\"Restricted\""
+#             }
+#         }
+#     }
+# }
+
 site "sampleapp" {
     host = "localhost:3000"
     dist = "./dist"
@@ -16,12 +29,19 @@ site "sampleapp" {
     }
 
     if {
-        path_not = "/{**/*.*,*.*}"
+        path = "/storage/*"
 
         rewrite {
-            path = "/index.html"
+            path = "/a.txt"
+        }
+        respond {
+            dist = "../storage"
         }
     }
+
+    # if {
+    #     logic = logic.basicauth
+    # }
 
     if {
         path = "/restrict/*"
@@ -36,7 +56,7 @@ site "sampleapp" {
     }
 
     if {
-        path = "/oldpage"
+        path = "/old/*"
 
         respond {
             status = 302
@@ -55,13 +75,10 @@ site "sampleapp" {
     }
 
     if {
-        path = "/storage/a.txt"
+        path_not = "/{**/*.*,*.*}"
 
         rewrite {
-            path = "/a.txt"
-        }
-        respond {
-            dist = "../storage"
+            path = "/index.html"
         }
     }
 }
