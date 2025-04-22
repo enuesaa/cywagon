@@ -20,7 +20,7 @@ type Parser struct{}
 func (p *Parser) Parse(body []byte, val any) error {
 	parser := hclparse.NewParser()
 
-	file, diags := parser.ParseHCL(body, "cywagon.hcl")
+	file, diags := parser.ParseHCL(body, "server.hcl")
 	if diags.HasErrors() {
 		return NewErrParseFailed(diags[0])
 	}
