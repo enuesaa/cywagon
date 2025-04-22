@@ -105,7 +105,6 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 				}
 				return c.Resolve(200)
 			}
-			return c.Resolve(500)
 		}
 		return nil
 	})

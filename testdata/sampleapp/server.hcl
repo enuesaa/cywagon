@@ -25,7 +25,7 @@ site "sampleapp" {
     dist = "./dist"
 
     headers = {
-        "Aaa": "aaa",
+        "Cache-Control": "no-cache",
     }
 
     if {

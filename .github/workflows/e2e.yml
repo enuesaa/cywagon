@@ -1,0 +1,23 @@
+name: e2e
+
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/env
+      - uses: gacts/install-hurl@v1
+
+      - run: go install
+
+      - run: cywagon -help
+
+      - run: nohup cywagon up testdata/sampleapp &
+      - run: hurl --test testdata/sampleapp
