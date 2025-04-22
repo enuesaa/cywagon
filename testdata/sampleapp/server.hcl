@@ -56,21 +56,13 @@ site "sampleapp" {
     }
 
     if {
-        path = "/old/*"
+        path = "/old"
 
         respond {
-            status = 302
+            status = 301
             headers = {
                 "Location": "/",
             }
-        }
-    }
-
-    if {
-        path_in = ["/aaa", "/aaa/*"]
-
-        respond {
-            status = 299
         }
     }
 
