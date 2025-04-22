@@ -4,6 +4,7 @@ import (
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/gohcl"
 	"github.com/hashicorp/hcl/v2/hclparse"
+	"github.com/zclconf/go-cty/cty"
 )
 
 func (p *Parser) MergeHCLFiles(files map[string][]byte) (hcl.Body, error) {
@@ -22,8 +23,21 @@ func (p *Parser) MergeHCLFiles(files map[string][]byte) (hcl.Body, error) {
 	return body, nil
 }
 
-func (p *Parser) Decode(body hcl.Body, vars *hcl.EvalContext, val any) error {
-	if diags := gohcl.DecodeBody(body, vars, val); diags.HasErrors() {
+func (p *Parser) UseVar(name string, val cty.Value) {
+	p.vars[name] = val
+}
+
+func (p *Parser) resetVars() {
+	p.vars = make(map[string]cty.Value)
+}
+
+func (p *Parser) Decode(body hcl.Body, val any) error {
+	defer p.resetVars()
+
+	tctx := &hcl.EvalContext{
+		Variables: p.vars,
+	}
+	if diags := gohcl.DecodeBody(body, tctx, val); diags.HasErrors() {
 		return NewErrParseFailed(diags[0])
 	}
 	return nil

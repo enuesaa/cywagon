@@ -1,14 +1,12 @@
 package service
 
 import (
-	"maps"
 	"strings"
 
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/libhcl"
 	"github.com/enuesaa/cywagon/internal/service/model"
 	"github.com/hashicorp/hcl/v2"
-	"github.com/zclconf/go-cty/cty"
 )
 
 func NewConfSrv() ConfSrvInterface {
@@ -28,7 +26,7 @@ type ConfSrv struct {
 	Hcl libhcl.Parser
 }
 
-func (c *ConfSrv) ListHCLFiles(workdir string) (map[string][]byte, error) {
+func (c *ConfSrv) ReadHCLFiles(workdir string) (hcl.Body, error) {
 	files := make(map[string][]byte, 0)
 	fpaths, err := c.Fs.ListFiles(workdir)
 	if err != nil {
@@ -44,41 +42,24 @@ func (c *ConfSrv) ListHCLFiles(workdir string) (map[string][]byte, error) {
 		}
 		files[fpath] = fbytes
 	}
-	return files, nil
+	return c.Hcl.MergeHCLFiles(files)
 }
 
 func (c *ConfSrv) Read(workdir string) (model.Config, error) {
 	var config model.Config
 
-	files, err := c.ListHCLFiles(workdir)
+	hclbody, err := c.ReadHCLFiles(workdir)
 	if err != nil {
 		return config, err
 	}
-	hclbody, err := c.Hcl.MergeHCLFiles(files)
-	if err != nil {
+	var partialconsts model.PartialConstsConfig
+
+	if err := c.Hcl.Decode(hclbody, &partialconsts); err != nil {
 		return config, err
 	}
+	c.Hcl.UseVar("const", partialconsts.FlattenConsts())
 
-	type PartialConstsConfig struct {
-		Consts []model.Const `hcl:"const,block"`
-		Remain hcl.Body      `hcl:",remain"`
-	}
-	var partialconsts PartialConstsConfig
-
-	if err := c.Hcl.Decode(hclbody, nil, &partialconsts); err != nil {
-		return config, err
-	}
-	constsmap := make(map[string]cty.Value)
-	for _, co := range partialconsts.Consts {
-		maps.Copy(constsmap, co.Attrs)
-	}
-
-	vars := &hcl.EvalContext{
-		Variables: map[string]cty.Value{
-			"const": cty.ObjectVal(constsmap),
-		},
-	}
-	if err := c.Hcl.Decode(hclbody, vars, &config); err != nil {
+	if err := c.Hcl.Decode(hclbody, &config); err != nil {
 		return config, err
 	}
 	return config, nil
