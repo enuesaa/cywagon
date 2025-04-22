@@ -13,9 +13,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/env
+
+      # for sampleapp
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '9'
+      # hurl
       - uses: gacts/install-hurl@v1
 
       - run: go install
+
+      - run: pnpm install
+        working-directory: ./testdata/sampleapp
+      - run: pnpm build
+        working-directory: ./testdata/sampleapp
 
       - run: cywagon -help
 
