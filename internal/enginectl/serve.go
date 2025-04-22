@@ -16,16 +16,18 @@ type Site struct {
 func (e *Engine) Serve(config model.Config, workdir string) error {
 	e.Server.Port = config.Server.Port
 
-	sitemap := make(map[string]Site, 0)
+	sitemap := make(map[string]model.Site, 0)
+	for _, site := range config.Sites {
+		sitemap[site.Host] = site
+	}
+
+	distmap := make(map[string]fs.FS)
 	for _, site := range config.Sites {
 		dist, err := e.LoadFS(workdir, site.Dist)
 		if err != nil {
 			return err
 		}
-		sitemap[site.Host] = Site{
-			Dist: dist,
-			Config: site,
-		}
+		distmap[site.Dist] = dist
 	}
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
@@ -37,7 +39,7 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
-		for name, value := range site.Config.Headers {
+		for name, value := range site.Headers {
 			c.ResHeader(name, value)
 		}
 		return nil
@@ -45,7 +47,7 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
-		for _, ifb := range site.Config.Ifs {
+		for _, ifb := range site.Ifs {
 			if e.shouldCheckCondStr(ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
 				if !e.matchCondPath(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
 					continue
@@ -78,9 +80,10 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
+		dist := distmap[site.Dist]
 		path := strings.TrimPrefix(c.Path, "/")
 
-		f, err := site.Dist.Open(path)
+		f, err := dist.Open(path)
 		if err != nil {
 			return c.Resolve(404)
 		}
