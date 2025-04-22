@@ -22,8 +22,8 @@ func (p *Parser) MergeHCLFiles(files map[string][]byte) (hcl.Body, error) {
 	return body, nil
 }
 
-func (p *Parser) Decode(body hcl.Body, val any) error {
-	if diags := gohcl.DecodeBody(body, nil, val); diags.HasErrors() {
+func (p *Parser) Decode(body hcl.Body, vars *hcl.EvalContext, val any) error {
+	if diags := gohcl.DecodeBody(body, vars, val); diags.HasErrors() {
 		return NewErrParseFailed(diags[0])
 	}
 	return nil
