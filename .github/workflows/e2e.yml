@@ -33,5 +33,5 @@ jobs:
 
       - run: cywagon -help
 
-      - run: nohup cywagon up testdata/sampleapp &
-      - run: hurl --test testdata/sampleapp
+      - run: nohup cywagon up ./testdata/sampleapp/server &
+      - run: hurl --test ./testdata/sampleapp/e2e

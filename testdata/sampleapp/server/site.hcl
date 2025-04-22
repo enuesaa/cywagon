@@ -1,28 +1,6 @@
-server {
-    port = 3000
-}
-
-const {
-    // test:test
-    basicauth = "Basic dGVzdDp0ZXN0"
-}
-
-# logic "basicauth" {
-#     if {
-#         path = "/restrict/*"
-#         headers_not = {"Authorization": const.basicauth}
-#         respond {
-#             status = 401
-#             headers = {
-#                 "WWW-Authenticate": "Basic realm=\"Restricted\""
-#             }
-#         }
-#     }
-# }
-
 site "sampleapp" {
     host = "localhost:3000"
-    dist = "./dist"
+    dist = "../dist"
 
     headers = {
         "Cache-Control": "no-cache",
@@ -33,15 +11,12 @@ site "sampleapp" {
 
         rewrite {
             path = "/a.txt"
+            // base 
         }
         respond {
-            dist = "../storage"
+            dist = "../../storage"
         }
     }
-
-    # if {
-    #     logic = logic.basicauth
-    # }
 
     if {
         path = "/restrict/*"

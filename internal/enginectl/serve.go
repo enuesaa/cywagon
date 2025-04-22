@@ -13,19 +13,20 @@ type Site struct {
 	Config model.Site
 }
 
-func (e *Engine) Serve(config model.Config, workdir string) error {
-	e.Server.Port = config.Server.Port
-
+func (e *Engine) loadSites(config model.Config) map[string]model.Site {
 	sitemap := make(map[string]model.Site, 0)
 	for _, site := range config.Sites {
 		sitemap[site.Host] = site
 	}
+	return sitemap
+}
 
+func (e *Engine) loadDists(config model.Config, workdir string) (map[string]fs.FS, error) {
 	distmap := make(map[string]fs.FS)
 	for _, site := range config.Sites {
 		dist, err := e.LoadFS(workdir, site.Dist)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		distmap[site.Dist] = dist
 
@@ -34,11 +35,22 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 				distpath := *ifb.Respond.Dist
 				dist, err := e.LoadFS(workdir, distpath)
 				if err != nil {
-					return err
+					return nil, err
 				}
 				distmap[distpath] = dist
 			}
 		}
+	}
+	return distmap, nil
+}
+
+func (e *Engine) Serve(config model.Config, workdir string) error {
+	e.Server.Port = config.Server.Port
+
+	sitemap := e.loadSites(config)
+	distmap, err := e.loadDists(config, workdir)
+	if err != nil {
+		return err
 	}
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
