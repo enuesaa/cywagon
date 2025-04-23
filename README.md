@@ -1,4 +1,5 @@
 # cywagon
+A conditionally configurable web server. Toy app.
 
 ### Commands
 ```console
@@ -10,28 +11,61 @@ $ cywagon up -help
 ```
 
 ### Features
-- ウェブサーバ
-  - リバースプロキシ
-  - 静的コンテンツも配信できればベストだが一旦スコープアウト
-- logging
-- 設定ファイルを lua で記述する
-- lua で handler を書くことができ、リクエストパスやステータスコードを override できる
+- 静的コンテンツを配信するWebサーバ
+- 設定ファイルを HCL で記述する
 
-```lua
-host = "example.com"
+```hcl
+site "sampleapp" {
+    host = "localhost:3000"
+    dist = "../dist"
 
-origin.host = "https://example.com"
+    headers = {
+        "Cache-Control": "no-cache",
+    }
 
-function handler(next, req)
-    if (req.path == "/favicon.ico") then
-        req.path = "/aaa"
-    end
+    if {
+        path = "/storage/*"
 
-    res = next(req)
-    res.status = 200
+        rewrite {
+            path = "/a.txt"
+            // base 
+        }
+        respond {
+            dist = "../../storage"
+        }
+    }
 
-    return res
-end
+    if {
+        path = "/restrict/*"
+        headers_not = {"Authorization": const.basicauth}
+
+        respond {
+            status = 401
+            headers = {
+                "WWW-Authenticate": "Basic realm=\"Restricted\""
+            }
+        }
+    }
+
+    if {
+        path = "/old"
+
+        respond {
+            status = 301
+            headers = {
+                "Location": "/",
+            }
+        }
+    }
+
+    if {
+        path_not = "/{**/*.*,*.*}"
+
+        rewrite {
+            path = "/index.html"
+        }
+    }
+}
 ```
 
 ### Future plan
