@@ -23,8 +23,8 @@ func New() *Engine {
 		ConfSrv:   service.NewConfSrv(),
 		Sock:      libsock.New(),
 
-		sitemap: make(map[string]model.Site),
-		distmap: make(map[string]fs.FS),
+		sitemap:  make(map[string]model.Site),
+		distmap:  make(map[string]fs.FS),
 		logicmap: make(map[string]model.Logic),
 	}
 	return &engine
@@ -37,7 +37,7 @@ type Engine struct {
 	ConfSrv service.ConfSrvInterface
 	Sock    libsock.Sock
 
-	sitemap map[string]model.Site
-	distmap map[string]fs.FS
+	sitemap  map[string]model.Site
+	distmap  map[string]fs.FS
 	logicmap map[string]model.Logic
 }

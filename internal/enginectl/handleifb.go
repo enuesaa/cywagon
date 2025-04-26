@@ -46,15 +46,7 @@ func (e *Engine) handleIfBlocks(c *libserve.Context, ifs []model.If) *libserve.R
 			}
 			if ifb.Respond.Dist != nil {
 				dist := e.distmap[*ifb.Respond.Dist]
-				path := strings.TrimPrefix(c.Path, "/")
-
-				f, err := dist.Open(path)
-				if err != nil {
-					return c.Resolve(404)
-				}
-				if err := c.ResBody(path, f); err != nil {
-					return c.Resolve(404)
-				}
+				return e.handleDist(c, dist)
 			}
 			return c.Resolve(200)
 		}

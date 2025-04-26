@@ -1,8 +1,6 @@
 package enginectl
 
 import (
-	"strings"
-
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
@@ -39,16 +37,7 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := e.sitemap[c.Host]
 		dist := e.distmap[site.Dist]
-		path := strings.TrimPrefix(c.Path, "/")
-
-		f, err := dist.Open(path)
-		if err != nil {
-			return c.Resolve(404)
-		}
-		if err := c.ResBody(path, f); err != nil {
-			return c.Resolve(404)
-		}
-		return c.Resolve(200)
+		return e.handleDist(c, dist)
 	})
 
 	return e.Server.Serve()
