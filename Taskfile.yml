@@ -1,0 +1,16 @@
+version: '3'
+
+tasks:
+  e2e:
+    desc: Run e2e tests
+    deps:
+      - e2e:serve
+      - e2e:test
+
+  e2e:serve:
+    cmd: go run . up ./testdata/sampleapp/server
+
+  e2e:test:
+    cmds:
+      - sleep 1
+      - hurl --test ./testdata/sampleapp/e2e

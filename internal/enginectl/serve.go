@@ -97,8 +97,7 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 					c.ResStatusPrefer(*ifb.Respond.Status)
 				}
 				if ifb.Respond.Dist != nil {
-					distpath := *ifb.Respond.Dist
-					dist := distmap[distpath]
+					dist := distmap[*ifb.Respond.Dist]
 					path := strings.TrimPrefix(c.Path, "/")
 		
 					f, err := dist.Open(path)
