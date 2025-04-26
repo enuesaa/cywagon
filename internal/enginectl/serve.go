@@ -93,6 +93,9 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 				if ifb.Respond.Body != nil {
 					c.ResBody(c.Path, strings.NewReader(*ifb.Respond.Body))
 				}
+				if ifb.Respond.Status != nil {
+					c.ResStatusPrefer(*ifb.Respond.Status)
+				}
 				if ifb.Respond.Dist != nil {
 					distpath := *ifb.Respond.Dist
 					dist := distmap[distpath]
@@ -100,20 +103,11 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 		
 					f, err := dist.Open(path)
 					if err != nil {
-						if ifb.Respond.Status != nil {
-							return c.Resolve(*ifb.Respond.Status)
-						}
 						return c.Resolve(404)
 					}
 					if err := c.ResBody(path, f); err != nil {
-						if ifb.Respond.Status != nil {
-							return c.Resolve(*ifb.Respond.Status)
-						}
 						return c.Resolve(404)
 					}
-				}
-				if ifb.Respond.Status != nil {
-					return c.Resolve(*ifb.Respond.Status)
 				}
 				return c.Resolve(200)
 			}

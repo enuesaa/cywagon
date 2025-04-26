@@ -33,6 +33,7 @@ type Context struct {
 	Headers map[string]string
 	res Response
 	req *http.Request
+	statusPrefer int
 }
 
 func (c *Context) ResHeader(name string, value string) {
@@ -55,8 +56,16 @@ func (c *Context) ResBody(path string, body io.Reader) error {
 	return nil
 }
 
+func (c *Context) ResStatusPrefer(status int) {
+	c.statusPrefer = status
+}
+
 func (c *Context) Resolve(status int) *Response {
-	c.res.status = status
+	if c.statusPrefer > 0 {
+		c.res.status = c.statusPrefer
+	} else {
+		c.res.status = status
+	}
 
 	return &c.res
 }

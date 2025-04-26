@@ -26,7 +26,7 @@ type ConfSrv struct {
 	Hcl libhcl.Parser
 }
 
-func (c *ConfSrv) ReadHCLFiles(workdir string) (hcl.Body, error) {
+func (c *ConfSrv) readHCLFiles(workdir string) (hcl.Body, error) {
 	files := make(map[string][]byte, 0)
 	fpaths, err := c.Fs.ListFiles(workdir)
 	if err != nil {
@@ -48,7 +48,7 @@ func (c *ConfSrv) ReadHCLFiles(workdir string) (hcl.Body, error) {
 func (c *ConfSrv) Read(workdir string) (model.Config, error) {
 	var config model.Config
 
-	hclbody, err := c.ReadHCLFiles(workdir)
+	hclbody, err := c.readHCLFiles(workdir)
 	if err != nil {
 		return config, err
 	}
