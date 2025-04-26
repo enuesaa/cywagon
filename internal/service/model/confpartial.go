@@ -22,3 +22,21 @@ func (p *PartialConstsConfig) FlattenConsts() cty.Value {
 	}
 	return cty.ObjectVal(merged)
 }
+
+type LogicNameOnly struct {
+	Name string `hcl:"name,label"`
+	Remain hcl.Body `hcl:",remain"`
+}
+
+type PartialLogicNameOnlyConfig struct {
+	Logics []LogicNameOnly `hcl:"logic,block"`
+	Remain hcl.Body        `hcl:",remain"`
+}
+
+func (p *PartialLogicNameOnlyConfig) FlattenLogicNames() cty.Value {
+	merged := make(map[string]cty.Value)
+	for _, co := range p.Logics {
+		merged[co.Name] = cty.StringVal(co.Name)
+	}
+	return cty.ObjectVal(merged)
+}

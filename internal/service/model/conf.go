@@ -6,6 +6,7 @@ type Config struct {
 	Server Server  `hcl:"server,block"`
 	Sites  []Site  `hcl:"site,block"`
 	Consts []Const `hcl:"const,block"`
+	Logics []Logic `hcl:"logic,block"`
 }
 
 type Server struct {
@@ -25,6 +26,8 @@ type Site struct {
 }
 
 type If struct {
+	Logic     *string  `hcl:"logic,optional"`
+
 	Path      *string  `hcl:"path,optional"`
 	PathIn    []string `hcl:"path_in,optional"`
 	PathNot   *string  `hcl:"path_not,optional"`
@@ -53,4 +56,9 @@ type Respond struct {
 
 type Rewrite struct {
 	Path *string `hcl:"path,optional"`
+}
+
+type Logic struct {
+	Name string `hcl:"name,label"`
+	Ifs  []If   `hcl:"if,block"`
 }

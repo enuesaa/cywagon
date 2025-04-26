@@ -27,13 +27,7 @@ func (p *Parser) UseVar(name string, val cty.Value) {
 	p.vars[name] = val
 }
 
-func (p *Parser) resetVars() {
-	p.vars = make(map[string]cty.Value)
-}
-
 func (p *Parser) Decode(body hcl.Body, val any) error {
-	defer p.resetVars()
-
 	tctx := &hcl.EvalContext{
 		Variables: p.vars,
 	}

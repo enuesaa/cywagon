@@ -52,12 +52,18 @@ func (c *ConfSrv) Read(workdir string) (model.Config, error) {
 	if err != nil {
 		return config, err
 	}
-	var partialconsts model.PartialConstsConfig
 
-	if err := c.Hcl.Decode(hclbody, &partialconsts); err != nil {
+	var partialConsts model.PartialConstsConfig
+	if err := c.Hcl.Decode(hclbody, &partialConsts); err != nil {
 		return config, err
 	}
-	c.Hcl.UseVar("const", partialconsts.FlattenConsts())
+	c.Hcl.UseVar("const", partialConsts.FlattenConsts())
+
+	var partialLogicNameOnly model.PartialLogicNameOnlyConfig
+	if err := c.Hcl.Decode(hclbody, &partialLogicNameOnly); err != nil {
+		return config, err
+	}
+	c.Hcl.UseVar("logic", partialLogicNameOnly.FlattenLogicNames())
 
 	if err := c.Hcl.Decode(hclbody, &config); err != nil {
 		return config, err

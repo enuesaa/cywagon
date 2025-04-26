@@ -3,7 +3,9 @@ package libhcl
 import "github.com/zclconf/go-cty/cty"
 
 func New() Parser {
-	return Parser{}
+	return Parser{
+		vars: make(map[string]cty.Value),
+	}
 }
 
 // see https://github.com/hashicorp/hcl/issues/496
