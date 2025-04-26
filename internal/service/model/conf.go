@@ -26,7 +26,7 @@ type Site struct {
 }
 
 type If struct {
-	Logic     *string  `hcl:"logic,optional"`
+	Logic *string `hcl:"logic,optional"`
 
 	Path      *string  `hcl:"path,optional"`
 	PathIn    []string `hcl:"path_in,optional"`

@@ -33,10 +33,6 @@ site "sampleapp" {
     }
 
     if {
-        path_not = "/{**/*.*,*.*}"
-
-        rewrite {
-            path = "/index.html"
-        }
+        logic = logic.index
     }
 }

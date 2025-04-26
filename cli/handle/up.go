@@ -5,7 +5,6 @@ func (h *Handler) Up(workdir string) error {
 	if err != nil {
 		return err
 	}
-	h.Log.Pprint(config)
 	if err := h.Engine.Serve(config, workdir); err != nil {
 		return err
 	}

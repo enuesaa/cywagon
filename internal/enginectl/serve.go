@@ -44,7 +44,7 @@ func (e *Engine) loadDists(config model.Config, workdir string) (map[string]fs.F
 	return distmap, nil
 }
 
-func (e *Engine) loadLogics(config model.Config) (map[string]model.Logic) {
+func (e *Engine) loadLogics(config model.Config) map[string]model.Logic {
 	logicmap := make(map[string]model.Logic)
 	for _, logic := range config.Logics {
 		logicmap[logic.Name] = logic

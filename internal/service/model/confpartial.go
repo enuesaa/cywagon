@@ -24,7 +24,7 @@ func (p *PartialConstsConfig) FlattenConsts() cty.Value {
 }
 
 type LogicNameOnly struct {
-	Name string `hcl:"name,label"`
+	Name   string   `hcl:"name,label"`
 	Remain hcl.Body `hcl:",remain"`
 }
 
