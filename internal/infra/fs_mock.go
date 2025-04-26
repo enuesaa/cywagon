@@ -39,6 +39,20 @@ func (m *MockFsInterface) EXPECT() *MockFsInterfaceMockRecorder {
 	return m.recorder
 }
 
+// Create mocks base method.
+func (m *MockFsInterface) Create(path string, body []byte) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", path, body)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockFsInterfaceMockRecorder) Create(path, body any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFsInterface)(nil).Create), path, body)
+}
+
 // IsExist mocks base method.
 func (m *MockFsInterface) IsExist(path string) bool {
 	m.ctrl.T.Helper()

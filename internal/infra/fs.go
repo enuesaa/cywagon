@@ -13,6 +13,7 @@ type FsInterface interface {
 	IsExist(path string) bool
 	IsFile(path string) bool
 	Read(path string) ([]byte, error)
+	Create(path string, body []byte) error
 	ListFiles(path string) ([]string, error)
 }
 type Fs struct{}
@@ -39,6 +40,18 @@ func (i *Fs) Read(path string) ([]byte, error) {
 	}
 	defer f.Close()
 	return io.ReadAll(f)
+}
+
+func (i *Fs) Create(path string, body []byte) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	if _, err := file.Write(body); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (i *Fs) ListFiles(path string) ([]string, error) {

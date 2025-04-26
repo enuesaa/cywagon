@@ -19,6 +19,7 @@ func Run() int {
 	subcommands.Register(command.NewUpCommand(), "")
 	subcommands.Register(command.NewCheckCommand(), "")
 	// subcommands.Register(command.NewReloadCommand(), "")
+	subcommands.Register(command.NewFmtCommand(), "")
 
 	// parse
 	flag.Parse()
