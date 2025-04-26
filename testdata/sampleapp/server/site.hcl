@@ -18,15 +18,7 @@ site "sampleapp" {
     }
 
     if {
-        path = "/restrict/*"
-        headers_not = {"Authorization": const.basicauth}
-
-        respond {
-            status = 401
-            headers = {
-                "WWW-Authenticate": "Basic realm=\"Restricted\""
-            }
-        }
+        logic = logic.basicauth
     }
 
     if {

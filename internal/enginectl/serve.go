@@ -44,6 +44,14 @@ func (e *Engine) loadDists(config model.Config, workdir string) (map[string]fs.F
 	return distmap, nil
 }
 
+func (e *Engine) loadLogics(config model.Config) (map[string]model.Logic) {
+	logicmap := make(map[string]model.Logic)
+	for _, logic := range config.Logics {
+		logicmap[logic.Name] = logic
+	}
+	return logicmap
+}
+
 func (e *Engine) Serve(config model.Config, workdir string) error {
 	e.Server.Port = config.Server.Port
 
@@ -52,6 +60,7 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 	if err != nil {
 		return err
 	}
+	logicmap := e.loadLogics(config)
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		if _, ok := sitemap[c.Host]; !ok {
@@ -70,48 +79,7 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := sitemap[c.Host]
-		for _, ifb := range site.Ifs {
-			if e.shouldCheckCondStr(ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
-				if !e.matchCondPath(c.Path, ifb.Path, ifb.PathIn, ifb.PathNot, ifb.PathNotIn) {
-					continue
-				}
-			}
-			if e.shouldCheckCondStrMap(ifb.Headers, ifb.HeadersIn, ifb.HeadersNot, ifb.HeadersNotIn) {
-				if !e.matchCondStrMap(c.Headers, ifb.Headers, ifb.HeadersIn, ifb.HeadersNot, ifb.HeadersNotIn) {
-					continue
-				}
-			}
-			if ifb.Rewrite != nil {
-				if ifb.Rewrite.Path != nil {
-					c.Path = e.calcRewritePath(c.Path, *ifb.Rewrite.Path)
-				}
-			}
-			if ifb.Respond != nil {
-				for key, value := range ifb.Respond.Headers {
-					c.ResHeader(key, value)
-				}
-				if ifb.Respond.Body != nil {
-					c.ResBody(c.Path, strings.NewReader(*ifb.Respond.Body))
-				}
-				if ifb.Respond.Status != nil {
-					c.ResStatusPrefer(*ifb.Respond.Status)
-				}
-				if ifb.Respond.Dist != nil {
-					dist := distmap[*ifb.Respond.Dist]
-					path := strings.TrimPrefix(c.Path, "/")
-
-					f, err := dist.Open(path)
-					if err != nil {
-						return c.Resolve(404)
-					}
-					if err := c.ResBody(path, f); err != nil {
-						return c.Resolve(404)
-					}
-				}
-				return c.Resolve(200)
-			}
-		}
-		return nil
+		return e.handleIfBlocks(c, site.Ifs, distmap, logicmap)
 	})
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
