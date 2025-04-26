@@ -24,6 +24,7 @@ func NewContext(req *http.Request) Context {
 			body:    nil,
 		},
 		req: req,
+		statusPrefer: 0,
 	}
 }
 
@@ -41,8 +42,7 @@ func (c *Context) ResHeader(name string, value string) {
 }
 
 func (c *Context) ResBody(path string, body io.Reader) error {
-	ext := filepath.Ext(path)
-	contentType := mime.TypeByExtension(ext)
+	contentType := c.CalcContentType(path)
 	if contentType != "" {
 		c.res.headers["Content-Type"] = contentType
 	}
@@ -56,6 +56,11 @@ func (c *Context) ResBody(path string, body io.Reader) error {
 	return nil
 }
 
+func (c *Context) CalcContentType(path string) string {
+	ext := filepath.Ext(path)
+	return mime.TypeByExtension(ext)
+}
+
 func (c *Context) ResStatusPrefer(status int) {
 	c.statusPrefer = status
 }
@@ -66,6 +71,5 @@ func (c *Context) Resolve(status int) *Response {
 	} else {
 		c.res.status = status
 	}
-
 	return &c.res
 }
