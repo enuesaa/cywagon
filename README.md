@@ -1,6 +1,8 @@
 # cywagon
 A conditionally configurable web server. Toy app.
 
+[![ci](https://github.com/enuesaa/cywagon/actions/workflows/ci.yml/badge.svg)](https://github.com/enuesaa/cywagon/actions/workflows/ci.yml)
+
 ### Commands
 ```console
 $ cywagon check -help
@@ -16,55 +18,27 @@ $ cywagon up -help
 
 ```hcl
 site "sampleapp" {
-    host = "localhost:3000"
-    dist = "../dist"
+  host = "localhost:3000"
+  dist = "../dist"
 
-    headers = {
-        "Cache-Control": "no-cache",
+  if {
+    path = "/old"
+
+    respond {
+      status = 301
+      headers = {
+        "Location" : "/",
+      }
     }
+  }
 
-    if {
-        path = "/storage/*"
+  if {
+    path_not_in = ["/**/*.*", "/*.*"]
 
-        rewrite {
-            path = "/a.txt"
-            // base 
-        }
-        respond {
-            dist = "../../storage"
-        }
+    rewrite {
+      path = "/index.html"
     }
-
-    if {
-        path = "/restrict/*"
-        headers_not = {"Authorization": const.basicauth}
-
-        respond {
-            status = 401
-            headers = {
-                "WWW-Authenticate": "Basic realm=\"Restricted\""
-            }
-        }
-    }
-
-    if {
-        path = "/old"
-
-        respond {
-            status = 301
-            headers = {
-                "Location": "/",
-            }
-        }
-    }
-
-    if {
-        path_not = "/{**/*.*,*.*}"
-
-        rewrite {
-            path = "/index.html"
-        }
-    }
+  }
 }
 ```
 
@@ -79,9 +53,3 @@ site "sampleapp" {
   - ただし apache みたいに即座に反映されるのではなく、明示的に reload する
     - インメモリで格納しているため。
     - こちらの方が「配置~デプロイ」まで時間的猶予が生まれ、安全であるため。
-- ビルド成果物に .cywagon.lua が含まれていれば、それを尊重する
-
-```console
-$ cywagon reload <sitename>
-$ cywagon check <sitename>
-```
