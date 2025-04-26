@@ -1,21 +1,20 @@
 package enginectl
 
 import (
-	"io/fs"
 	"strings"
 
 	"github.com/enuesaa/cywagon/internal/libserve"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func (e *Engine) handleIfBlocks(c *libserve.Context, ifs []model.If, distmap map[string]fs.FS, logicmap map[string]model.Logic) *libserve.Response {
+func (e *Engine) handleIfBlocks(c *libserve.Context, ifs []model.If) *libserve.Response {
 	for _, ifb := range ifs {
 		if ifb.Logic != nil {
-			logic, ok := logicmap[*ifb.Logic]
+			logic, ok := e.logicmap[*ifb.Logic]
 			if !ok {
 				continue
 			}
-			if res := e.handleIfBlocks(c, logic.Ifs, distmap, logicmap); res != nil {
+			if res := e.handleIfBlocks(c, logic.Ifs); res != nil {
 				return res
 			}
 		}
@@ -46,7 +45,7 @@ func (e *Engine) handleIfBlocks(c *libserve.Context, ifs []model.If, distmap map
 				c.ResStatusPrefer(*ifb.Respond.Status)
 			}
 			if ifb.Respond.Dist != nil {
-				dist := distmap[*ifb.Respond.Dist]
+				dist := e.distmap[*ifb.Respond.Dist]
 				path := strings.TrimPrefix(c.Path, "/")
 
 				f, err := dist.Open(path)
