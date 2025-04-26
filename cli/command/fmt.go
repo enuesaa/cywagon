@@ -27,7 +27,7 @@ func (c *FmtCommand) Name() string {
 }
 
 func (c *FmtCommand) Synopsis() string {
-	return "Fmt"
+	return "[Experimental] Fmt"
 }
 
 func (c *FmtCommand) Usage() string {
@@ -43,7 +43,7 @@ func (c *FmtCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) sub
 	}
 	path := f.Arg(0)
 
-	if err := c.handler.Check(path); err != nil {
+	if err := c.handler.Format(path); err != nil {
 		c.Log.Error(err)
 		return subcommands.ExitFailure
 	}

@@ -1,9 +1,9 @@
 logic "index" {
-    if {
-        path_not_in = ["/**/*.*", "/*.*"]
+  if {
+    path_not_in = ["/**/*.*", "/*.*"]
 
-        rewrite {
-            path = "/index.html"
-        }
+    rewrite {
+      path = "/index.html"
     }
+  }
 }

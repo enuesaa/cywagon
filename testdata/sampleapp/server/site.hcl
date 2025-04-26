@@ -1,38 +1,38 @@
 site "sampleapp" {
-    host = "localhost:3000"
-    dist = "../dist"
+  host = "localhost:3000"
+  dist = "../dist"
 
-    headers = {
-        "Cache-Control": "no-cache",
+  headers = {
+    "Cache-Control" : "no-cache",
+  }
+
+  if {
+    path = "/storage/*"
+
+    rewrite {
+      path = "/{dir2:}" # Example: "/{dir2}", "/{:dir2}", "/{last}", "{path}"
     }
-
-    if {
-        path = "/storage/*"
-
-        rewrite {
-            path = "/{dir2:}" # Example: "/{dir2}", "/{:dir2}", "/{last}", "{path}"
-        }
-        respond {
-            dist = "../../storage"
-        }
+    respond {
+      dist = "../../storage"
     }
+  }
 
-    if {
-        logic = logic.basicauth
+  if {
+    logic = logic.basicauth
+  }
+
+  if {
+    path = "/old"
+
+    respond {
+      status = 301
+      headers = {
+        "Location" : "/",
+      }
     }
+  }
 
-    if {
-        path = "/old"
-
-        respond {
-            status = 301
-            headers = {
-                "Location": "/",
-            }
-        }
-    }
-
-    if {
-        logic = logic.index
-    }
+  if {
+    logic = logic.index
+  }
 }
