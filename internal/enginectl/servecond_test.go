@@ -13,81 +13,81 @@ func TestMatchCondStr(t *testing.T) {
 		return &val
 	}
 
-	cases := []struct{
+	cases := []struct {
 		expect bool
-		val string
-		eq *string
-		in []string
-		nq *string
-		notin []string
+		val    string
+		eq     *string
+		in     []string
+		nq     *string
+		notin  []string
 	}{
 		{
 			expect: true,
-			val: "a",
-			eq: str("a"),
-			in: []string{},
-			nq: nil,
-			notin: []string{},
+			val:    "a",
+			eq:     str("a"),
+			in:     []string{},
+			nq:     nil,
+			notin:  []string{},
 		},
 		{
 			expect: false,
-			val: "a",
-			eq: str("b"),
-			in: []string{},
-			nq: nil,
-			notin: []string{},
+			val:    "a",
+			eq:     str("b"),
+			in:     []string{},
+			nq:     nil,
+			notin:  []string{},
 		},
 		{
 			expect: true,
-			val: "a",
-			eq: nil,
-			in: []string{"a", "b"},
-			nq: nil,
-			notin: []string{},
+			val:    "a",
+			eq:     nil,
+			in:     []string{"a", "b"},
+			nq:     nil,
+			notin:  []string{},
 		},
 		{
 			expect: true,
-			val: "a",
-			eq: nil,
-			in: []string{"a", "b"},
-			nq: nil,
-			notin: []string{},
+			val:    "a",
+			eq:     nil,
+			in:     []string{"a", "b"},
+			nq:     nil,
+			notin:  []string{},
 		},
 		{
 			expect: true,
-			val: "a",
-			eq: nil,
-			in: []string{},
-			nq: str("b"),
-			notin: []string{},
+			val:    "a",
+			eq:     nil,
+			in:     []string{},
+			nq:     str("b"),
+			notin:  []string{},
 		},
 		{
 			expect: false,
-			val: "a",
-			eq: nil,
-			in: []string{},
-			nq: str("a"),
-			notin: []string{},
+			val:    "a",
+			eq:     nil,
+			in:     []string{},
+			nq:     str("a"),
+			notin:  []string{},
 		},
 		{
 			expect: true,
-			val: "a",
-			eq: nil,
-			in: []string{},
-			nq: nil,
-			notin: []string{"b", "c"},
+			val:    "a",
+			eq:     nil,
+			in:     []string{},
+			nq:     nil,
+			notin:  []string{"b", "c"},
 		},
 		{
 			expect: false,
-			val: "a",
-			eq: nil,
-			in: []string{},
-			nq: nil,
-			notin: []string{"a", "b"},
+			val:    "a",
+			eq:     nil,
+			in:     []string{},
+			nq:     nil,
+			notin:  []string{"a", "b"},
 		},
 		{
 			expect: false,
-			val: "a",
+			val:    "a",
 		},
 	}
 
@@ -100,13 +100,13 @@ func TestMatchCondStr(t *testing.T) {
 func TestMatchCondStrMap(t *testing.T) {
 	engine := New()
 
-	cases := []struct{
+	cases := []struct {
 		expect bool
-		val map[string]string
-		eq map[string]string
-		in []map[string]string
-		nq map[string]string
-		notin []map[string]string
+		val    map[string]string
+		eq     map[string]string
+		in     []map[string]string
+		nq     map[string]string
+		notin  []map[string]string
 	}{
 		{
 			expect: true,

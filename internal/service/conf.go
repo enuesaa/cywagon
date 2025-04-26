@@ -12,7 +12,7 @@ import (
 func NewConfSrv() ConfSrvInterface {
 	return &ConfSrv{
 		Container: infra.Default,
-		Hcl: libhcl.New(),
+		Hcl:       libhcl.New(),
 	}
 }
 

@@ -4,8 +4,8 @@ import "net/http"
 
 type Response struct {
 	headers map[string]string
-	status int
-	body []byte
+	status  int
+	body    []byte
 }
 
 func (r *Response) flush(w http.ResponseWriter) error {

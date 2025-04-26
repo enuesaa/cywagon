@@ -9,15 +9,15 @@ import (
 func NewErrParseFailed(err *hcl.Diagnostic) *ErrParseFailed {
 	return &ErrParseFailed{
 		filename: err.Subject.Filename,
-		line: err.Subject.Start.Line,
-		message: err.Detail,
+		line:     err.Subject.Start.Line,
+		message:  err.Detail,
 	}
 }
 
 type ErrParseFailed struct {
 	filename string
 	line     int
-	message   string
+	message  string
 }
 
 func (e *ErrParseFailed) Error() string {

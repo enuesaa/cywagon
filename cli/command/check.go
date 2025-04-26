@@ -59,4 +59,3 @@ func (c *CheckCommand) ValidateArgs(args []string) error {
 	}
 	return nil
 }
-

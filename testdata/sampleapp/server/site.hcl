@@ -10,8 +10,8 @@ site "sampleapp" {
         path = "/storage/*"
 
         rewrite {
-            path = "/a.txt"
-            // base 
+            from_path_pattern = "/storage(/*)"
+            path = "%1/index.html"
         }
         respond {
             dist = "../../storage"

@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 )
 
-
 func NewContext(req *http.Request) Context {
 	headers := make(map[string]string)
 	for key, value := range req.Header {
@@ -15,25 +14,25 @@ func NewContext(req *http.Request) Context {
 	}
 
 	return Context{
-		Host: req.Host,
-		Path: req.URL.Path,
+		Host:    req.Host,
+		Path:    req.URL.Path,
 		Headers: headers,
 		res: Response{
 			headers: make(map[string]string),
 			status:  0,
 			body:    nil,
 		},
-		req: req,
+		req:          req,
 		statusPrefer: 0,
 	}
 }
 
 type Context struct {
-	Host string
-	Path string
-	Headers map[string]string
-	res Response
-	req *http.Request
+	Host         string
+	Path         string
+	Headers      map[string]string
+	res          Response
+	req          *http.Request
 	statusPrefer int
 }
 

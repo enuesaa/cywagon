@@ -9,7 +9,7 @@ func (e *Engine) matchCondPath(val string, eq *string, in []string, nq *string, 
 			return false
 		}
 		return g.Match(v)
-	}	
+	}
 
 	if nq != nil && !isEq(*nq, val) {
 		return true

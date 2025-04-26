@@ -25,9 +25,9 @@ type Site struct {
 }
 
 type If struct {
-	Path      *string   `hcl:"path,optional"`
+	Path      *string  `hcl:"path,optional"`
 	PathIn    []string `hcl:"path_in,optional"`
-	PathNot   *string   `hcl:"path_not,optional"`
+	PathNot   *string  `hcl:"path_not,optional"`
 	PathNotIn []string `hcl:"path_not_in,optional"`
 
 	Headers      map[string]string   `hcl:"headers,optional"`
@@ -35,8 +35,8 @@ type If struct {
 	HeadersNot   map[string]string   `hcl:"headers_not,optional"`
 	HeadersNotIn []map[string]string `hcl:"headers_not_in,optional"`
 
-	Ipaddr      *string   `hcl:"ipaddr,optional"`
-	IpaddrNot   *string   `hcl:"ipaddr_not,optional"`
+	Ipaddr      *string  `hcl:"ipaddr,optional"`
+	IpaddrNot   *string  `hcl:"ipaddr_not,optional"`
 	IpaddrIn    []string `hcl:"ipaddr_in,optional"`
 	IpaddrNotIn []string `hcl:"ipaddr_not_in,optional"`
 
@@ -52,5 +52,6 @@ type Respond struct {
 }
 
 type Rewrite struct {
-	Path *string   `hcl:"path,optional"`
+	FromPathPattern *string `hcl:"from_path_pattern,optional"`
+	Path            *string `hcl:"path,optional"`
 }

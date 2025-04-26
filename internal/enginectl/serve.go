@@ -9,7 +9,7 @@ import (
 )
 
 type Site struct {
-	Dist fs.FS
+	Dist   fs.FS
 	Config model.Site
 }
 
@@ -82,8 +82,12 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 				}
 			}
 			if ifb.Rewrite != nil {
+				var vars []string
+				if ifb.Rewrite.FromPathPattern != nil {
+					vars = e.extractRewritePathVars(c.Path, *ifb.Rewrite.FromPathPattern)
+				}
 				if ifb.Rewrite.Path != nil {
-					c.Path = *ifb.Rewrite.Path
+					c.Path = e.injectRewritePathVars(*ifb.Rewrite.Path, vars)
 				}
 			}
 			if ifb.Respond != nil {
@@ -99,7 +103,7 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 				if ifb.Respond.Dist != nil {
 					dist := distmap[*ifb.Respond.Dist]
 					path := strings.TrimPrefix(c.Path, "/")
-		
+
 					f, err := dist.Open(path)
 					if err != nil {
 						return c.Resolve(404)

@@ -13,6 +13,6 @@ func New() Server {
 type Server struct {
 	infra.Container
 
-	Port  int
+	Port     int
 	handlers []Handler
 }
