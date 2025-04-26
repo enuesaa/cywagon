@@ -2,30 +2,35 @@ package enginectl
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 )
 
-func (e *Engine) extractRewritePathVars(path string, pattern string) []string {
-	re, err := regexp.Compile(pattern)
-	if err != nil {
-		return nil
-	}
-	match := re.FindAllStringSubmatch(path, -1)
-	if len(match[0]) <= 1 {
-		return nil
-	}
-	return match[0][1:]
-}
+func (e *Engine) calcRewritePath(from string, path string) string {
+	dirs := strings.Split(from, "/")
 
-func (e *Engine) injectRewritePathVars(path string, vars []string) string {
-	if len(vars) == 0 {
-		return path
+	for i, val := range dirs {
+		if val == "" {
+			continue
+		}
+		keyr := fmt.Sprintf("{dir%d}", i)
+		path = strings.ReplaceAll(path, keyr, val)
+
+		path = strings.ReplaceAll(path, "/:}", "/" + val + "/:}")
+		keyr = fmt.Sprintf("{dir%d:}", i)
+		path = strings.ReplaceAll(path, keyr, val + "/:}")
+
+		keyr = fmt.Sprintf("{:dir%d}", i)
+		path = strings.ReplaceAll(path, keyr, val)
+		path = strings.ReplaceAll(path, "{:", val + "/{:")
 	}
-	for i, val := range vars {
-		from := fmt.Sprintf("%%%d", i + 1)
-		path = strings.ReplaceAll(path, from, val)
+	path = strings.ReplaceAll(path, "/{:", "")
+	path = strings.ReplaceAll(path, "/:}", "")
+
+	path = strings.ReplaceAll(path, "{path}", from)
+
+	if len(dirs) > 0 {
+		last := dirs[len(dirs) - 1]
+		path = strings.ReplaceAll(path, "{last}", last)
 	}
-	fmt.Println(path)
 	return path
 }

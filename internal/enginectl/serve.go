@@ -82,12 +82,8 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 				}
 			}
 			if ifb.Rewrite != nil {
-				var vars []string
-				if ifb.Rewrite.FromPathPattern != nil {
-					vars = e.extractRewritePathVars(c.Path, *ifb.Rewrite.FromPathPattern)
-				}
 				if ifb.Rewrite.Path != nil {
-					c.Path = e.injectRewritePathVars(*ifb.Rewrite.Path, vars)
+					c.Path = e.calcRewritePath(c.Path, *ifb.Rewrite.Path)
 				}
 			}
 			if ifb.Respond != nil {

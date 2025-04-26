@@ -52,6 +52,5 @@ type Respond struct {
 }
 
 type Rewrite struct {
-	FromPathPattern *string `hcl:"from_path_pattern,optional"`
-	Path            *string `hcl:"path,optional"`
+	Path *string `hcl:"path,optional"`
 }

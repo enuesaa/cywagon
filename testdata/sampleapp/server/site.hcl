@@ -10,8 +10,9 @@ site "sampleapp" {
         path = "/storage/*"
 
         rewrite {
-            from_path_pattern = "/storage(/*)"
-            path = "%1/index.html"
+            path = "{dir2:}/index.html"
+            # path = "{dir1:}/index.html"
+            # path = "{:dir2}/index.html"
         }
         respond {
             dist = "../../storage"
