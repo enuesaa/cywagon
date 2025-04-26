@@ -10,7 +10,7 @@ site "sampleapp" {
         path = "/storage/*"
 
         rewrite {
-            path = "{dir2:}/index.html"
+            path = "/{dir2:}"
             # path = "{dir1:}/index.html"
             # path = "{:dir2}/index.html"
         }
