@@ -1,5 +1,5 @@
 # cywagon
-A conditionally configurable web server. Toy app.
+A conditionally configurable web server. Toy app
 
 [![ci](https://github.com/enuesaa/cywagon/actions/workflows/ci.yml/badge.svg)](https://github.com/enuesaa/cywagon/actions/workflows/ci.yml)
 
