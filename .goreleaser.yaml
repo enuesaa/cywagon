@@ -2,3 +2,12 @@ builds:
   - goos:
       - darwin
       - linux
+
+release:
+  extra_files:
+    - glob: ./install.sh
+  header: |
+    # Install
+    ```bash
+    curl -sL https://github.com/enuesaa/cywagon/releases/download/{{ .Tag }}/install.sh | bash
+    ```
