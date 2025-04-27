@@ -7,3 +7,6 @@
 # test
 cover.out
 cover.html
+
+# app
+install.sh
