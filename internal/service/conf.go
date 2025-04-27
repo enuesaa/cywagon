@@ -19,8 +19,9 @@ func NewConfSrv() ConfSrvInterface {
 
 type ConfSrvInterface interface {
 	ListHCLFiles(workdir string) ([]string, error)
-	Read(workdir string) (model.Config, error)
-	Format(workdir string) error
+	ReadHCLFiles(fpaths []string) (hcl.Body, error)
+	Read(fpaths []string) (model.Config, error)
+	Format(fpaths []string) error
 }
 
 type ConfSrv struct {
@@ -37,22 +38,17 @@ func (c *ConfSrv) ListHCLFiles(workdir string) ([]string, error) {
 	var list []string
 
 	for _, fpath := range fpaths {
-		if !strings.HasSuffix(fpath, ".hcl") {
-			continue
+		if strings.HasSuffix(fpath, ".hcl") {
+			list = append(list, fpath)
 		}
-		list = append(list, fpath)
 	}
 	return list, nil
 }
 
-func (c *ConfSrv) readHCLFiles(workdir string) (hcl.Body, error) {
-	list, err := c.ListHCLFiles(workdir)
-	if err != nil {
-		return nil, err
-	}
+func (c *ConfSrv) ReadHCLFiles(fpaths []string) (hcl.Body, error) {
 	files := make(map[string][]byte, 0)
 
-	for _, fpath := range list {
+	for _, fpath := range fpaths {
 		fbytes, err := c.Fs.Read(fpath)
 		if err != nil {
 			return nil, err
@@ -62,10 +58,10 @@ func (c *ConfSrv) readHCLFiles(workdir string) (hcl.Body, error) {
 	return c.Hcl.MergeHCLFiles(files)
 }
 
-func (c *ConfSrv) Read(workdir string) (model.Config, error) {
+func (c *ConfSrv) Read(fpaths []string) (model.Config, error) {
 	var config model.Config
 
-	hclbody, err := c.readHCLFiles(workdir)
+	hclbody, err := c.ReadHCLFiles(fpaths)
 	if err != nil {
 		return config, err
 	}
@@ -88,12 +84,8 @@ func (c *ConfSrv) Read(workdir string) (model.Config, error) {
 	return config, nil
 }
 
-func (c *ConfSrv) Format(workdir string) error {
-	list, err := c.ListHCLFiles(workdir)
-	if err != nil {
-		return err
-	}
-	for _, fpath := range list {
+func (c *ConfSrv) Format(fpaths []string) error {
+	for _, fpath := range fpaths {
 		fbytes, err := c.Fs.Read(fpath)
 		if err != nil {
 			return err
