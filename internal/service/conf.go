@@ -81,7 +81,16 @@ func (c *ConfSrv) Read(fpaths []string) (model.Config, error) {
 	if err := c.Hcl.Decode(hclbody, &config); err != nil {
 		return config, err
 	}
+	c.applyDefault(&config)
+
 	return config, nil
+}
+
+func (c *ConfSrv) applyDefault(config *model.Config) {
+	if config.Server.LogFile == nil {
+		def := "/dev/stdout"
+		config.Server.LogFile = &def
+	}
 }
 
 func (c *ConfSrv) Format(fpaths []string) error {

@@ -8,20 +8,6 @@ import (
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-func (e *Engine) Load(config model.Config, workdir string) error {
-	e.Server.Port = config.Server.Port
-
-	e.loadSites(config)
-	e.loadLogics(config)
-
-	if err := e.loadDists(config, workdir); err != nil {
-		return err
-	}
-	e.printBanner()
-
-	return nil
-}
-
 type Site struct {
 	Dist   fs.FS
 	Config model.Site

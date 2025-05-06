@@ -10,7 +10,7 @@ import (
 )
 
 type EngineInterface interface {
-	Load(config model.Config, workdir string) error
+	Setup(config model.Config, workdir string) error
 	Serve() error
 	Close() error
 }

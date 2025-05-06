@@ -11,7 +11,7 @@ import (
 func NewLogSrv() LogSrvInterface {
 	return &LogSrv{
 		Container: infra.Default,
-		writer: os.Stdout,
+		writer:    os.Stdout,
 	}
 }
 

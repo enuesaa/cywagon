@@ -3,6 +3,8 @@ package enginectl
 import "github.com/enuesaa/cywagon/internal/libserve"
 
 func (e *Engine) Serve() error {
+	e.printBanner()
+
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		if _, ok := e.sitemap[c.Host]; !ok {
 			return c.Resolve(500)
