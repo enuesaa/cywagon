@@ -18,9 +18,10 @@ func NewConfSrv() ConfSrvInterface {
 }
 
 type ConfSrvInterface interface {
-	ListHCLFiles(workdir string) ([]string, error)
+	ListHCLFiles(dir string) ([]string, error)
 	ReadHCLFiles(fpaths []string) (hcl.Body, error)
-	Read(fpaths []string) (model.Config, error)
+	Parse(hclbody hcl.Body) (model.Config, error)
+	ReadInDir(dir string) (model.Config, error)
 	Format(fpaths []string) error
 }
 
@@ -30,8 +31,8 @@ type ConfSrv struct {
 	Hcl libhcl.Parser
 }
 
-func (c *ConfSrv) ListHCLFiles(workdir string) ([]string, error) {
-	fpaths, err := c.Fs.ListFiles(workdir)
+func (c *ConfSrv) ListHCLFiles(dir string) ([]string, error) {
+	fpaths, err := c.Fs.ListFiles(dir)
 	if err != nil {
 		return nil, err
 	}
@@ -58,13 +59,8 @@ func (c *ConfSrv) ReadHCLFiles(fpaths []string) (hcl.Body, error) {
 	return c.Hcl.MergeHCLFiles(files)
 }
 
-func (c *ConfSrv) Read(fpaths []string) (model.Config, error) {
+func (c *ConfSrv) Parse(hclbody hcl.Body) (model.Config, error) {
 	var config model.Config
-
-	hclbody, err := c.ReadHCLFiles(fpaths)
-	if err != nil {
-		return config, err
-	}
 
 	var partialConsts model.PartialConstsConfig
 	if err := c.Hcl.Decode(hclbody, &partialConsts); err != nil {
@@ -91,6 +87,18 @@ func (c *ConfSrv) applyDefault(config *model.Config) {
 		def := "/dev/stdout"
 		config.Server.LogFile = &def
 	}
+}
+
+func (c *ConfSrv) ReadInDir(dir string) (model.Config, error) {
+	fpaths, err := c.ListHCLFiles(dir)
+	if err != nil {
+		return model.Config{}, err
+	}
+	hclbody, err := c.ReadHCLFiles(fpaths)
+	if err != nil {
+		return model.Config{}, err
+	}
+	return c.Parse(hclbody)
 }
 
 func (c *ConfSrv) Format(fpaths []string) error {

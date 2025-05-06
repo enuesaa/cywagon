@@ -1,11 +1,7 @@
 package handle
 
 func (h *Handler) Up(workdir string) error {
-	hclFilePaths, err := h.ConfSrv.ListHCLFiles(workdir)
-	if err != nil {
-		return err
-	}
-	config, err := h.ConfSrv.Read(hclFilePaths)
+	config, err := h.ConfSrv.ReadInDir(workdir)
 	if err != nil {
 		return err
 	}
