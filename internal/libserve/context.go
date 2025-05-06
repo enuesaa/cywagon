@@ -76,3 +76,7 @@ func (c *Context) Resolve(status int) *Response {
 	}
 	return &c.res
 }
+
+func (c *Context) GetOriginalPath() string {
+	return c.req.URL.Path
+}
