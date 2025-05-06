@@ -9,16 +9,16 @@ func (h *Handler) Check(workdir string) error {
 	if err != nil {
 		return err
 	}
-	h.Log.Info("Configuration OK!")
+	h.Ps.Print("Configuration OK!")
 
-	h.Log.Info("******************************")
-	h.Log.Info("* The server will listen on port %d", config.Server.Port)
-	h.Log.Info("* ")
-	h.Log.Info("* Sites:")
+	h.Ps.Print("******************************")
+	h.Ps.Printf("* The server will listen on port %d", config.Server.Port)
+	h.Ps.Print("* ")
+	h.Ps.Print("* Sites:")
 	for _, site := range config.Sites {
-		h.Log.Info("* - %s", site.Host)
+		h.Ps.Printf("* - %s", site.Host)
 	}
-	h.Log.Info("******************************")
+	h.Ps.Print("******************************")
 
 	return nil
 }

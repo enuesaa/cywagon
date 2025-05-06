@@ -8,7 +8,7 @@ func (h *Handler) Format(workdir string) error {
 	if err := h.ConfSrv.Format(hclFilePaths); err != nil {
 		return err
 	}
-	h.Log.Info("formatted!")
+	h.Ps.Print("formatted!")
 
 	return nil
 }

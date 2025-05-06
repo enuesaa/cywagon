@@ -38,13 +38,13 @@ func (c *CheckCommand) SetFlags(_ *flag.FlagSet) {}
 
 func (c *CheckCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
 	if err := c.ValidateArgs(f.Args()); err != nil {
-		c.Log.Error(err)
+		c.Ps.PrintErr(err)
 		return subcommands.ExitFailure
 	}
 	path := f.Arg(0)
 
 	if err := c.handler.Check(path); err != nil {
-		c.Log.Error(err)
+		c.Ps.PrintErr(err)
 		return subcommands.ExitFailure
 	}
 	return subcommands.ExitSuccess

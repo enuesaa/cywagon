@@ -38,13 +38,13 @@ func (c *FmtCommand) SetFlags(_ *flag.FlagSet) {}
 
 func (c *FmtCommand) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subcommands.ExitStatus {
 	if err := c.ValidateArgs(f.Args()); err != nil {
-		c.Log.Error(err)
+		c.Ps.PrintErr(err)
 		return subcommands.ExitFailure
 	}
 	path := f.Arg(0)
 
 	if err := c.handler.Format(path); err != nil {
-		c.Log.Error(err)
+		c.Ps.PrintErr(err)
 		return subcommands.ExitFailure
 	}
 	return subcommands.ExitSuccess

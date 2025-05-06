@@ -5,7 +5,6 @@ import (
 
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/libserve"
-	"github.com/enuesaa/cywagon/internal/libsock"
 	"github.com/enuesaa/cywagon/internal/service"
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
@@ -21,6 +20,7 @@ func New() *Engine {
 		Container: infra.Default,
 		Server:    libserve.New(),
 		ConfSrv:   service.NewConfSrv(),
+		Log:       service.NewLogSrv(),
 
 		sitemap:  make(map[string]model.Site),
 		distmap:  make(map[string]fs.FS),
@@ -34,7 +34,7 @@ type Engine struct {
 
 	Server  libserve.Server
 	ConfSrv service.ConfSrvInterface
-	Sock    libsock.Sock
+	Log     service.LogSrvInterface
 
 	sitemap  map[string]model.Site
 	distmap  map[string]fs.FS

@@ -26,7 +26,6 @@ func (e *Sock) Send(text string) error {
 	if err := decoder.Decode(&res); err != nil {
 		return err
 	}
-	e.Log.Info("client: ", res.Data)
 
 	return nil
 }

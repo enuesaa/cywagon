@@ -18,11 +18,11 @@ func (e *Sock) Listen(handler ListenHandler) error {
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			e.Log.Error(err)
+			// e.Log.Error(err)
 			continue
 		}
 		if err := e.processConn(conn, handler); err != nil {
-			e.Log.Error(err)
+			// e.Log.Error(err)
 		}
 	}
 }
