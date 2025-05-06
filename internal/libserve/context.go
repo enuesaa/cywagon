@@ -5,6 +5,8 @@ import (
 	"mime"
 	"net/http"
 	"path/filepath"
+
+	"github.com/oklog/ulid/v2"
 )
 
 func NewContext(req *http.Request) Context {
@@ -14,6 +16,7 @@ func NewContext(req *http.Request) Context {
 	}
 
 	return Context{
+		Id:      ulid.Make().String(),
 		Host:    req.Host,
 		Path:    req.URL.Path,
 		Headers: headers,
@@ -28,6 +31,7 @@ func NewContext(req *http.Request) Context {
 }
 
 type Context struct {
+	Id           string
 	Host         string
 	Path         string
 	Headers      map[string]string

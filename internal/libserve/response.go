@@ -21,3 +21,7 @@ func (r *Response) flush(w http.ResponseWriter) error {
 	}
 	return nil
 }
+
+func (r *Response) GetStatus() int {
+	return r.status
+}
