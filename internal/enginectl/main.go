@@ -11,7 +11,8 @@ import (
 )
 
 type EngineInterface interface {
-	Serve(config model.Config, workdir string) error
+	Load(config model.Config, workdir string) error
+	Serve() error
 	Close() error
 }
 
