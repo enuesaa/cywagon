@@ -10,6 +10,7 @@
 package infra
 
 import (
+	fs "io/fs"
 	reflect "reflect"
 
 	gomock "go.uber.org/mock/gomock"
@@ -51,6 +52,21 @@ func (m *MockFsInterface) Create(path string, body []byte) error {
 func (mr *MockFsInterfaceMockRecorder) Create(path, body any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFsInterface)(nil).Create), path, body)
+}
+
+// DirFS mocks base method.
+func (m *MockFsInterface) DirFS(path string) (fs.FS, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DirFS", path)
+	ret0, _ := ret[0].(fs.FS)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DirFS indicates an expected call of DirFS.
+func (mr *MockFsInterfaceMockRecorder) DirFS(path any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DirFS", reflect.TypeOf((*MockFsInterface)(nil).DirFS), path)
 }
 
 // IsExist mocks base method.

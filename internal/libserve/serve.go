@@ -31,8 +31,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			if s.logger != nil {
 				s.logger(&ctx, res.status, ctx.req.Method)
 			}
-
-			// flush
 			if err := res.flush(w); err != nil {
 				// s.Log.Info("Error: %w", err)
 			}

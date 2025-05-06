@@ -10,7 +10,7 @@ import (
 )
 
 type EngineInterface interface {
-	Setup(config model.Config, workdir string) error
+	Load(config model.Config, workdir string) error
 	Serve() error
 	Close() error
 }
@@ -36,6 +36,7 @@ type Engine struct {
 	ConfSrv service.ConfSrvInterface
 	Log     service.LogSrvInterface
 
+	config   model.Config
 	sitemap  map[string]model.Site
 	distmap  map[string]fs.FS
 	logicmap map[string]model.Logic

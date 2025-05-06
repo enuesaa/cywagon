@@ -5,9 +5,6 @@ import (
 	"os"
 )
 
-// To generate mock file, run following command:
-//   mockgen -source=ps.go -destination=ps_mock.go -package=infra
-
 type PsInterface interface {
 	Print(text string)
 	Printf(format string, a ...any)

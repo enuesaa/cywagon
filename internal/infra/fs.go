@@ -2,12 +2,10 @@ package infra
 
 import (
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 )
-
-// To generate mock file, run following command:
-//   mockgen -source=fs.go -destination=fs_mock.go -package=infra
 
 type FsInterface interface {
 	IsExist(path string) bool
@@ -15,6 +13,7 @@ type FsInterface interface {
 	Read(path string) ([]byte, error)
 	Create(path string, body []byte) error
 	ListFiles(path string) ([]string, error)
+	DirFS(path string) (fs.FS, error)
 }
 type Fs struct{}
 
@@ -67,4 +66,11 @@ func (i *Fs) ListFiles(path string) ([]string, error) {
 		return nil
 	})
 	return list, err
+}
+
+func (i *Fs) DirFS(path string) (fs.FS, error) {
+	if _, err := os.Stat(path); err != nil {
+		return nil, err
+	}
+	return os.DirFS(path), nil
 }

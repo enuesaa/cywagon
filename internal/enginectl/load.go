@@ -2,35 +2,46 @@ package enginectl
 
 import (
 	"io/fs"
-	"os"
 	"path/filepath"
 
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
-type Site struct {
-	Dist   fs.FS
-	Config model.Site
+func (e *Engine) Load(config model.Config, workdir string) error {
+	e.config = config
+
+	if err := e.loadConfig(); err != nil {
+		return err
+	}
+	if err := e.loadDists(workdir); err != nil {
+		return err
+	}
+	return nil
 }
 
-func (e *Engine) loadSites(config model.Config) {
+func (e *Engine) loadConfig() error {
 	e.sitemap = make(map[string]model.Site, 0)
-	for _, site := range config.Sites {
+	for _, site := range e.config.Sites {
 		e.sitemap[site.Host] = site
 	}
-}
 
-func (e *Engine) loadLogics(config model.Config) {
 	e.logicmap = make(map[string]model.Logic)
-	for _, logic := range config.Logics {
+	for _, logic := range e.config.Logics {
 		e.logicmap[logic.Name] = logic
 	}
+
+	if err := e.Log.SetLogFile(*e.config.Server.LogFile); err != nil {
+		return err
+	}
+	return nil
 }
 
-func (e *Engine) loadDists(config model.Config, workdir string) error {
+func (e *Engine) loadDists(workdir string) error {
 	e.distmap = make(map[string]fs.FS)
-	for _, site := range config.Sites {
-		dist, err := e.loadFS(workdir, site.Dist)
+
+	for _, site := range e.config.Sites {
+		path := filepath.Join(workdir, site.Dist)
+		dist, err := e.Fs.DirFS(path)
 		if err != nil {
 			return err
 		}
@@ -38,22 +49,14 @@ func (e *Engine) loadDists(config model.Config, workdir string) error {
 
 		for _, ifb := range site.Ifs {
 			if ifb.Respond != nil && ifb.Respond.Dist != nil {
-				distpath := *ifb.Respond.Dist
-				dist, err := e.loadFS(workdir, distpath)
+				path := filepath.Join(workdir, *ifb.Respond.Dist)
+				dist, err := e.Fs.DirFS(path)
 				if err != nil {
 					return err
 				}
-				e.distmap[distpath] = dist
+				e.distmap[*ifb.Respond.Dist] = dist
 			}
 		}
 	}
 	return nil
-}
-
-func (e *Engine) loadFS(workdir string, distpath string) (fs.FS, error) {
-	path := filepath.Join(workdir, distpath)
-	if _, err := os.Stat(path); err != nil {
-		return nil, err
-	}
-	return os.DirFS(path), nil
 }

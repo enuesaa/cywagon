@@ -9,13 +9,10 @@ func (h *Handler) Up(workdir string) error {
 	if err != nil {
 		return err
 	}
-	if err := h.Engine.Setup(config, workdir); err != nil {
+	if err := h.Engine.Load(config, workdir); err != nil {
 		return err
 	}
 	if err := h.Engine.Serve(); err != nil {
-		return err
-	}
-	if err := h.Engine.Close(); err != nil {
 		return err
 	}
 	return nil

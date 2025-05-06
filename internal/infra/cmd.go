@@ -5,9 +5,6 @@ import (
 	"os/exec"
 )
 
-// To generate mock file, run following command:
-//   mockgen -source=cmd.go -destination=cmd_mock.go -package=infra
-
 type CmdInterface interface {
 	Start(workdir string, command string) error
 }
