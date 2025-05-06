@@ -19,10 +19,14 @@ type LogSrvInterface interface {
 	SetLogFile(path string) error
 
 	Info(text string)
+	Infos(scope string, text string)
 	Infof(format string, a ...any)
+	Infosf(scope string, format string, a ...any)
 
 	Debug(text string)
+	Debugs(scope, text string)
 	Debugf(format string, a ...any)
+	Debugsf(scope string, format string, a ...any)
 
 	Err(err error)
 }
@@ -44,7 +48,11 @@ func (c *LogSrv) SetLogFile(path string) error {
 }
 
 func (c *LogSrv) Info(text string) {
-	fmt.Fprintf(c.writer, "[info] %s\n", text)
+	fmt.Fprintf(c.writer, "I %s\n", text)
+}
+
+func (c *LogSrv) Infos(scope string, text string) {
+	c.Infof("[%s] %s", scope, text)
 }
 
 func (c *LogSrv) Infof(format string, a ...any) {
@@ -52,13 +60,27 @@ func (c *LogSrv) Infof(format string, a ...any) {
 	c.Info(text)
 }
 
+func (c *LogSrv) Infosf(scope string, format string, a ...any) {
+	text := fmt.Sprintf(format, a...)
+	c.Infof("[%s] %s", scope, text)
+}
+
 func (c *LogSrv) Debug(text string) {
-	fmt.Fprintf(c.writer, "[debug] %s\n", text)
+	fmt.Fprintf(c.writer, "D %s\n", text)
+}
+
+func (c *LogSrv) Debugs(scope, text string) {
+	c.Debugf("[%s] %s", scope, text)
 }
 
 func (c *LogSrv) Debugf(format string, a ...any) {
 	text := fmt.Sprintf(format, a...)
 	c.Debug(text)
+}
+
+func (c *LogSrv) Debugsf(scope string, format string, a ...any) {
+	text := fmt.Sprintf(format, a...)
+	c.Debugf("[%s] %s", scope, text)
 }
 
 func (c *LogSrv) Err(err error) {

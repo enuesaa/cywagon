@@ -8,7 +8,7 @@ import (
 )
 
 func (e *Engine) handleDist(c *libserve.Context, dist fs.FS) *libserve.Response {
-	e.log(c, "resolved: %s", c.Path)
+	e.logcf(c, "resolved: %s", c.Path)
 
 	path := strings.TrimPrefix(c.Path, "/")
 
