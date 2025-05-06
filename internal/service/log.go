@@ -12,11 +12,15 @@ func NewLogSrv() LogSrvInterface {
 	return &LogSrv{
 		Container: infra.Default,
 		writer:    os.Stdout,
+		debug:     false,
 	}
 }
 
 type LogSrvInterface interface {
 	SetLogFile(path string) error
+
+	// TODO: SetLogLevel
+	SetDebugLog(is bool)
 
 	Info(text string)
 	Infos(scope string, text string)
@@ -35,6 +39,7 @@ type LogSrv struct {
 	infra.Container
 
 	writer io.Writer
+	debug  bool
 }
 
 func (c *LogSrv) SetLogFile(path string) error {
@@ -45,6 +50,10 @@ func (c *LogSrv) SetLogFile(path string) error {
 	c.writer = f
 
 	return nil
+}
+
+func (c *LogSrv) SetDebugLog(is bool) {
+	c.debug = is
 }
 
 func (c *LogSrv) Info(text string) {

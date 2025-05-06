@@ -22,7 +22,7 @@ func Run() int {
 	flag.Parse()
 
 	if *versionFlag {
-		fmt.Println("0.0.2")
+		fmt.Println("0.0.3")
 		return 0
 	}
 
