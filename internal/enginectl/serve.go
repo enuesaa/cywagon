@@ -8,9 +8,7 @@ import (
 func (e *Engine) Serve(config model.Config, workdir string) error {
 	e.Server.Port = config.Server.Port
 
-	e.loadSites(config)
-	e.loadLogics(config)
-	if err := e.loadDists(config, workdir); err != nil {
+	if err := e.load(config, workdir); err != nil {
 		return err
 	}
 
@@ -23,10 +21,7 @@ func (e *Engine) Serve(config model.Config, workdir string) error {
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {
 		site := e.sitemap[c.Host]
-		for name, value := range site.Headers {
-			c.ResHeader(name, value)
-		}
-		return nil
+		return e.handleHeader(c, site)
 	})
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {

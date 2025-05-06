@@ -8,6 +8,17 @@ import (
 	"github.com/enuesaa/cywagon/internal/service/model"
 )
 
+// public にして処理を別にした方が良いかも
+func (e *Engine) load(config model.Config, workdir string) error {
+	e.loadSites(config)
+	e.loadLogics(config)
+
+	if err := e.loadDists(config, workdir); err != nil {
+		return err
+	}
+	return nil
+}
+
 type Site struct {
 	Dist   fs.FS
 	Config model.Site
