@@ -12,7 +12,6 @@ import (
 
 type EngineInterface interface {
 	Serve(config model.Config, workdir string) error
-	StartListenSock() error
 	Close() error
 }
 
@@ -21,7 +20,6 @@ func New() *Engine {
 		Container: infra.Default,
 		Server:    libserve.New(),
 		ConfSrv:   service.NewConfSrv(),
-		Sock:      libsock.New(),
 
 		sitemap:  make(map[string]model.Site),
 		distmap:  make(map[string]fs.FS),

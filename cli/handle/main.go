@@ -12,7 +12,6 @@ func New() Handler {
 		Container: infra.Default,
 		Engine:    enginectl.New(),
 		ConfSrv:   service.NewConfSrv(),
-		Sock:      libsock.New(),
 	}
 }
 
