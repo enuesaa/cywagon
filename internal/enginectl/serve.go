@@ -5,8 +5,8 @@ import "github.com/enuesaa/cywagon/internal/libserve"
 func (e *Engine) Serve() error {
 	e.printBanner()
 
-	e.Server.UseLogger(func(c *libserve.Context, res *libserve.Response) {
-		e.log(c, "%d %s", res.GetStatus(), c.Path)
+	e.Server.UseLogger(func(c *libserve.Context, status int, method string) {
+		e.log(c, "%d %s %s", status, method, c.Path)
 	})
 
 	e.Server.Use(func(c *libserve.Context) *libserve.Response {

@@ -7,7 +7,6 @@ func New() Server {
 		Container: infra.Default,
 		Port:      3000,
 		handlers:  make([]Handler, 0),
-		logger:    func(c *Context, res *Response) {},
 	}
 }
 

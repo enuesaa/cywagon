@@ -6,7 +6,7 @@ import (
 )
 
 type Handler func(c *Context) *Response
-type Logger func(c *Context, res *Response)
+type Logger func(c *Context, status int, method string)
 
 func (s *Server) Use(handler Handler) {
 	s.handlers = append(s.handlers, handler)
@@ -28,7 +28,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	for _, handler := range s.handlers {
 		res := handler(&ctx)
 		if res != nil {
-			s.logger(&ctx, res)
+			if s.logger != nil {
+				s.logger(&ctx, res.status, ctx.req.Method)
+			}
 
 			// flush
 			if err := res.flush(w); err != nil {
