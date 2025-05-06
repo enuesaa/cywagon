@@ -8,8 +8,8 @@ logic "index" {
   }
 
   if {
-    path = "/**/*"
-    path_not_in = ["/**/*.*", "/*.*"]
+    path = "/*"
+    path_not_in = ["/*.*", "/**/*.*"]
 
     rewrite {
       path = "{path}.html"
