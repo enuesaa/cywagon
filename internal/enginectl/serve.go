@@ -22,7 +22,5 @@ func (e *Engine) Serve() error {
 		dist := e.distmap[site.Dist]
 		return e.handleDist(c, dist)
 	})
-	e.printBanner()
-
 	return e.Server.Serve()
 }

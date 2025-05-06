@@ -8,6 +8,8 @@ import (
 )
 
 func (e *Engine) handleDist(c *libserve.Context, dist fs.FS) *libserve.Response {
+	e.Log.Info("resolved: %s", c.Path)
+
 	path := strings.TrimPrefix(c.Path, "/")
 
 	f, err := dist.Open(path)

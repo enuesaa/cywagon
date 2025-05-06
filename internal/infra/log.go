@@ -15,6 +15,7 @@ func init() {
 	log.SetFlags(0)
 }
 
+// Deprecated
 type LogInterface interface {
 	Error(err error)
 	Info(format string, a ...any)
