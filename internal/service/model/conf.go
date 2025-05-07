@@ -10,9 +10,9 @@ type Config struct {
 }
 
 type Server struct {
-	Port    int     `hcl:"port"`
-	LogFile *string `hcl:"log_file,optional"`
-	LogDebug *bool  `hcl:"log_debug,optional"`
+	Port     int     `hcl:"port"`
+	LogFile  *string `hcl:"log_file,optional" default:"/dev/stdout"`
+	LogDebug *bool   `hcl:"log_debug,optional" default:"false"`
 }
 
 type Const struct {

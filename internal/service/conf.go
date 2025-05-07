@@ -3,12 +3,12 @@ package service
 import (
 	"strings"
 
+	"github.com/creasty/defaults"
 	"github.com/enuesaa/cywagon/internal/infra"
 	"github.com/enuesaa/cywagon/internal/libhcl"
 	"github.com/enuesaa/cywagon/internal/service/model"
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclwrite"
-    "github.com/samber/lo"
 )
 
 func NewConfSrv() ConfSrvInterface {
@@ -78,18 +78,14 @@ func (c *ConfSrv) Parse(hclbody hcl.Body) (model.Config, error) {
 	if err := c.Hcl.Decode(hclbody, &config); err != nil {
 		return config, err
 	}
-	c.applyDefault(&config)
-
+	if err := c.applyDefaults(&config); err != nil {
+		return config, err
+	}
 	return config, nil
 }
 
-func (c *ConfSrv) applyDefault(config *model.Config) {
-	if config.Server.LogFile == nil {
-		config.Server.LogFile = lo.ToPtr("/dev/stdout")
-	}
-	if config.Server.LogDebug == nil {
-		config.Server.LogDebug = lo.ToPtr(false)
-	}
+func (c *ConfSrv) applyDefaults(config *model.Config) error {
+	return defaults.Set(config)
 }
 
 func (c *ConfSrv) ReadInDir(dir string) (model.Config, error) {
