@@ -8,6 +8,7 @@ import (
 	"github.com/enuesaa/cywagon/internal/service/model"
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclwrite"
+    "github.com/samber/lo"
 )
 
 func NewConfSrv() ConfSrvInterface {
@@ -84,8 +85,10 @@ func (c *ConfSrv) Parse(hclbody hcl.Body) (model.Config, error) {
 
 func (c *ConfSrv) applyDefault(config *model.Config) {
 	if config.Server.LogFile == nil {
-		def := "/dev/stdout"
-		config.Server.LogFile = &def
+		config.Server.LogFile = lo.ToPtr("/dev/stdout")
+	}
+	if config.Server.LogDebug == nil {
+		config.Server.LogDebug = lo.ToPtr(false)
 	}
 }
 

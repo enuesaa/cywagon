@@ -17,16 +17,17 @@ func NewLogSrv() LogSrvInterface {
 }
 
 type LogSrvInterface interface {
+	// configure
 	SetLogFile(path string) error
+	IncludeDebugLog(is bool)
 
-	// TODO: SetLogLevel
-	SetDebugLog(is bool)
-
+	// info
 	Info(text string)
 	Infos(scope string, text string)
 	Infof(format string, a ...any)
 	Infosf(scope string, format string, a ...any)
 
+	// debug
 	Debug(text string)
 	Debugs(scope, text string)
 	Debugf(format string, a ...any)
@@ -52,7 +53,7 @@ func (c *LogSrv) SetLogFile(path string) error {
 	return nil
 }
 
-func (c *LogSrv) SetDebugLog(is bool) {
+func (c *LogSrv) IncludeDebugLog(is bool) {
 	c.debug = is
 }
 

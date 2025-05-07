@@ -33,6 +33,13 @@ func (e *Engine) loadConfig() error {
 	if err := e.Log.SetLogFile(*e.config.Server.LogFile); err != nil {
 		return err
 	}
+
+	debugLog := false
+	if e.config.Server.LogDebug != nil {
+		debugLog = *e.config.Server.LogDebug
+	}
+	e.Log.IncludeDebugLog(debugLog)
+
 	return nil
 }
 

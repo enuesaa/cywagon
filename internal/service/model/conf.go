@@ -12,6 +12,7 @@ type Config struct {
 type Server struct {
 	Port    int     `hcl:"port"`
 	LogFile *string `hcl:"log_file,optional"`
+	LogDebug *bool  `hcl:"log_debug,optional"`
 }
 
 type Const struct {
