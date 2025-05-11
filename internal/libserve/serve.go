@@ -6,26 +6,33 @@ import (
 	"net/http"
 )
 
-type Handler func(c *Context) *Response
-type FnOnResponse func(c *Context, status int, method string)
-type FnOnError func(c *Context, err error)
-
 func (s *Server) Use(handler Handler) {
 	s.handlers = append(s.handlers, handler)
+}
+
+func (s *Server) UseTLS(certFile string, keyFile string) {
+	s.certs = append(s.certs, Cert{certFile: certFile, keyFile: keyFile})
 }
 
 func (s *Server) Serve() error {
 	addr := fmt.Sprintf(":%d", s.Port)
 
-	// return http.ListenAndServe(addr, s)
+	return http.ListenAndServe(addr, s)
+}
+
+func (s *Server) ServeTLS() error {
+	addr := fmt.Sprintf(":%d", s.Port)
 
 	// see https://gist.github.com/denji/12b3a568f092ab951456
-	cert, err := tls.LoadX509KeyPair("example.local.pem", "example.local-key.pem")
-	if err != nil {
-		return err
-	}
 	tlsconfig := tls.Config{
-		Certificates: []tls.Certificate{cert},
+		Certificates: make([]tls.Certificate, 0),
+	}
+	for _, c := range s.certs {
+		cert, err := tls.LoadX509KeyPair(c.certFile, c.keyFile)
+		if err != nil {
+			return err
+		}
+		tlsconfig.Certificates = append(tlsconfig.Certificates, cert)
 	}
 	srv := &http.Server{
 		Addr:      addr,

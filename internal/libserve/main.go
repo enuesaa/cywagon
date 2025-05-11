@@ -17,6 +17,16 @@ type Server struct {
 
 	Port       int
 	handlers   []Handler
+	certs      []Cert
 	OnResponse FnOnResponse
 	OnError    FnOnError
+}
+
+type Handler func(c *Context) *Response
+type FnOnResponse func(c *Context, status int, method string)
+type FnOnError func(c *Context, err error)
+
+type Cert struct {
+	certFile string
+	keyFile  string
 }

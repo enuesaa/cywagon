@@ -1,5 +1,5 @@
 site "sampleapp" {
-  host = "example.local"
+  host = "localhost:3000"
   dist = "../dist"
 
   headers = {
