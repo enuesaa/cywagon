@@ -1,6 +1,7 @@
 package libserve
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 )
@@ -16,7 +17,20 @@ func (s *Server) Use(handler Handler) {
 func (s *Server) Serve() error {
 	addr := fmt.Sprintf(":%d", s.Port)
 
-	return http.ListenAndServe(addr, s)
+	// see https://gist.github.com/denji/12b3a568f092ab951456
+	cert, err := tls.LoadX509KeyPair("localhost.pem", "localhost-key.pem")
+	if err != nil {
+		return err
+	}
+	tlsconfig := tls.Config{
+		Certificates: []tls.Certificate{cert},
+	}
+	srv := &http.Server{
+		Addr:      addr,
+		Handler:   s,
+		TLSConfig: &tlsconfig,
+	}
+	return srv.ListenAndServeTLS("", "")
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {

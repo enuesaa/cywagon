@@ -10,3 +10,4 @@ cover.html
 
 # app
 install.sh
+*.pem
