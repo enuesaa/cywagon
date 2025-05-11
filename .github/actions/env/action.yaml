@@ -7,3 +7,5 @@ runs:
     - uses: actions/setup-go@v4
       with:
         go-version-file: go.mod
+    - uses: arduino/setup-task@v2
+    - uses: gacts/install-hurl@v1

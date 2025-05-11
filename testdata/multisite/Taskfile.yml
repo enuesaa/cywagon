@@ -1,0 +1,14 @@
+version: '3'
+
+tasks:
+  setup:
+    dir: ./server
+    cmds:
+      - mkcert example.local
+      - mkcert example2.local
+      - mkcert -install
+
+  down:
+    dir: ./server
+    cmds:
+      - mkcert -uninstall

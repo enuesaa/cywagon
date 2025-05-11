@@ -61,8 +61,6 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: '9'
-      # hurl
-      - uses: gacts/install-hurl@v1
 
       - run: go install
 
@@ -80,14 +78,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - run: |
+      - name: Install mkcert deps
+        run: sudo apt install -y libnss3-tools
+
+      - name: Install mkcert
+        run: |
           curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
           chmod +x mkcert-v*-linux-amd64
           sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 
-      - run: mkcert --help
-
-      - run: |
-          mkcert example.local
-          mkcert example2.local
-          sudo mkcert -install
+      - run: sudo task -t ./testdata/multisite/Taskfile.yml setup
