@@ -1,7 +1,10 @@
-site "sampleapp" {
+site "example" {
   port = 3000
-  host = "localhost:3000"
-  dist = "../dist"
+  host = "example.local:3000"
+  dist = "../../sampleapp/dist"
+
+  tlscert = "./example.local.pem"
+  tlskey  = "./example.local-key.pem"
 
   headers = {
     "Cache-Control" : "no-cache",
@@ -16,10 +19,6 @@ site "sampleapp" {
     respond {
       dist = "../../storage"
     }
-  }
-
-  if {
-    logic = logic.basicauth
   }
 
   if {

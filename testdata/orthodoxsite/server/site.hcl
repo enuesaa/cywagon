@@ -1,4 +1,5 @@
 site "sampleapp" {
+  port = 3000
   host = "localhost:3000"
   dist = "../dist"
 
