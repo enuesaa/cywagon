@@ -10,7 +10,6 @@ type Config struct {
 }
 
 type Server struct {
-	Port     int     `hcl:"port"`
 	LogFile  *string `hcl:"log_file,optional" default:"/dev/stdout"`
 	LogDebug *bool   `hcl:"log_debug,optional" default:"false"`
 }
@@ -20,6 +19,9 @@ type Const struct {
 }
 
 type Site struct {
+	Port    int               `hcl:"port"`
+	TLSCert *string           `hcl:"tlscert,optional"`
+	TLSKey  *string           `hcl:"tlskey,optional"`
 	Name    string            `hcl:"name,label"`
 	Host    string            `hcl:"host"`
 	Dist    string            `hcl:"dist"`

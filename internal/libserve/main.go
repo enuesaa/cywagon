@@ -26,6 +26,6 @@ type FnOnError func(c *Context, err error)
 
 type ListenConfig struct {
 	tls bool
-	certfile string
-	keyfile string
+	tlscert string
+	tlskey string
 }

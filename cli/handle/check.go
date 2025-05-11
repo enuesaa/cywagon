@@ -8,8 +8,6 @@ func (h *Handler) Check(workdir string) error {
 	h.Ps.Print("Configuration OK!")
 
 	h.Ps.Print("******************************")
-	h.Ps.Printf("* The server will listen on port %d", config.Server.Port)
-	h.Ps.Print("* ")
 	h.Ps.Print("* Sites:")
 	for _, site := range config.Sites {
 		h.Ps.Printf("* - %s", site.Host)

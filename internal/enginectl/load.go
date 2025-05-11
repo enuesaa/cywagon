@@ -1,6 +1,7 @@
 package enginectl
 
 import (
+	"fmt"
 	"io/fs"
 	"path/filepath"
 
@@ -35,6 +36,11 @@ func (e *Engine) loadConfig() error {
 	}
 	e.Log.IncludeDebugLog(*e.config.Server.LogDebug)
 
+	for _, site := range e.config.Sites {
+		if site.TLSCert != nil && site.TLSKey == nil {
+			return fmt.Errorf("tlskey should be specified when the site use tls")
+		}
+	}
 	return nil
 }
 

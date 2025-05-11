@@ -22,14 +22,14 @@ func (s *Server) Listen(port int) {
 	})
 }
 
-func (s *Server) ListenTLS(port int, certfile string, keyfile string) {
+func (s *Server) ListenTLS(port int, tlscert string, tlskey string) {
 	if _, ok := s.listenmap[port]; !ok {
 		s.listenmap[port] = make([]ListenConfig, 0)
 	}
 	s.listenmap[port] = append(s.listenmap[port], ListenConfig{
 		tls: true,
-		certfile: certfile,
-		keyfile: keyfile,
+		tlscert: tlscert,
+		tlskey: tlskey,
 	})
 }
 
@@ -84,7 +84,7 @@ func (s *Server) serveTLS(port int, lconfig []ListenConfig) func() error {
 			Certificates: make([]tls.Certificate, 0),
 		}
 		for _, l := range lconfig {
-			cert, err := tls.LoadX509KeyPair(l.certfile, l.keyfile)
+			cert, err := tls.LoadX509KeyPair(l.tlscert, l.tlskey)
 			if err != nil {
 				return err
 			}
