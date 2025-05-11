@@ -12,3 +12,4 @@ tasks:
     dir: ./server
     cmds:
       - mkcert -uninstall
+      - rm -rf *.pem

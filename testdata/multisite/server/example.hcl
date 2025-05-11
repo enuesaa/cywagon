@@ -1,6 +1,6 @@
 site "example" {
-  port = 3000
-  host = "example.local:3000"
+  port = 443
+  host = "example.local"
   dist = "../../sampleapp/dist"
 
   tlscert = "./example.local.pem"
@@ -8,28 +8,6 @@ site "example" {
 
   headers = {
     "Cache-Control" : "no-cache",
-  }
-
-  if {
-    path = "/storage/*"
-
-    rewrite {
-      path = "/{dir2:}" # Example: "/{dir2}", "/{:dir2}", "/{last}", "{path}"
-    }
-    respond {
-      dist = "../../storage"
-    }
-  }
-
-  if {
-    path = "/old"
-
-    respond {
-      status = 301
-      headers = {
-        "Location" : "/",
-      }
-    }
   }
 
   if {
