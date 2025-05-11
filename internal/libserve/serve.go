@@ -17,8 +17,10 @@ func (s *Server) Use(handler Handler) {
 func (s *Server) Serve() error {
 	addr := fmt.Sprintf(":%d", s.Port)
 
+	// return http.ListenAndServe(addr, s)
+
 	// see https://gist.github.com/denji/12b3a568f092ab951456
-	cert, err := tls.LoadX509KeyPair("localhost.pem", "localhost-key.pem")
+	cert, err := tls.LoadX509KeyPair("example.local.pem", "example.local-key.pem")
 	if err != nil {
 		return err
 	}

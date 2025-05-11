@@ -1,5 +1,5 @@
-site "sampleapp" {
-  host = "example.local"
+site "example2" {
+  host = "example2.local"
   dist = "../dist"
 
   headers = {
