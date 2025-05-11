@@ -1,5 +1,5 @@
 site "example2" {
-  port = 443
+  port = 8443
   host = "example2.local"
   dist = "../../sampleapp/dist"
 
