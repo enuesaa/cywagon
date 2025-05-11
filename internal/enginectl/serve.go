@@ -4,7 +4,13 @@ import "github.com/enuesaa/cywagon/internal/libserve"
 
 func (e *Engine) Serve() error {
 	e.Server.Port = e.config.Server.Port
-	e.logf("The server started on port %d", e.Server.Port)
+	e.logf("The server started")
+
+	// for _, site := range e.sitemap {
+	// 	e.logf("The server started: %s", site.Host)
+	// 	e.Server.Listen(80)
+	// 	// e.Server.ListenTLS(443, "", "")
+	// }
 
 	e.Server.OnResponse = func(c *libserve.Context, status int, method string) {
 		e.logcf(c, "%d %s %s (as %s)", status, method, c.GetOriginalPath(), c.Path)

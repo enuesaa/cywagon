@@ -5,30 +5,7 @@ import (
 	"mime"
 	"net/http"
 	"path/filepath"
-
-	"github.com/oklog/ulid/v2"
 )
-
-func NewContext(req *http.Request) Context {
-	headers := make(map[string]string)
-	for key, value := range req.Header {
-		headers[key] = value[0]
-	}
-
-	return Context{
-		Id:      ulid.Make().String(),
-		Host:    req.Host,
-		Path:    req.URL.Path,
-		Headers: headers,
-		res: Response{
-			headers: make(map[string]string),
-			status:  0,
-			body:    nil,
-		},
-		req:          req,
-		statusPrefer: 0,
-	}
-}
 
 type Context struct {
 	Id           string

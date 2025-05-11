@@ -10,14 +10,34 @@ func (s *Server) Use(handler Handler) {
 	s.handlers = append(s.handlers, handler)
 }
 
-func (s *Server) UseTLS(certFile string, keyFile string) {
-	s.certs = append(s.certs, Cert{certFile: certFile, keyFile: keyFile})
+func (s *Server) Listen(port int) {
+	s.listeners = append(s.listeners, Listener{
+		port: port,
+		tls: false,
+	})
+}
+
+func (s *Server) ListenTLS(port int, certfile string, keyfile string) {
+	s.listeners = append(s.listeners, Listener{
+		port: port,
+		tls: false,
+		certfile: certfile,
+		keyfile: keyfile,
+	})
 }
 
 func (s *Server) Serve() error {
 	addr := fmt.Sprintf(":%d", s.Port)
-
-	return http.ListenAndServe(addr, s)
+	listener := Listener{
+		server: s,
+		port: s.Port,
+		tls: false,
+	}
+	srv := &http.Server{
+		Addr:    addr,
+		Handler: &listener,
+	}
+	return srv.ListenAndServe()
 }
 
 func (s *Server) ServeTLS() error {
@@ -27,33 +47,22 @@ func (s *Server) ServeTLS() error {
 	tlsconfig := tls.Config{
 		Certificates: make([]tls.Certificate, 0),
 	}
-	for _, c := range s.certs {
-		cert, err := tls.LoadX509KeyPair(c.certFile, c.keyFile)
+	for _, l := range s.listeners {
+		cert, err := tls.LoadX509KeyPair(l.certfile, l.keyfile)
 		if err != nil {
 			return err
 		}
 		tlsconfig.Certificates = append(tlsconfig.Certificates, cert)
 	}
+	listener := Listener{
+		server: s,
+		port: s.Port,
+		tls: false,
+	}
 	srv := &http.Server{
 		Addr:      addr,
-		Handler:   s,
+		Handler:   &listener,
 		TLSConfig: &tlsconfig,
 	}
 	return srv.ListenAndServeTLS("", "")
-}
-
-func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	ctx := NewContext(req)
-
-	for _, handler := range s.handlers {
-		res := handler(&ctx)
-		if res != nil {
-			s.OnResponse(&ctx, res.status, ctx.req.Method)
-
-			if err := res.flush(w); err != nil {
-				s.OnError(&ctx, err)
-			}
-			break
-		}
-	}
 }
