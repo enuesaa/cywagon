@@ -9,6 +9,7 @@ import (
 
 type Context struct {
 	Id           string
+	Port         int
 	Host         string
 	Path         string
 	Headers      map[string]string

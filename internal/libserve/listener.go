@@ -7,11 +7,8 @@ import (
 )
 
 type Listener struct {
-	server *Server
+	*Server
 	port int
-	tls bool
-	certfile string
-	keyfile string
 }
 
 func (l *Listener) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -22,6 +19,7 @@ func (l *Listener) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	ctx := Context{
 		Id:      ulid.Make().String(),
+		Port:    l.port,
 		Host:    req.Host,
 		Path:    req.URL.Path,
 		Headers: headers,
@@ -34,13 +32,13 @@ func (l *Listener) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		statusPrefer: 0,
 	}
 
-	for _, handler := range l.server.handlers {
+	for _, handler := range l.handlers {
 		res := handler(&ctx)
 		if res != nil {
-			l.server.OnResponse(&ctx, res.status, ctx.req.Method)
+			l.OnResponse(&ctx, res.status, ctx.req.Method)
 
 			if err := res.flush(w); err != nil {
-				l.server.OnError(&ctx, err)
+				l.OnError(&ctx, err)
 			}
 			break
 		}
