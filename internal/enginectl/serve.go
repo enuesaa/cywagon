@@ -3,15 +3,6 @@ package enginectl
 import "github.com/enuesaa/cywagon/internal/libserve"
 
 func (e *Engine) Serve() error {
-	for _, site := range e.sitemap {
-		e.logf("The server started: %s", site.Host)
-		if site.TLSCert == nil {
-			e.Server.Listen(site.Port)
-		} else {
-			e.Server.ListenTLS(site.Port, *site.TLSCert, *site.TLSKey)
-		}
-	}
-
 	e.Server.OnResponse = func(c *libserve.Context, status int, method string) {
 		e.logcf(c, "%d %s %s (as %s)", status, method, c.GetOriginalPath(), c.Path)
 	}

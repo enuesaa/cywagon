@@ -17,6 +17,8 @@ func (e *Engine) Load(config model.Config, workdir string) error {
 	if err := e.loadDists(workdir); err != nil {
 		return err
 	}
+	e.listen(workdir)
+
 	return nil
 }
 
@@ -67,4 +69,17 @@ func (e *Engine) loadDists(workdir string) error {
 		}
 	}
 	return nil
+}
+
+func (e *Engine) listen(workdir string) {
+	for _, site := range e.sitemap {
+		e.logf("The server loaded: %s", site.Host)
+		if site.TLSCert == nil {
+			e.Server.Listen(site.Port)
+		} else {
+			tlscertpath := filepath.Join(workdir, *site.TLSCert)
+			tlskeypath := filepath.Join(workdir, *site.TLSKey)
+			e.Server.ListenTLS(site.Port, tlscertpath, tlskeypath)
+		}
+	}
 }

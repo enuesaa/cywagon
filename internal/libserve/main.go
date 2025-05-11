@@ -8,6 +8,7 @@ func New() Server {
 		OnResponse: func(c *Context, status int, method string) {},
 		OnError:    func(c *Context, err error) {},
 		handlers:   make([]Handler, 0),
+		listenmap:  make(map[int][]ListenConfig),
 	}
 }
 
@@ -25,7 +26,7 @@ type FnOnResponse func(c *Context, status int, method string)
 type FnOnError func(c *Context, err error)
 
 type ListenConfig struct {
-	tls bool
+	tls     bool
 	tlscert string
-	tlskey string
+	tlskey  string
 }

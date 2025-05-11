@@ -27,14 +27,14 @@ func (s *Server) ListenTLS(port int, tlscert string, tlskey string) {
 		s.listenmap[port] = make([]ListenConfig, 0)
 	}
 	s.listenmap[port] = append(s.listenmap[port], ListenConfig{
-		tls: true,
+		tls:     true,
 		tlscert: tlscert,
-		tlskey: tlskey,
+		tlskey:  tlskey,
 	})
 }
 
 func (s *Server) Serve() error {
-	g, _ := errgroup.WithContext(context.Background())
+	g, ctx := errgroup.WithContext(context.Background())
 
 	for port, config := range s.listenmap {
 		isTls, err := s.judgeIsTLSListener(config)
@@ -42,9 +42,9 @@ func (s *Server) Serve() error {
 			return err
 		}
 		if isTls {
-			g.Go(s.serveTLS(port, config))
+			g.Go(s.serveTLS(ctx, port, config))
 		} else {
-			g.Go(s.serve(port))
+			g.Go(s.serve(ctx, port))
 		}
 	}
 	return g.Wait()
@@ -60,22 +60,26 @@ func (s *Server) judgeIsTLSListener(config []ListenConfig) (bool, error) {
 	return tls, nil
 }
 
-func (s *Server) serve(port int) func() error {
+func (s *Server) serve(ctx context.Context, port int) func() error {
 	return func() error {
 		addr := fmt.Sprintf(":%d", port)
 		listener := Listener{
 			Server: s,
-			port: port,
+			port:   port,
 		}
 		srv := &http.Server{
 			Addr:    addr,
 			Handler: &listener,
 		}
+		go func() {
+			<-ctx.Done()
+			srv.Shutdown(context.Background())
+		}()
 		return srv.ListenAndServe()
 	}
 }
 
-func (s *Server) serveTLS(port int, lconfig []ListenConfig) func() error {
+func (s *Server) serveTLS(ctx context.Context, port int, lconfig []ListenConfig) func() error {
 	return func() error {
 		addr := fmt.Sprintf(":%d", port)
 
@@ -92,13 +96,17 @@ func (s *Server) serveTLS(port int, lconfig []ListenConfig) func() error {
 		}
 		listener := Listener{
 			Server: s,
-			port: port,
+			port:   port,
 		}
 		srv := &http.Server{
 			Addr:      addr,
 			Handler:   &listener,
 			TLSConfig: &tlsconfig,
 		}
+		go func() {
+			<-ctx.Done()
+			srv.Shutdown(context.Background())
+		}()
 		return srv.ListenAndServeTLS("", "")
 	}
 }
