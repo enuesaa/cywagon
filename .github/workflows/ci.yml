@@ -86,7 +86,5 @@ jobs:
       - run: task -t ./testdata/multisite/Taskfile.yml --yes setup
       - run: task -t ./testdata/multisite/Taskfile.yml --yes write-etc-hosts
 
-      - run: cat /etc/hosts
-
       - run: nohup cywagon up ./testdata/multisite/server &
-      - run: hurl --test ./testdata/multisite/e2e
+      - run: hurl --insecure --test ./testdata/multisite/e2e
