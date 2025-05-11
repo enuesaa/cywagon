@@ -70,9 +70,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/env
 
-      - run: which task
-      - run: task --help
-
       - run: go install
       - run: pnpm install
         working-directory: ./testdata/sampleapp
@@ -86,8 +83,8 @@ jobs:
           chmod +x mkcert-v*-linux-amd64
           sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 
-      - run: sudo task -t ./testdata/multisite/Taskfile.yml --yes setup
-      - run: sudo task -t ./testdata/multisite/Taskfile.yml --yes write-etc-hosts
+      - run: task -t ./testdata/multisite/Taskfile.yml --yes setup
+      - run: task -t ./testdata/multisite/Taskfile.yml --yes write-etc-hosts
 
       - run: nohup cywagon up ./testdata/multisite/server &
       - run: hurl --test ./testdata/multisite/e2e

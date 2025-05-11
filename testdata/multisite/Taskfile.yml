@@ -7,14 +7,14 @@ tasks:
     cmds:
       - mkcert example.local
       - mkcert example2.local
-      - mkcert -install
+      - sudo mkcert -install
 
   write-etc-hosts:
     prompt: Are you sure to write /etc/hosts ?
     dir: ./server
     cmds:
-      - echo "127.0.0.1 example.local" | tee -a /etc/hosts
-      - echo "127.0.0.1 example2.local" | tee -a /etc/hosts
+      - echo "127.0.0.1 example.local" | sudo tee -a /etc/hosts
+      - echo "127.0.0.1 example2.local" | sudo tee -a /etc/hosts
 
   down:
     dir: ./server
