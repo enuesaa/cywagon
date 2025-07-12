@@ -16,7 +16,7 @@ tasks:
       - echo "127.0.0.1 example.local" | sudo tee -a /etc/hosts
       - echo "127.0.0.1 example2.local" | sudo tee -a /etc/hosts
 
-  down:
+  clean:
     dir: ./server
     cmds:
       - mkcert -uninstall
