@@ -16,6 +16,15 @@ tasks:
       - echo "127.0.0.1 example.local" | sudo tee -a /etc/hosts
       - echo "127.0.0.1 example2.local" | sudo tee -a /etc/hosts
 
+  e2e:serve:
+    dir: ../../
+    cmds:
+      - go run . up testdata/multisite/server
+
+  e2e:test:
+    cmds:
+      - hurl --test *
+
   clean:
     dir: ./server
     cmds:
