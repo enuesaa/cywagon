@@ -30,3 +30,4 @@ tasks:
     cmds:
       - mkcert -uninstall
       - rm -rf *.pem
+      - echo "Please ensure to remove `example.local`, ``example2.local from /etc/hosts"
